@@ -1,0 +1,31 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/fragment_bg">
+    <include
+        layout="@layout/search_layout"
+        android:visibility="gone"></include>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+    <ListView
+        android:divider="@null"
+        android:id="@+id/list_team_members"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:cacheColorHint="@android:color/transparent"
+        android:listSelector="@android:color/transparent"
+        android:paddingLeft="@dimen/padding_default"
+        android:paddingRight="@dimen/padding_default" >
+    </ListView>
+
+        <include
+            layout="@layout/no_data_found"
+            android:visibility="gone"></include>
+    </RelativeLayout>
+
+</LinearLayout>

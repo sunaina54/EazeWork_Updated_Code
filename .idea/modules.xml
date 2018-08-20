@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/ChipsLayoutManager/ChipsLayoutManager.iml" filepath="$PROJECT_DIR$/ChipsLayoutManager/ChipsLayoutManager.iml" />
+      <module fileurl="file://D:\ps_quick_it\EazeWork-16March-Github\EazeWork-Eaze-Work-1.1.4-V1.1.3\EazeWork.iml" filepath="D:\ps_quick_it\EazeWork-16March-Github\EazeWork-Eaze-Work-1.1.4-V1.1.3\EazeWork.iml" />
+      <module fileurl="file://$PROJECT_DIR$/EazeWork-Eaze-Work-1.1.4-V1.1.3.iml" filepath="$PROJECT_DIR$/EazeWork-Eaze-Work-1.1.4-V1.1.3.iml" />
+      <module fileurl="file://$PROJECT_DIR$/eazeWork/eazeWork.iml" filepath="$PROJECT_DIR$/eazeWork/eazeWork.iml" />
+    </modules>
+  </component>
+</project>

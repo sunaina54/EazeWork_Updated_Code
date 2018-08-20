@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:background="@color/fragment_bg"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+
+    <include
+        layout="@layout/search_layout"
+        android:visibility="gone"></include>
+
+
+
+    <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ListView
+        android:divider="@null"
+        android:id="@+id/expandableList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:cacheColorHint="@android:color/transparent"
+        android:listSelector="@android:color/transparent"
+        android:paddingLeft="@dimen/padding_default"
+
+        android:paddingRight="@dimen/padding_default"  />
+
+    <include
+        layout="@layout/no_data_found"
+        android:visibility="gone"></include>
+
+</RelativeLayout>
+
+</LinearLayout>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/margin_5"
+    >
+
+
+    <LinearLayout
+        android:visibility="visible"
+        android:id="@+id/pagerlayout"
+        android:background="@color/transparent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <hr.eazework.com.Carasole.EnhancedWrapContentViewPager
+            android:id="@+id/pager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible">
+
+        </hr.eazework.com.Carasole.EnhancedWrapContentViewPager>
+
+
+        <LinearLayout
+            android:padding="@dimen/margin_5"
+            android:layout_margin="@dimen/margin_5"
+            android:visibility="visible"
+            android:id="@+id/btnViewPagerLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center|center_horizontal"
+            android:layout_gravity="center|center_horizontal"
+            android:orientation="horizontal">
+
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>
+<!--
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_margin="5dp"
+    tools:context="hr.eazework.Slider.Slider"
+
+    >
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@drawable/slider_bg">
+
+        <hr.eazework.Slider.Slider
+            android:id="@+id/slider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:animateIndicators="true"
+            app:defaultIndicators="circle"
+            app:indicatorSize="8dp"
+            app:intervalSecond="5"
+            app:loopSlides="true"
+            >
+
+        </hr.eazework.Slider.Slider>
+
+
+
+    </FrameLayout>
+
+</RelativeLayout>
+
+-->

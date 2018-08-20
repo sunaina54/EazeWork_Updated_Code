@@ -148,6 +148,10 @@
     <string name="expense_request_home">Advance Request Summary</string>
     <string name="date">Date</string>
     <string name="reason">Reason</string>
+    <string name="category">Category</string>
+    <string name="subCategory">Sub Category</string>
+    <string name="subject">Subject</string>
+    <string name="priority">Priority</string>
     <string name="currency">Currency</string>
     <string name="balance">Balance</string>
     <string name="pendingWith">Pending With</string>
@@ -159,6 +163,8 @@
     <string name="chooser_title">Choose Title</string>
     <string name="voucher_no">Voucher No</string>
     <string name="description">Description</string>
+    <string name="feedback">Feedback</string>
+    <string name="rating">Rating</string>
     <string name="request_for">Request For</string>
     <string name="amount">Amount</string>
     <string name="save_as_draft">Save As Draft</string>
@@ -204,6 +210,7 @@
     <string name="end_time">End Time</string>
     <string name="cancel">Cancel</string>
     <string name="travel_from">Travel From</string>
+    <string name="created_on">Created On</string>
     <string name="travel_to">Travel To</string>
     <string name="classic_tours">Classic Tours</string>
     <string name="adventure">Adventure</string>
@@ -212,6 +219,7 @@
     <string name="religious_travel">Religious Travel</string>
     <string name="photography">Photography</string>
     <string name="tour">Tour Request</string>
+    <string name="ticket">Raise Ticket</string>
     <string name="edit_expense_claim">Edit Expense</string>
     <string name="work_from_home">Work From Home</string>
     <string name="outdoor_duty">Outdoor Duty</string>

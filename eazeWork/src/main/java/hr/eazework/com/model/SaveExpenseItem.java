@@ -14,10 +14,10 @@ public class SaveExpenseItem implements Serializable {
     private String ReqID;
     private String Description;
     private String CurrencyCode;
-    private int ForEmpID;
+    private String ForEmpID;
     private String EmpName;
     private int ClaimTypeID;
-    private int ProjectID;
+    private String ProjectID;
     private String ProjectName;
     private String ReqStatus;
     private String ApproverName;
@@ -154,11 +154,11 @@ public class SaveExpenseItem implements Serializable {
         ClaimTypeID = claimTypeID;
     }
 
-    public int getProjectID() {
+    public String getProjectID() {
         return ProjectID;
     }
 
-    public void setProjectID(int projectID) {
+    public void setProjectID(String projectID) {
         ProjectID = projectID;
     }
 
@@ -202,11 +202,11 @@ public class SaveExpenseItem implements Serializable {
         CurrencyCode = currencyCode;
     }
 
-    public int getForEmpID() {
+    public String getForEmpID() {
         return ForEmpID;
     }
 
-    public void setForEmpID(int forEmpID) {
+    public void setForEmpID(String forEmpID) {
         ForEmpID = forEmpID;
     }
 

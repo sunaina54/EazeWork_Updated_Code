@@ -127,7 +127,8 @@ public class AddExpenseFragment extends MyBaseFragment {
     private LineItemsModel lineItemList;
     private TextView inputTV, periodTV, amountTV, inputRightTV;
     private String labelInput, labelAmount, labelPeriod, labelRight, periodDate;
-    int reqId, empId;
+    String reqId;
+    String empId="0";
     private LinearLayout rl_edit_team_member;
     private View rootView;
     private static final int PERMISSION_REQUEST_CODE = 3;
@@ -174,7 +175,7 @@ public class AddExpenseFragment extends MyBaseFragment {
         empId = expenseRequestModel.getExpense().getExpenseItem().getForEmpID();
         if (expenseRequestModel!=null && expenseRequestModel.getExpense()!=null &&
                 expenseRequestModel.getExpense().getExpenseItem()!=null && expenseRequestModel.getExpense().getExpenseItem().getReqID() != null) {
-            reqId = Integer.parseInt(expenseRequestModel.getExpense().getExpenseItem().getReqID());
+            reqId = expenseRequestModel.getExpense().getExpenseItem().getReqID();
         }
         progressBar = (ProgressBar) rootView.findViewById(R.id.progress_bar);
         progressBar.bringToFront();
@@ -315,7 +316,7 @@ public class AddExpenseFragment extends MyBaseFragment {
                             categoryDesc = headCategoryList.getCategoryDesc();
                             category = headCategoryList.getCategory();
 
-                            if (lineItemList != null && lineItemList.getLineItemID() != 0 && lineItemList.getCategoryID() == category) {
+                            if (lineItemList != null && !lineItemList.getLineItemID().equalsIgnoreCase("0") && lineItemList.getCategoryID() == category) {
 
                             } else {
                                 if (lineItemList == null) {
@@ -357,7 +358,9 @@ public class AddExpenseFragment extends MyBaseFragment {
 
                             headsItemModel = (HeadsItemModel) selectedObject;
                             categoryHeadTV.setText(headsItemModel.getHeadDesc());
-                            if (lineItemList != null && lineItemList.getLineItemID() != 0 && lineItemList.getHeadID().equalsIgnoreCase(headsItemModel.getHeadID())) {
+                            if (lineItemList != null && lineItemList.getLineItemID()!=null &&
+                                    !lineItemList.getLineItemID().equalsIgnoreCase("0")&&
+                                    lineItemList.getHeadID().equalsIgnoreCase(headsItemModel.getHeadID())) {
 
                             } else {
                                 headDesc = headsItemModel.getHeadDesc();
@@ -572,7 +575,7 @@ public class AddExpenseFragment extends MyBaseFragment {
 
                 if (lineItem.get(i).getLineItemID() == lineItemList.getLineItemID() && !lineItem.get(i).getFlag().equalsIgnoreCase(AppsConstant.NEW_FLAG)) {
                     tempModel = lineItem.get(i);
-                    if (lineItemList.getLineItemID() != 0) {
+                    if (lineItemList.getLineItemID().equalsIgnoreCase("0")) {
                         lineItemList.setLineItemID(lineItemList.getLineItemID());
                     }
                     lineItem.set(i, lineItemList);
@@ -581,7 +584,7 @@ public class AddExpenseFragment extends MyBaseFragment {
 
                 if (lineItem.get(i).getI() == lineItemList.getI() && lineItemList.getFlag() != null && lineItemList.getFlag().equalsIgnoreCase(AppsConstant.NEW_FLAG)) {
                     tempModel = lineItem.get(i);
-                    lineItemList.setLineItemID(0);
+                    lineItemList.setLineItemID("0");
                     lineItemList.setFlag("N");
                     lineItem.set(i, lineItemList);
                     break;
@@ -589,7 +592,7 @@ public class AddExpenseFragment extends MyBaseFragment {
 
             }
             if (tempModel == null) {
-                lineItemList.setLineItemID(0);
+                lineItemList.setLineItemID("0");
                 lineItemList.setFlag("N");
                 lineItemList.setI(lineItem.size() + 1);
                 lineItem.add(lineItemList);
@@ -975,7 +978,7 @@ public class AddExpenseFragment extends MyBaseFragment {
         public void onBindViewHolder(final ViewHolder holder, final int position) {
 
             final SupportDocsItemModel fileObject = mDataset.get(position);
-            if (fileObject.getDocID() != 0 && fileObject.getFlag().equalsIgnoreCase(AppsConstant.DELETE_FLAG)) {
+            if (!fileObject.getDocID().equalsIgnoreCase("0") && fileObject.getFlag().equalsIgnoreCase(AppsConstant.DELETE_FLAG)) {
 
             } else {
                 String fileType = "";
@@ -1053,7 +1056,7 @@ public class AddExpenseFragment extends MyBaseFragment {
                     @Override
                     public void onClick(final View v) {
                         ArrayList<String> list = new ArrayList<>();
-                        if (fileObject.getDocID() != 0) {
+                        if (!fileObject.getDocID().equalsIgnoreCase("0") ) {
                             list.add("Edit");
                             list.add("Delete");
                             list.add("Download");
@@ -1107,7 +1110,7 @@ public class AddExpenseFragment extends MyBaseFragment {
 
                                     dialog.show();
                                 } else if (selectedObject.toString().equalsIgnoreCase("Delete")) {
-                                    if (fileObject.getDocID() != 0) {
+                                    if (!fileObject.getDocID().equalsIgnoreCase("0") ) {
                                         fileObject.setFlag(AppsConstant.DELETE_FLAG);
                                         uploadFileList.set(uploadFileList.indexOf(fileObject), fileObject);
                                     } else {
@@ -1120,7 +1123,7 @@ public class AddExpenseFragment extends MyBaseFragment {
 
                                 } else if (selectedObject.toString().equalsIgnoreCase("Download")) {
 
-                                    if (fileObject.getDocID() == 0) {
+                                    if (fileObject.getDocID().equalsIgnoreCase("0") ) {
                                         return;
                                     }
                                     String filePath = fileObject.getDocPath().replace("~", "");
@@ -1223,7 +1226,7 @@ public class AddExpenseFragment extends MyBaseFragment {
                 categoryDesc = headCategoryList.getCategoryDesc();
                 category = headCategoryList.getCategory();
                 selectedCategoryHeads = headCategoryList.getHeads();
-                if (lineItemList != null && lineItemList.getLineItemID() == 0) {
+                if (lineItemList != null && lineItemList.getLineItemID().equalsIgnoreCase("0")) {
                     if (category == 1) {
                         todateLinearLayout.setVisibility(View.VISIBLE);
                         fromDateLinearLayout.setVisibility(View.VISIBLE);
@@ -1382,7 +1385,7 @@ public class AddExpenseFragment extends MyBaseFragment {
                 categoryListResponseModel = CategoryListResponseModel.create(str);
                 headCategoryListModels = categoryListResponseModel.getGetCategoryListResult().getHeadCategoryList();
                 if (headCategoryListModels != null && headCategoryListModels.size() > 0) {
-                    if (lineItemList != null && lineItemList.getLineItemID() == 0) {
+                    if (lineItemList != null && lineItemList.getLineItemID().equalsIgnoreCase("0")) {
                         callApiForSetEditedData();
                     } else if (lineItemList != null) {
                         callApiForSetEditedData();

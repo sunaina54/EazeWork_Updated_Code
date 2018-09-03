@@ -761,7 +761,7 @@ public class AttendanceApprovalFragment extends BaseFragment {
 
     private void sendViewODRequestSummaryData(AttendanceItem item) {
         GetODRequestDetail getODRequestDetail = new GetODRequestDetail();
-        getODRequestDetail.setReqID(Integer.parseInt(item.getReqID()));
+        getODRequestDetail.setReqID(item.getReqID());
         getODRequestDetail.setAction(AppsConstant.VIEW_ACTION);
         CommunicationManager.getInstance().sendPostRequest(this,
                 AppRequestJSONString.ODSummaryDetails(getODRequestDetail),
@@ -887,7 +887,7 @@ public class AttendanceApprovalFragment extends BaseFragment {
 
     private void sendAttendanceApprovalData() {
         TimeModificationItem timeModificationItem = new TimeModificationItem();
-        timeModificationItem.setForEmpID(reqDetail.getEmpID() + "");
+        timeModificationItem.setForEmpID(reqDetail.getEmpID());
         timeModificationItem.setAttendID(reqDetail.getAttendID());
         timeModificationItem.setReqTime(reqDetail.getReqTime());
         timeModificationItem.setReqOutTime(reqDetail.getReqOutTime());

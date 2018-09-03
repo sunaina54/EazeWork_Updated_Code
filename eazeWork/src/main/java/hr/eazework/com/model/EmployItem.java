@@ -8,7 +8,8 @@ import java.io.Serializable;
 
 public class EmployItem implements Serializable {
     private String EmpCode;
-    private Long  EmpID;
+    //private Long  EmpID;
+    private String  EmpID;
     private String Name;
 
     public String getEmpCode() {
@@ -19,13 +20,21 @@ public class EmployItem implements Serializable {
         EmpCode = empCode;
     }
 
-    public Long getEmpID() {
+    public String getEmpID() {
+        return EmpID;
+    }
+
+    public void setEmpID(String empID) {
+        EmpID = empID;
+    }
+
+    /* public Long getEmpID() {
         return EmpID;
     }
 
     public void setEmpID(Long empID) {
         EmpID = empID;
-    }
+    }*/
 
     public String getName() {
         return Name;

@@ -55,11 +55,11 @@ public class ViewLeaveFragment extends BaseFragment {
     public static final String TAG = "ViewLeaveFragment";
     private String screenName = "ViewLeaveFragment";
     private Preferences preferences;
-    private TextView requestIdTV, empNameTV, statusTV, startDateTV, endDateTV, daysTV,dateWorkedTV;
+    private TextView requestIdTV, empNameTV, statusTV, startDateTV, endDateTV, daysTV, dateWorkedTV;
     private TextView submittedByTV, pendingWithTV;
     private LinearLayout remarksLinearLayout, wfhSummaryLl, tourSummaryLl, odSummaryLl, docLl;
     private RecyclerView remarksRV;
-    private Button withdrawBTN;
+    private Button withdrawBTN, clickBTN;
     private LinearLayout errorLinearLayout;
     private DocumentUploadAdapter documentViewAdapter;
     private RecyclerView documentRV;
@@ -81,8 +81,8 @@ public class ViewLeaveFragment extends BaseFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-            this.setShowPlusMenu(true);
-            this.setShowEditTeamButtons(false);
+        this.setShowPlusMenu(true);
+        this.setShowEditTeamButtons(false);
 
         super.onCreate(savedInstanceState);
 
@@ -141,14 +141,23 @@ public class ViewLeaveFragment extends BaseFragment {
         requestIdTV = (TextView) rootView.findViewById(R.id.requestIdTV);
         empNameTV = (TextView) rootView.findViewById(R.id.empNameTV);
         statusTV = (TextView) rootView.findViewById(R.id.statusTV);
-        dateWorkedLl= (LinearLayout) rootView.findViewById(R.id.dateWorkedLl);
-        dateWorkedTV= (TextView) rootView.findViewById(R.id.dateWorkedTV);
+        dateWorkedLl = (LinearLayout) rootView.findViewById(R.id.dateWorkedLl);
+        dateWorkedTV = (TextView) rootView.findViewById(R.id.dateWorkedTV);
         submittedByTV = (TextView) rootView.findViewById(R.id.submittedByTV);
         pendingWithTV = (TextView) rootView.findViewById(R.id.pendingWithTV);
         startDateTV = (TextView) rootView.findViewById(R.id.startDateTV);
         endDateTV = (TextView) rootView.findViewById(R.id.endDateTV);
         daysTV = (TextView) rootView.findViewById(R.id.daysTV);
 
+       /* clickBTN = (Button) rootView.findViewById(R.id.clickBTN);
+        clickBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (leaveReqsItem != null && leaveReqsItem.getReqID() != null) {
+                    sendViewLeaveRequestSummaryData(leaveReqsItem);
+                }
+            }
+        });*/
         withdrawBTN = (Button) rootView.findViewById(R.id.withdrawBTN);
         withdrawBTN.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -177,7 +186,7 @@ public class ViewLeaveFragment extends BaseFragment {
 
     private void sendWithdrawRequestData() {
         GetWFHRequestDetail requestDetail = new GetWFHRequestDetail();
-        requestDetail.setReqStatus(leaveRequestDetailsModel.getReqStatus()+"");
+        requestDetail.setReqStatus(leaveRequestDetailsModel.getReqStatus() + "");
         requestDetail.setReqID(String.valueOf(leaveRequestDetailsModel.getReqID()));
         Utility.showHidePregress(progressbar, true);
         CommunicationManager.getInstance().sendPostRequest(this,
@@ -222,12 +231,12 @@ public class ViewLeaveFragment extends BaseFragment {
 
     private void updateUI(LeaveRequestDetailsModel item) {
         dateWorkedLl.setVisibility(View.GONE);
-        if(item.getCompOffLeaveWithStep1YN().equalsIgnoreCase("Y")){
+        if (item.getCompOffLeaveWithStep1YN().equalsIgnoreCase("Y")) {
             dateWorkedLl.setVisibility(View.VISIBLE);
             dateWorkedTV.setText(item.getStartDate());
             startDateTV.setText(item.getEndDate());
             endDateTV.setText(item.getEndDate());
-        }else {
+        } else {
             dateWorkedLl.setVisibility(View.GONE);
             startDateTV.setText(item.getStartDate());
             endDateTV.setText(item.getEndDate());
@@ -239,11 +248,11 @@ public class ViewLeaveFragment extends BaseFragment {
         statusTV.setText(item.getStatusDesc());
 
 
-        String duration=item.getTotalDays();
-        if(item.getHalfDayFS()!=null && item.getHalfDayFS().equalsIgnoreCase("F")){
-            duration=duration+" (First Half)";
-        }else if(item.getHalfDayFS()!=null && item.getHalfDayFS().equalsIgnoreCase("S")){
-            duration=duration+" (Second Half)";
+        String duration = item.getTotalDays();
+        if (item.getHalfDayFS() != null && item.getHalfDayFS().equalsIgnoreCase("F")) {
+            duration = duration + " (First Half)";
+        } else if (item.getHalfDayFS() != null && item.getHalfDayFS().equalsIgnoreCase("S")) {
+            duration = duration + " (Second Half)";
         }
         daysTV.setText(duration);
 
@@ -287,4 +296,6 @@ public class ViewLeaveFragment extends BaseFragment {
             }
         }
     }
+
+
 }

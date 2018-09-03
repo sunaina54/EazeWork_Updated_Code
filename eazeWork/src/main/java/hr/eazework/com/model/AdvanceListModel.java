@@ -10,14 +10,14 @@ import java.io.Serializable;
 
 public class AdvanceListModel extends GenericResponse implements Serializable {
 
-    private int AdvanceID;
+    private String AdvanceID;
     private String ApprovalLevel;
     private String ApprovedAmount;
     private String BalAmount;
     private String CurrencyCode;
     private int EmpAdvReqStatus;
     private String FinalApprover;
-    private int ForEmpID;
+    private String ForEmpID;
     private String HideYN;
     private String Name;
     private String PendWith;
@@ -27,16 +27,16 @@ public class AdvanceListModel extends GenericResponse implements Serializable {
     private String ReqAmount;
     private String ReqCode;
     private String ReqDate;
-    private int ReqID;
+    private String ReqID;
     private int ReqStatus;
     private int Source;
     private String StatusDesc;
 
-    public int getAdvanceID() {
+    public String getAdvanceID() {
         return AdvanceID;
     }
 
-    public void setAdvanceID(int advanceID) {
+    public void setAdvanceID(String advanceID) {
         AdvanceID = advanceID;
     }
 
@@ -88,11 +88,11 @@ public class AdvanceListModel extends GenericResponse implements Serializable {
         FinalApprover = finalApprover;
     }
 
-    public int getForEmpID() {
+    public String getForEmpID() {
         return ForEmpID;
     }
 
-    public void setForEmpID(int forEmpID) {
+    public void setForEmpID(String forEmpID) {
         ForEmpID = forEmpID;
     }
 
@@ -168,11 +168,11 @@ public class AdvanceListModel extends GenericResponse implements Serializable {
         ReqDate = reqDate;
     }
 
-    public int getReqID() {
+    public String getReqID() {
         return ReqID;
     }
 
-    public void setReqID(int reqID) {
+    public void setReqID(String reqID) {
         ReqID = reqID;
     }
 

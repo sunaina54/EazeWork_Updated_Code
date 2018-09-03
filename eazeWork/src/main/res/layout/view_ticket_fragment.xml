@@ -59,6 +59,15 @@
                     android:layout_marginRight="@dimen/margin_13">
                     <include layout="@layout/upload_document_layout"></include>
                 </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_13"
+                    android:id="@+id/feedbackLl"
+                    android:layout_marginRight="@dimen/margin_13">
+                    <include layout="@layout/view_feedback_layout"></include>
+                </LinearLayout>
                 <include layout="@layout/action_button_layout" android:id="@+id/buttonLinearLayout"></include>
             </LinearLayout>
 

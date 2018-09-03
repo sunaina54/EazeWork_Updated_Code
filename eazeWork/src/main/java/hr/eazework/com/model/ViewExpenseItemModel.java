@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class ViewExpenseItemModel extends GenericResponse implements Serializable {
     private ArrayList<AdvanceListItemModel> AdvanceList ;
-    private int ApproverID ;
+    private String ApproverID ;
     private int ClaimTypeID ;
     private String ClaimTypeDesc;
     private String CurrencyCode;
@@ -19,15 +19,15 @@ public class ViewExpenseItemModel extends GenericResponse implements Serializabl
     private ArrayList<DocListModel> DocList ;
     private String[] DocListLineItem ;
     private String EmpCode;
-    private int ForEmpID ;
+    private String ForEmpID ;
     private String Name;
-    private int PendEmpID ;
+    private String PendEmpID ;
     private String PendingWith;
-    private int ProjectID ;
+    private String ProjectID ;
     private String ReqCode;
     private String ReqDate;
     private String ProjectName;
-    private int ReqID ;
+    private String ReqID ;
     private int ReqStatus ;
     private String ReqStatusDesc;
     private String ShowProject;
@@ -35,7 +35,7 @@ public class ViewExpenseItemModel extends GenericResponse implements Serializabl
     private int VerifierID ;
     private String TotalExpenseClaimed;
     private String NetAmountToBePaid;
-    private int SubmitteByEmpID;
+    private String SubmitteByEmpID;
     private String SubmittedByName;
     private String ReqRemark;
     private ArrayList<LineItemsModel> LineItems;
@@ -82,11 +82,11 @@ public class ViewExpenseItemModel extends GenericResponse implements Serializabl
         ReqRemark = reqRemark;
     }
 
-    public int getSubmitteByEmpID() {
+    public String getSubmitteByEmpID() {
         return SubmitteByEmpID;
     }
 
-    public void setSubmitteByEmpID(int submitteByEmpID) {
+    public void setSubmitteByEmpID(String submitteByEmpID) {
         SubmitteByEmpID = submitteByEmpID;
     }
 
@@ -130,11 +130,19 @@ public class ViewExpenseItemModel extends GenericResponse implements Serializabl
         AdvanceList = advanceList;
     }
 
-    public int getApproverID() {
+    /*public int getApproverID() {
         return ApproverID;
     }
 
     public void setApproverID(int approverID) {
+        ApproverID = approverID;
+    }*/
+
+    public String getApproverID() {
+        return ApproverID;
+    }
+
+    public void setApproverID(String approverID) {
         ApproverID = approverID;
     }
 
@@ -186,11 +194,19 @@ public class ViewExpenseItemModel extends GenericResponse implements Serializabl
         EmpCode = empCode;
     }
 
-    public int getForEmpID() {
+ /*   public int getForEmpID() {
         return ForEmpID;
     }
 
     public void setForEmpID(int forEmpID) {
+        ForEmpID = forEmpID;
+    }*/
+
+    public String getForEmpID() {
+        return ForEmpID;
+    }
+
+    public void setForEmpID(String forEmpID) {
         ForEmpID = forEmpID;
     }
 
@@ -202,11 +218,11 @@ public class ViewExpenseItemModel extends GenericResponse implements Serializabl
         Name = name;
     }
 
-    public int getPendEmpID() {
+    public String getPendEmpID() {
         return PendEmpID;
     }
 
-    public void setPendEmpID(int pendEmpID) {
+    public void setPendEmpID(String pendEmpID) {
         PendEmpID = pendEmpID;
     }
 
@@ -218,11 +234,11 @@ public class ViewExpenseItemModel extends GenericResponse implements Serializabl
         PendingWith = pendingWith;
     }
 
-    public int getProjectID() {
+    public String getProjectID() {
         return ProjectID;
     }
 
-    public void setProjectID(int projectID) {
+    public void setProjectID(String projectID) {
         ProjectID = projectID;
     }
 
@@ -242,11 +258,11 @@ public class ViewExpenseItemModel extends GenericResponse implements Serializabl
         ReqDate = reqDate;
     }
 
-    public int getReqID() {
+    public String getReqID() {
         return ReqID;
     }
 
-    public void setReqID(int reqID) {
+    public void setReqID(String reqID) {
         ReqID = reqID;
     }
 

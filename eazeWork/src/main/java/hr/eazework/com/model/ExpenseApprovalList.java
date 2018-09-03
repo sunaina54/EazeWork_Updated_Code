@@ -10,19 +10,19 @@ import java.io.Serializable;
 
 public class ExpenseApprovalList extends GenericResponse implements Serializable {
     private String Approved;
-    private int ApproverID ;
+    private String ApproverID ;
     private String ClaimTypeDesc;
     private int ClaimTypeID ;
     private String CurrencyCode;
     private String Description;
     private String EmpCode;
-    private int ForEmpID ;
+    private String ForEmpID ;
     private String Name;
     private int PendEmpID ;
     private String PendingWith;
     private String ReqCode;
     private String ReqDate;
-    private int ReqID ;
+    private String ReqID ;
     private int ReqStatus ;
     private String ReqStatusDesc;
     private String Requested;
@@ -45,11 +45,11 @@ public class ExpenseApprovalList extends GenericResponse implements Serializable
         Approved = approved;
     }
 
-    public int getApproverID() {
+    public String getApproverID() {
         return ApproverID;
     }
 
-    public void setApproverID(int approverID) {
+    public void setApproverID(String approverID) {
         ApproverID = approverID;
     }
 
@@ -93,11 +93,11 @@ public class ExpenseApprovalList extends GenericResponse implements Serializable
         EmpCode = empCode;
     }
 
-    public int getForEmpID() {
+    public String getForEmpID() {
         return ForEmpID;
     }
 
-    public void setForEmpID(int forEmpID) {
+    public void setForEmpID(String forEmpID) {
         ForEmpID = forEmpID;
     }
 
@@ -141,11 +141,11 @@ public class ExpenseApprovalList extends GenericResponse implements Serializable
         ReqDate = reqDate;
     }
 
-    public int getReqID() {
+    public String getReqID() {
         return ReqID;
     }
 
-    public void setReqID(int reqID) {
+    public void setReqID(String reqID) {
         ReqID = reqID;
     }
 

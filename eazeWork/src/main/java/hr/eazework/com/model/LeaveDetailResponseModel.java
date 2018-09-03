@@ -24,6 +24,7 @@ public class LeaveDetailResponseModel implements Serializable {
         // Use GSON to instantiate this class using the JSON representation of the state
         Gson gson = new Gson();
         return gson.fromJson(serializedData, LeaveDetailResponseModel.class);
+
     }
     public String serialize() {
         // Serialize this class into a JSON string using GSON

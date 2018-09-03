@@ -192,7 +192,7 @@ public class CreateNewLeaveFragment extends BaseFragment implements OnCheckedCha
     private void setupLeave() {
         if (employItem != null) {
             MainActivity.isAnimationLoaded = false;
-            String empCode = String.valueOf(employItem.getEmpID());
+            String empCode = employItem.getEmpID();
             CommunicationManager.getInstance().sendPostRequest(this,
                     AppRequestJSONString.getEmpLeavesData(empCode), CommunicationConstant.API_EMP_LEAVES,
                     true);
@@ -403,7 +403,8 @@ public class CreateNewLeaveFragment extends BaseFragment implements OnCheckedCha
         employItem = new EmployItem();
         LoginUserModel loginUserModel = ModelManager.getInstance().getLoginUserModel();
 
-        employItem.setEmpID(Long.parseLong(loginUserModel.getUserModel().getEmpId()));
+        //employItem.setEmpID(Long.parseLong(loginUserModel.getUserModel().getEmpId()));
+        employItem.setEmpID(loginUserModel.getUserModel().getEmpId());
         empId = loginUserModel.getUserModel().getEmpId();
         employItem.setName(loginUserModel.getUserModel().getUserName());
         employItem.setEmpCode(loginUserModel.getUserModel().getEmpCode());
@@ -665,7 +666,7 @@ public class CreateNewLeaveFragment extends BaseFragment implements OnCheckedCha
 
 
         LoginUserModel loginUserModel = ModelManager.getInstance().getLoginUserModel();
-        String empCode = String.valueOf(employItem.getEmpID());
+        String empCode = employItem.getEmpID();
 
         String remark = etRemark.getText().toString();
         if (isRhSelected) {
@@ -1164,14 +1165,16 @@ public class CreateNewLeaveFragment extends BaseFragment implements OnCheckedCha
                         ModelManager.getInstance().setLeaveTypeModel(leaveTypeModel);
                         if (employeeLeaveModel != null && employeeLeaveModel.getmReqID() != null
                                 && !employeeLeaveModel.getmReqID().equalsIgnoreCase("0")) {   //Approval edit
-                            if (employeeLeaveModel.getmReqType() != null && employeeLeaveModel.getmReqType().equalsIgnoreCase(AppsConstant.LEAVE_EDIT)) {
+                            if (employeeLeaveModel.getmReqType() != null &&
+                                    employeeLeaveModel.getmReqType().equalsIgnoreCase(AppsConstant.LEAVE_EDIT)) {
                                 reqId = employeeLeaveModel.getmReqID();
                                 remarksDataLl.setVisibility(View.VISIBLE);
                                 sendViewLeaveRequestSummaryData();
                                 disabledFieldData();
                             }
 
-                            if (employeeLeaveModel.getmReqType() != null && employeeLeaveModel.getmReqType().equalsIgnoreCase(AppsConstant.LEAVE_WITHDRAWAL)) {
+                            if (employeeLeaveModel.getmReqType() != null &&
+                                    employeeLeaveModel.getmReqType().equalsIgnoreCase(AppsConstant.LEAVE_WITHDRAWAL)) {
                                 reqId = employeeLeaveModel.getmReqID();
                                 remarksDataLl.setVisibility(View.VISIBLE);
                                 sendViewLeaveRequestSummaryData();
@@ -2004,9 +2007,10 @@ public class CreateNewLeaveFragment extends BaseFragment implements OnCheckedCha
 
         empNameTV.setText(item.getForEmpName());
         ((TextView) rootView.findViewById(R.id.tv_select_leave_type)).setText(item.getLeaveDesc());
-        LeaveTypeModel leaveType = ModelManager.getInstance().getLeaveTypeModel();
-        if (leaveType != null) {
-            for (LeaveTypeModel leaveItem : leaveType.getLeaveTypeList()) {
+        LeaveTypeModel leaveType1 = ModelManager.getInstance().getLeaveTypeModel();
+       String laveList= leaveType1.getLeaveTypeList().toString();
+        if (leaveType1.getLeaveTypeList() != null ) {
+            for (LeaveTypeModel leaveItem : leaveType1.getLeaveTypeList()) {
                 if (leaveItem.getLeaveId().equalsIgnoreCase(item.getLeaveID())) {
                     leaveTypeModel = leaveItem;
                     break;

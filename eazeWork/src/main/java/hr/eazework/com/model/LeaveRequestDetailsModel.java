@@ -10,11 +10,11 @@ import java.util.ArrayList;
 public class LeaveRequestDetailsModel implements Serializable {
     private String ApprovalLevel;
     private String Button;
-    private int ForEmpID;
-    private int PendEmpID;
+    private String ForEmpID;
+    private String PendEmpID;
     private String Remark;
     private String ReqCode;
-    private int ReqID;
+    private String ReqID;
     private int ReqStatus ;
     private String HalfDayFS;
     private String EndDate;
@@ -67,19 +67,19 @@ public class LeaveRequestDetailsModel implements Serializable {
         Button = button;
     }
 
-    public int getForEmpID() {
+    public String getForEmpID() {
         return ForEmpID;
     }
 
-    public void setForEmpID(int forEmpID) {
+    public void setForEmpID(String forEmpID) {
         ForEmpID = forEmpID;
     }
 
-    public int getPendEmpID() {
+    public String getPendEmpID() {
         return PendEmpID;
     }
 
-    public void setPendEmpID(int pendEmpID) {
+    public void setPendEmpID(String pendEmpID) {
         PendEmpID = pendEmpID;
     }
 
@@ -99,11 +99,11 @@ public class LeaveRequestDetailsModel implements Serializable {
         ReqCode = reqCode;
     }
 
-    public int getReqID() {
+    public String getReqID() {
         return ReqID;
     }
 
-    public void setReqID(int reqID) {
+    public void setReqID(String reqID) {
         ReqID = reqID;
     }
 

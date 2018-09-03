@@ -1062,7 +1062,9 @@ public class WorkFromHomeRequestFragment extends BaseFragment {
                     if (responseData1 != null) {
                         empNameTV.setText("");
                         GetCorpEmpParamResultResponse corpEmpParamResultResponse = GetCorpEmpParamResultResponse.create(responseData1);
-                        if (corpEmpParamResultResponse != null && corpEmpParamResultResponse.getGetCorpEmpParamResult() != null && corpEmpParamResultResponse.getGetCorpEmpParamResult().getErrorCode() != null && corpEmpParamResultResponse.getGetCorpEmpParamResult().getErrorCode().equalsIgnoreCase("0")) {
+                        if (corpEmpParamResultResponse != null && corpEmpParamResultResponse.getGetCorpEmpParamResult() != null
+                                && corpEmpParamResultResponse.getGetCorpEmpParamResult().getErrorCode() != null
+                                && corpEmpParamResultResponse.getGetCorpEmpParamResult().getErrorCode().equalsIgnoreCase("0")) {
 
                             if (corpEmpParamResultResponse.getGetCorpEmpParamResult().getCorpEmpParamList() != null &&
                                     corpEmpParamResultResponse.getGetCorpEmpParamResult().getCorpEmpParamList().size() > 0) {
@@ -1080,7 +1082,8 @@ public class WorkFromHomeRequestFragment extends BaseFragment {
                                   }
 
                                   if(item.getParam().equalsIgnoreCase("WFHSelfInitYN") && item.getValue().equalsIgnoreCase("Y")){
-                                      employItem.setEmpID(Long.parseLong(loginUserModel.getUserModel().getEmpId()));
+                                      //employItem.setEmpID(Long.parseLong(loginUserModel.getUserModel().getEmpId()));
+                                      employItem.setEmpID(loginUserModel.getUserModel().getEmpId());
                                       empId = loginUserModel.getUserModel().getEmpId();
                                       employItem.setName(loginUserModel.getUserModel().getUserName());
                                       employItem.setEmpCode(loginUserModel.getUserModel().getEmpCode());

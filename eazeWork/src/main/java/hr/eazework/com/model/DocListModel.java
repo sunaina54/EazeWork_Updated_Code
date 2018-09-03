@@ -17,7 +17,7 @@ public class DocListModel implements Serializable {
     private int Length;
     private String Name;
     private String DocFile;
-    private int DocID;
+    private String DocID;
     private String DocPath;
     private String Flag;
     private int SeqNo;
@@ -70,11 +70,11 @@ public class DocListModel implements Serializable {
         DocFile = docFile;
     }
 
-    public int getDocID() {
+    public String getDocID() {
         return DocID;
     }
 
-    public void setDocID(int docID) {
+    public void setDocID(String docID) {
         DocID = docID;
     }
 

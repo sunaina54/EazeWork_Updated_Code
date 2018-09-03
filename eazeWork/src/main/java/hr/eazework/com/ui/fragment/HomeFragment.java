@@ -501,7 +501,8 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
         if (menuItemModel != null) {
             MenuItemModel itemModel = menuItemModel.getItemModel(MenuItemModel.ATTANDANCE_KEY);
             if (itemModel != null && itemModel.isAccess()) {
-                if (ModelManager.getInstance().getCheckInOutModel() != null && ModelManager.getInstance().getCheckInOutModel().isMarkAttandanceEnable()) {
+                if (ModelManager.getInstance().getCheckInOutModel() != null
+                        && ModelManager.getInstance().getCheckInOutModel().isMarkAttandanceEnable()) {
                     MainItemModel item = new MainItemModel(itemModel.getmObjectDesc(),
                             getString(R.string.msg_mark_attandance),
                             getString(R.string.msg_today_in_time), "--:--",
@@ -941,8 +942,6 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
                         JSONObject expenseData = object.optJSONObject("ExpenseStatus");
                         Log.d("Expense Result", expenseData.toString());
                         updateExpenseMethods(expenseData);
-
-
                     }
                 } catch (JSONException e) {
                     Crashlytics.logException(e);

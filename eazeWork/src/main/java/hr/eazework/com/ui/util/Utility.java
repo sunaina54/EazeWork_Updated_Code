@@ -757,7 +757,7 @@ public class Utility {
                     }else if(screen.equalsIgnoreCase(AppsConstant.EDIT)){
                         list.add("Edit");
                         list.add("Delete");
-                        if(model.getDocID()!=0) {
+                        if(model.getDocID()!=null && !model.getDocID().equalsIgnoreCase("0") ) {
                             list.add("Download");
                         }
                     }else if(screen.equalsIgnoreCase(AppsConstant.VIEW)){
@@ -806,10 +806,10 @@ public class Utility {
 
                                 dialog.show();
                             } else if (selectedObject.toString().equalsIgnoreCase("Delete")) {
-                                if (model.getDocID() != 0 && model.getFlag().equalsIgnoreCase(AppsConstant.OLD_FLAG)) {
+                                if (model.getDocID()!=null && !model.getDocID().equalsIgnoreCase("0")  && model.getFlag().equalsIgnoreCase(AppsConstant.OLD_FLAG)) {
                                     model.setFlag(AppsConstant.DELETE_FLAG);
                                     adapter.mDataset.set(adapter.mDataset.indexOf(model), model);
-                                } else if (model.getDocID() == 0 && model.getFlag().equalsIgnoreCase(AppsConstant.NEW_FLAG)) {
+                                } else if (model.getDocID()==null || model.getDocID().equalsIgnoreCase("0")  && model.getFlag().equalsIgnoreCase(AppsConstant.NEW_FLAG)) {
                                     adapter.mDataset.remove(adapter.mDataset.indexOf(model));
                                 }
                                 adapter.notifyDataSetChanged();

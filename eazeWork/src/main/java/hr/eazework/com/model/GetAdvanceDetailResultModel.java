@@ -10,7 +10,7 @@ import java.util.ArrayList;
  */
 
 public class GetAdvanceDetailResultModel extends GenericResponse implements Serializable {
-    private int AdvanceID;
+    private String AdvanceID;
     private String ApprovalLevel;
     private String ApprovedAmount;
     private String BalAmount;
@@ -30,7 +30,7 @@ public class GetAdvanceDetailResultModel extends GenericResponse implements Seri
     private String ReqAmount;
     private String ReqCode;
     private String ReqDate;
-    private int ReqID;
+    private String ReqID;
     private String EditYN;
     private String ReqStatus;
     private String Source;
@@ -97,11 +97,11 @@ public class GetAdvanceDetailResultModel extends GenericResponse implements Seri
         TotalAmount = totalAmount;
     }
 
-    public int getAdvanceID() {
+    public String getAdvanceID() {
         return AdvanceID;
     }
 
-    public void setAdvanceID(int advanceID) {
+    public void setAdvanceID(String advanceID) {
         AdvanceID = advanceID;
     }
 
@@ -241,11 +241,11 @@ public class GetAdvanceDetailResultModel extends GenericResponse implements Seri
         ReqDate = reqDate;
     }
 
-    public int getReqID() {
+    public String getReqID() {
         return ReqID;
     }
 
-    public void setReqID(int reqID) {
+    public void setReqID(String reqID) {
         ReqID = reqID;
     }
 

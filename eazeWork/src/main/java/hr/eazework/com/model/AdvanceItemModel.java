@@ -15,7 +15,7 @@ public class AdvanceItemModel implements Serializable {
     private String Remarks;
     private String ReqAmount;
     private String CurrencyCode;
-    private int ForEmpID;
+    private String ForEmpID;
     private String ReasonCode;
     private String Reason;
     private int Source;
@@ -87,13 +87,21 @@ public class AdvanceItemModel implements Serializable {
         CurrencyCode = currencyCode;
     }
 
-    public int getForEmpID() {
+    public String getForEmpID() {
+        return ForEmpID;
+    }
+
+    public void setForEmpID(String forEmpID) {
+        ForEmpID = forEmpID;
+    }
+
+    /* public int getForEmpID() {
         return ForEmpID;
     }
 
     public void setForEmpID(int forEmpID) {
         ForEmpID = forEmpID;
-    }
+    }*/
 
     public String getReasonCode() {
         return ReasonCode;

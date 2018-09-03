@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 public class EmployeeListModel extends GenericResponse implements Serializable {
     private String EmpCode;
-    private int EmpID;
+    private String EmpID;
     private String Name;
 
     public String getEmpCode() {
@@ -21,11 +21,11 @@ public class EmployeeListModel extends GenericResponse implements Serializable {
         EmpCode = empCode;
     }
 
-    public int getEmpID() {
+    public String getEmpID() {
         return EmpID;
     }
 
-    public void setEmpID(int empID) {
+    public void setEmpID(String empID) {
         EmpID = empID;
     }
 

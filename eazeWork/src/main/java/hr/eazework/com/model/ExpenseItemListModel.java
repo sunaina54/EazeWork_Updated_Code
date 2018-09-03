@@ -10,14 +10,14 @@ import java.io.Serializable;
 
 public class ExpenseItemListModel extends GenericResponse implements Serializable {
     private String AdvanceList;
-    private int ApproverID;
+    private String ApproverID;
     private int ClaimTypeID ;
     private String CurrencyCode;
     private String Description;
     private String DocList;
     private String DocListLineItem;
     private String EmpCode;
-    private int ForEmpID ;
+    private String ForEmpID ;
     private String LineItems;
     private String Name;
     private int PendEmpID;
@@ -25,7 +25,7 @@ public class ExpenseItemListModel extends GenericResponse implements Serializabl
     private int ProjectID ;
     private String ReqCode;
     private String ReqDate;
-    private int ReqID ;
+    private String ReqID ;
     private int ReqStatus;
     private String ReqStatusDesc;
     private String ShowProject;
@@ -48,11 +48,11 @@ public class ExpenseItemListModel extends GenericResponse implements Serializabl
         AdvanceList = advanceList;
     }
 
-    public int getApproverID() {
+    public String getApproverID() {
         return ApproverID;
     }
 
-    public void setApproverID(int approverID) {
+    public void setApproverID(String approverID) {
         ApproverID = approverID;
     }
 
@@ -104,11 +104,11 @@ public class ExpenseItemListModel extends GenericResponse implements Serializabl
         EmpCode = empCode;
     }
 
-    public int getForEmpID() {
+    public String getForEmpID() {
         return ForEmpID;
     }
 
-    public void setForEmpID(int forEmpID) {
+    public void setForEmpID(String forEmpID) {
         ForEmpID = forEmpID;
     }
 
@@ -168,11 +168,11 @@ public class ExpenseItemListModel extends GenericResponse implements Serializabl
         ReqDate = reqDate;
     }
 
-    public int getReqID() {
+    public String getReqID() {
         return ReqID;
     }
 
-    public void setReqID(int reqID) {
+    public void setReqID(String reqID) {
         ReqID = reqID;
     }
 

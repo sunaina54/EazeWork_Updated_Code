@@ -414,7 +414,7 @@ public class AppRequestJSONString {
         loginData.setDeviceID(MyApplication.getDeviceId());
         loginData.setSessionID(SharedPreference.getSessionId());
         ExpenseRequestModel expenseRequestModel=new ExpenseRequestModel();
-        expenseRequestModel.setReqID(0);
+        expenseRequestModel.setReqID("0");
         ViewExpenseClaimRequestModel viewExpenseClaimRequestModel= new ViewExpenseClaimRequestModel();
         viewExpenseClaimRequestModel.setLoginData(loginData);
         viewExpenseClaimRequestModel.setExpense(expenseRequestModel);
@@ -422,7 +422,7 @@ public class AppRequestJSONString {
         return viewExpenseClaimRequestModel.serialize();
     }
 
-    public static String getExpenseApproverData(int claimType,int empId,String projectId) {
+    public static String getExpenseApproverData(int claimType,String empId,String projectId) {
         AdvanceLoginDataRequestModel loginData = new AdvanceLoginDataRequestModel();
         loginData.setDeviceID(MyApplication.getDeviceId());
         loginData.setSessionID(SharedPreference.getSessionId());
@@ -674,12 +674,12 @@ public class AppRequestJSONString {
         return expenseInitData;
     }
 
-    public static String getHeadDetailsWithPolicyData(int empId, int categoryId, String headId,String currency,int reqId) {
+    public static String getHeadDetailsWithPolicyData(String empId, int categoryId, String headId,String currency,String reqId) {
         AdvanceLoginDataRequestModel loginData = new AdvanceLoginDataRequestModel();
         loginData.setDeviceID(MyApplication.getDeviceId());
         loginData.setSessionID(SharedPreference.getSessionId());
         VisibilityExpenseItem visibilityExpenseItem=new VisibilityExpenseItem();
-        visibilityExpenseItem.setReqID(reqId+"");
+        visibilityExpenseItem.setReqID(reqId);
         visibilityExpenseItem.setForEmpID(empId);
         visibilityExpenseItem.setCurrencyCode(currency);
         VisibilityExpenseModel visibilityExpenseModel=new VisibilityExpenseModel();
@@ -693,7 +693,7 @@ public class AppRequestJSONString {
         return headPolicyData;
     }
 
-    public static String getCategoryData(int empId,int reqId) {
+    public static String getCategoryData(String empId,String reqId) {
         AdvanceLoginDataRequestModel loginData = new AdvanceLoginDataRequestModel();
         loginData.setDeviceID(MyApplication.getDeviceId());
         loginData.setSessionID(SharedPreference.getSessionId());
@@ -707,7 +707,7 @@ public class AppRequestJSONString {
         return expenseCategoryData;
     }
 
-    public static String getPeriodicMonthData(int empId ,int reqId,String [] monthList) {
+    public static String getPeriodicMonthData(String empId ,String reqId,String [] monthList) {
         AdvanceLoginDataRequestModel loginData = new AdvanceLoginDataRequestModel();
         loginData.setDeviceID(MyApplication.getDeviceId());
         loginData.setSessionID(SharedPreference.getSessionId());
@@ -722,7 +722,7 @@ public class AppRequestJSONString {
         return expenseCategoryData;
     }
 
-    public static String getProjectData(int claimType,int empId) {
+    public static String getProjectData(int claimType,String empId) {
         AdvanceLoginDataRequestModel loginData = new AdvanceLoginDataRequestModel();
         loginData.setDeviceID(MyApplication.getDeviceId());
         loginData.setSessionID(SharedPreference.getSessionId());
@@ -784,8 +784,8 @@ public class AppRequestJSONString {
         saveExpenseItem.setReqID(requestId);
         saveExpenseItem.setApproverID(approverID);
         saveExpenseItem.setApproverName(approverName);
-        saveExpenseItem.setProjectID(Integer.parseInt(projectId));
-        saveExpenseItem.setForEmpID(Integer.parseInt(empId));
+        saveExpenseItem.setProjectID(projectId);
+        saveExpenseItem.setForEmpID(empId);
 
         SaveExpenseModel saveExpenseModel=new SaveExpenseModel();
         saveExpenseModel.setFromButton(fromButton);
@@ -817,7 +817,7 @@ public class AppRequestJSONString {
         advanceItemModel.setReqAmount(reqAmount);
         advanceItemModel.setApprovalLevel(approvalLevel);
         advanceItemModel.setCurrencyCode(currencyCode);
-        advanceItemModel.setForEmpID(Integer.parseInt(forEmpId));
+        advanceItemModel.setForEmpID(forEmpId);
         advanceItemModel.setReasonCode(reasonCode);
         advanceItemModel.setReason(reason);
         advanceItemModel.setSource(2);
@@ -837,7 +837,7 @@ public class AppRequestJSONString {
         return AdvanceRequest;
     }
 
-    public static String getViewAdvanceSummaryData(int requestId,int advanceId) {
+    public static String getViewAdvanceSummaryData(String requestId,String advanceId) {
         AdvanceLoginDataRequestModel loginData = new AdvanceLoginDataRequestModel();
         loginData.setDeviceID(MyApplication.getDeviceId());
         loginData.setSessionID(SharedPreference.getSessionId());
@@ -851,7 +851,7 @@ public class AppRequestJSONString {
 
 
 
-    public static String getViewExpenseClaimSummaryData(int requestId) {
+    public static String getViewExpenseClaimSummaryData(String requestId) {
         AdvanceLoginDataRequestModel loginData = new AdvanceLoginDataRequestModel();
         loginData.setDeviceID(MyApplication.getDeviceId());
         loginData.setSessionID(SharedPreference.getSessionId());
@@ -1271,6 +1271,8 @@ public class AppRequestJSONString {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        Log.d("TAG","Home Request : "+jsonObject.toString());
+
         return jsonObject.toString();
     }
 }

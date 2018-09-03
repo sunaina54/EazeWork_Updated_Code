@@ -11,7 +11,7 @@ import java.io.Serializable;
 public class AdvanceListItemModel implements Serializable {
     private String AdjAmount;
     private String paidAmount;
-    private int AdvanceID;
+    private String AdvanceID;
     private String Flag;
     private String ReqCode;
     private int SeqNo;
@@ -42,11 +42,11 @@ public class AdvanceListItemModel implements Serializable {
         AdjAmount = adjAmount;
     }
 
-    public int getAdvanceID() {
+    public String getAdvanceID() {
         return AdvanceID;
     }
 
-    public void setAdvanceID(int advanceID) {
+    public void setAdvanceID(String advanceID) {
         AdvanceID = advanceID;
     }
 

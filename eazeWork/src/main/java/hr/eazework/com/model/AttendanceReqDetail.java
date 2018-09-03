@@ -12,7 +12,7 @@ public class AttendanceReqDetail implements Serializable{
     private String AttendID;
     private String BreakID;
     private String EmpCode;
-    private int EmpID;
+    private String EmpID;
     private String ExistingOutTime;
     private String ExistingTime;
     private String MarkDate;
@@ -81,11 +81,11 @@ public class AttendanceReqDetail implements Serializable{
         EmpCode = empCode;
     }
 
-    public int getEmpID() {
+    public String getEmpID() {
         return EmpID;
     }
 
-    public void setEmpID(int empID) {
+    public void setEmpID(String empID) {
         EmpID = empID;
     }
 

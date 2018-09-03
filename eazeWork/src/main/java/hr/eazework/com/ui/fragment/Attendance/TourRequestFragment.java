@@ -984,7 +984,8 @@ public class TourRequestFragment extends BaseFragment {
                                     }
 
                                     if (item.getParam().equalsIgnoreCase("TourSelfInitYN") && item.getValue().equalsIgnoreCase("Y")) {
-                                        employItem.setEmpID(Long.parseLong(loginUserModel.getUserModel().getEmpId()));
+                                        //employItem.setEmpID(Long.parseLong(loginUserModel.getUserModel().getEmpId()));
+                                        employItem.setEmpID(loginUserModel.getUserModel().getEmpId());
                                         empId = loginUserModel.getUserModel().getEmpId();
                                         employItem.setName(loginUserModel.getUserModel().getUserName());
                                         employItem.setEmpCode(loginUserModel.getUserModel().getEmpCode());

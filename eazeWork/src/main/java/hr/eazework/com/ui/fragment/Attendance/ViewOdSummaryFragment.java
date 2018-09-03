@@ -140,7 +140,7 @@ public class ViewOdSummaryFragment extends BaseFragment {
 
     private void sendViewRequestSummaryData() {
         getODRequestDetail = new GetODRequestDetail();
-        getODRequestDetail.setReqID(Integer.parseInt(getEmpWFHResponseItem.getReqID()));
+        getODRequestDetail.setReqID(getEmpWFHResponseItem.getReqID());
         getODRequestDetail.setAction(AppsConstant.VIEW_ACTION);
         Utility.showHidePregress(progressbar, true);
         CommunicationManager.getInstance().sendPostRequest(this,

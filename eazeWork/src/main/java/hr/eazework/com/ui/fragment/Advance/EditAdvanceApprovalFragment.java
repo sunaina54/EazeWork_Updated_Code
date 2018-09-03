@@ -767,7 +767,7 @@ public class EditAdvanceApprovalFragment extends BaseFragment {
 
             final SupportDocsItemModel fileObject = mDataset.get(position);
             holder.documentParentLayout.setVisibility(View.GONE);
-            if (fileObject.getDocID() != 0 && fileObject.getFlag().equalsIgnoreCase(AppsConstant.DELETE_FLAG)) {
+            if (!fileObject.getDocID().equalsIgnoreCase("0") && fileObject.getFlag().equalsIgnoreCase(AppsConstant.DELETE_FLAG)) {
                 holder.documentParentLayout.setVisibility(View.GONE);
 
             } else {
@@ -853,7 +853,7 @@ public class EditAdvanceApprovalFragment extends BaseFragment {
                     @Override
                     public void onClick(final View v) {
                         ArrayList<String> list = new ArrayList<>();
-                        if(fileObject.getDocID()!=0) {
+                        if(!fileObject.getDocID().equalsIgnoreCase("0") ) {
                             list.add("Edit");
                             list.add("Delete");
                             list.add("Download");
@@ -908,10 +908,10 @@ public class EditAdvanceApprovalFragment extends BaseFragment {
                                     dialog.show();
                                 } else if (selectedObject.toString().equalsIgnoreCase("Delete")) {
                                     SupportDocsItemModel doc = mDataset.get(position);
-                                    if (doc.getDocID() != 0 && doc.getFlag().equalsIgnoreCase(AppsConstant.OLD_FLAG)) {
+                                    if (!doc.getDocID().equalsIgnoreCase("0") && doc.getFlag().equalsIgnoreCase(AppsConstant.OLD_FLAG)) {
                                         doc.setFlag(AppsConstant.DELETE_FLAG);
                                         mDataset.set(position, doc);
-                                    } else if (doc.getDocID() == 0 && doc.getFlag().equalsIgnoreCase(AppsConstant.NEW_FLAG)) {
+                                    } else if (doc.getDocID().equalsIgnoreCase("0") && doc.getFlag().equalsIgnoreCase(AppsConstant.NEW_FLAG)) {
                                         mDataset.remove(position);
                                     }
                                     DocumentUploadAdapter.this.notifyDataSetChanged();

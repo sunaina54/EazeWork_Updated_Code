@@ -862,7 +862,7 @@ public class OutdoorDutyRequestFragment extends BaseFragment {
 
     private void sendViewRequestSummaryData() {
         getODRequestDetail = new GetODRequestDetail();
-        getODRequestDetail.setReqID(Integer.parseInt(getEmpWFHResponseItem.getReqID()));
+        getODRequestDetail.setReqID(getEmpWFHResponseItem.getReqID());
         getODRequestDetail.setAction(AppsConstant.EDIT_ACTION);
         CommunicationManager.getInstance().sendPostRequest(this,
                 AppRequestJSONString.ODSummaryDetails(getODRequestDetail),
@@ -871,7 +871,7 @@ public class OutdoorDutyRequestFragment extends BaseFragment {
 
     private void sendViewWFHRequestSummaryData() {
         getODRequestDetail = new GetODRequestDetail();
-        getODRequestDetail.setReqID(Integer.parseInt(employeeLeaveModel.getReqID()));
+        getODRequestDetail.setReqID(employeeLeaveModel.getReqID());
         getODRequestDetail.setAction(AppsConstant.EDIT_ACTION);
         CommunicationManager.getInstance().sendPostRequest(this,
                 AppRequestJSONString.ODSummaryDetails(getODRequestDetail),
@@ -966,7 +966,8 @@ public class OutdoorDutyRequestFragment extends BaseFragment {
                                     }
 
                                     if(item.getParam().equalsIgnoreCase("ODSelfInitYN") && item.getValue().equalsIgnoreCase("Y")){
-                                        employItem.setEmpID(Long.parseLong(loginUserModel.getUserModel().getEmpId()));
+                                        //employItem.setEmpID(Long.parseLong(loginUserModel.getUserModel().getEmpId()));
+                                        employItem.setEmpID(loginUserModel.getUserModel().getEmpId());
                                         empId = loginUserModel.getUserModel().getEmpId();
                                         employItem.setName(loginUserModel.getUserModel().getUserName());
                                         employItem.setEmpCode(loginUserModel.getUserModel().getEmpCode());

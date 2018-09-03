@@ -14,7 +14,7 @@ public class WFHRequestDetailItem implements Serializable {
     private String PendEmpID;
     private String Remark;
     private String ReqCode;
-    private int ReqID;
+    private String ReqID;
     private int ReqStatus ;
     private String EndDate;
     private String StartDate ;
@@ -160,11 +160,11 @@ public class WFHRequestDetailItem implements Serializable {
         ReqCode = reqCode;
     }
 
-    public int getReqID() {
+    public String getReqID() {
         return ReqID;
     }
 
-    public void setReqID(int reqID) {
+    public void setReqID(String reqID) {
         ReqID = reqID;
     }
 

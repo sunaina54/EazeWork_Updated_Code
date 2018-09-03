@@ -141,7 +141,9 @@ public class EditViewExpenseClaimFragment extends BaseFragment {
     private String fromButton;
     private Button saveDraftBTN, submitBTN, resubmitBT;
     private ArrayList<DocListModel> uploadFileList;
-    private int empId = 0, claimTypeId = 0, projectId = 0, approverID;
+    private int  claimTypeId = 0;
+    private String projectId = "0";
+    private String empId="0",approverID;
     private String requestId = "", approverId = "";
     private String requestCode, reasonCode, amount;
     private Double totalExpenseAmount;
@@ -495,7 +497,7 @@ if(saveExpenseRequestModel!=null) {
 
         if (saveExpenseRequestModel.getExpense().getExpenseItem().getApproverID() != null) {
             approverLl.setVisibility(View.VISIBLE);
-            approverID = Integer.parseInt(saveExpenseRequestModel.getExpense().getExpenseItem().getApproverID());
+            approverID = saveExpenseRequestModel.getExpense().getExpenseItem().getApproverID();
             approverTV.setHint(saveExpenseRequestModel.getExpense().getExpenseItem().getApproverName());
         }
 
@@ -590,10 +592,10 @@ if(saveExpenseRequestModel!=null) {
                                         if (list != null && list.size() > 0) {
                                             for (int i = 0; i < list.size(); i++) {
                                                 LineItemsModel model = list.get(i);
-                                                if (model.getLineItemID() != 0) {
+                                                if (!model.getLineItemID().equalsIgnoreCase("0")) {
                                                     model.setFlag(AppsConstant.DELETE_FLAG);
                                                     list.set(i, model);
-                                                } else if (model.getLineItemID() == 0) {
+                                                } else if (model.getLineItemID().equalsIgnoreCase("0")) {
                                                     list.remove(i);
                                                 }
                                             }
@@ -675,7 +677,7 @@ if(saveExpenseRequestModel!=null) {
                                 projectListItem = (ProjectListItem) selectedObject;
                                 projectTV.setText(projectListItem.getProjectName());
                                 projectName = projectListItem.getProjectName();
-                                projectId = Integer.parseInt(projectListItem.getProjectID());
+                                projectId = projectListItem.getProjectID();
                                 saveExpenseRequestModel.getExpense().getExpenseItem().setProjectID(projectId);
                                 saveExpenseRequestModel.getExpense().getExpenseItem().setProjectName(projectName);
                                 sendExpenseApproverData();
@@ -690,8 +692,10 @@ if(saveExpenseRequestModel!=null) {
                 }
                 break;
             case R.id.onBehalfTV:
-                if (expensePageInitResponseModel != null &&  expensePageInitResponseModel.getGetExpensePageInitResult() != null &&
-                        expensePageInitResponseModel.getGetExpensePageInitResult().getOnBehalfOfYN().equalsIgnoreCase("Y")) {
+                if (expensePageInitResponseModel != null &&
+                        expensePageInitResponseModel.getGetExpensePageInitResult() != null &&
+                        expensePageInitResponseModel.getGetExpensePageInitResult().
+                                getOnBehalfOfYN().equalsIgnoreCase("Y")) {
                     onBehalfOfListModel = expensePageInitResponseModel.getGetExpensePageInitResult().getOnBehalfOfList();
                     if (onBehalfOfListModel != null) {
                         ArrayList<EmployeeListModel> employeeListModels = onBehalfOfListModel.getEpmployeeList();
@@ -799,7 +803,7 @@ if(saveExpenseRequestModel!=null) {
                     CommunicationConstant.API_GET_APPROVER_DETAILS, true);
         } else {
             CommunicationManager.getInstance().sendPostRequest(this,
-                    AppRequestJSONString.getExpenseApproverData(claimTypeId, Integer.parseInt(loginEmpId),String.valueOf(projectId)),
+                    AppRequestJSONString.getExpenseApproverData(claimTypeId, loginEmpId,String.valueOf(projectId)),
                     CommunicationConstant.API_GET_APPROVER_DETAILS, true);
         }
     }
@@ -887,8 +891,8 @@ if(saveExpenseRequestModel!=null) {
             projectId = item.getProjectID();
 
             if (projectTV.getText().toString().equalsIgnoreCase("")) {
-                saveExpenceItem.setProjectID(0);
-                projectId = 0;
+                saveExpenceItem.setProjectID("0");
+                projectId = "0";
                 saveExpenseRequestModel.getExpense().getExpenseItem().setProjectID(projectId);
             } else {
                 saveExpenseRequestModel.getExpense().getExpenseItem().setProjectID(projectId);
@@ -961,10 +965,11 @@ if(saveExpenseRequestModel!=null) {
                 saveExpenseRequestModel.getExpense().getExpenseItem().getLineItems() != null) {
 
             approverId = saveExpenseRequestModel.getExpense().getExpenseItem().getApproverID() + "";
-            if (saveExpenseRequestModel.getExpense().getExpenseItem().getProjectID() != 0) {
+            if (saveExpenseRequestModel.getExpense().getExpenseItem().getProjectID()!=null &&
+                    !saveExpenseRequestModel.getExpense().getExpenseItem().getProjectID().equalsIgnoreCase("0")) {
                 projectId = saveExpenseRequestModel.getExpense().getExpenseItem().getProjectID();
             } else {
-                projectId = 0;
+                projectId = "0";
             }
             empId = saveExpenseRequestModel.getExpense().getExpenseItem().getForEmpID();
             claimTypeId = saveExpenseRequestModel.getExpense().getExpenseItem().getClaimTypeID();
@@ -990,7 +995,7 @@ if(saveExpenseRequestModel!=null) {
             String[] monthList=sendPeriodicMonthData();
             if(monthList!=null && monthList.length>0) {
                 CommunicationManager.getInstance().sendPostRequest(this,
-                        AppRequestJSONString.getPeriodicMonthData(empId, Integer.parseInt(requestId), monthList),
+                        AppRequestJSONString.getPeriodicMonthData(empId, requestId, monthList),
                         CommunicationConstant.API_GET_MONTH_LIST, true);
             }else{
 
@@ -1014,7 +1019,7 @@ if(saveExpenseRequestModel!=null) {
                 String[] monthList=sendPeriodicMonthData();
                 if(monthList!=null && monthList.length>0) {
                     CommunicationManager.getInstance().sendPostRequest(this,
-                            AppRequestJSONString.getPeriodicMonthData(empId, Integer.parseInt(requestId), monthList),
+                            AppRequestJSONString.getPeriodicMonthData(empId, requestId, monthList),
                             CommunicationConstant.API_GET_MONTH_LIST, true);
                 }else{
 
@@ -1039,7 +1044,7 @@ if(saveExpenseRequestModel!=null) {
 
         } else {
             CommunicationManager.getInstance().sendPostRequest(this,
-                    AppRequestJSONString.getProjectData(claimTypeId, Integer.parseInt(loginEmpId)),
+                    AppRequestJSONString.getProjectData(claimTypeId,loginEmpId),
                     CommunicationConstant.API_GET_PROJECT_LIST_DETAILS, true);
         }
     }
@@ -1064,7 +1069,7 @@ if(saveExpenseRequestModel!=null) {
                         if (saveExpenseRequestModel != null) {
                             if (saveExpenseRequestModel.getExpense() != null) {
                                 if (saveExpenseRequestModel.getExpense().getExpenseItem() != null &&
-                                        saveExpenseRequestModel.getExpense().getExpenseItem().getForEmpID() == item.getEmpID()) {
+                                        saveExpenseRequestModel.getExpense().getExpenseItem().getForEmpID().equalsIgnoreCase(item.getEmpID())) {
                                     onBehalfTV.setText(item.getName());
                                     empId = item.getEmpID();
                                     employeeList = item;
@@ -1074,7 +1079,7 @@ if(saveExpenseRequestModel!=null) {
                                 }
                             }
                         }
-                        if (item.getEmpID() == Integer.parseInt(loginEmpId)) {
+                        if (item.getEmpID().equalsIgnoreCase(loginEmpId)) {
                             onBehalfTV.setText(item.getName());
                             empId = item.getEmpID();
                             employeeList = item;
@@ -1124,7 +1129,7 @@ if(saveExpenseRequestModel!=null) {
                 }else {
                     approverLl.setVisibility(View.VISIBLE);
                     approverTV.setText("");
-                    approverID=0;
+                    approverID="0";
                     saveExpenseRequestModel.getExpense().getExpenseItem().setApproverID(approverId);
                     saveExpenseRequestModel.getExpense().getExpenseItem().setApproverName(getApproverResponseModel.getGetApproverDetailsResult().getName());
                 }
@@ -1151,7 +1156,8 @@ if(saveExpenseRequestModel!=null) {
                 Log.d("TAG", "Advance Response : " + str);
                 viewClaimSummaryResponseModel = ViewClaimSummaryResponseModel.create(str);
                 if(viewClaimSummaryResponseModel != null && viewClaimSummaryResponseModel.getGetExpenseDetailResult() != null &&
-                        viewClaimSummaryResponseModel != null && !viewClaimSummaryResponseModel.getGetExpenseDetailResult().getErrorCode().equalsIgnoreCase(AppsConstant.SUCCESS)){
+                        viewClaimSummaryResponseModel != null &&
+                        !viewClaimSummaryResponseModel.getGetExpenseDetailResult().getErrorCode().equalsIgnoreCase(AppsConstant.SUCCESS)){
                     new AlertCustomDialog(getActivity(),viewClaimSummaryResponseModel.getGetExpenseDetailResult().getErrorMessage());
                     return;
                 }
@@ -1536,7 +1542,7 @@ if(saveExpenseRequestModel!=null) {
             Utility.refreshLineItem(currencyTV,dataSet);
             //old  line item data
 
-            if (item.getLineItemID() != 0 && !item.getFlag().equalsIgnoreCase(AppsConstant.DELETE_FLAG)) {
+            if (!item.getLineItemID().equalsIgnoreCase("0") && !item.getFlag().equalsIgnoreCase(AppsConstant.DELETE_FLAG)) {
                 String[] fromDate = item.getDateFrom().split(" ");
                 String[] toDate = item.getDateTo().split(" ");
                 holder.fromDateTV.setText(fromDate[0]);
@@ -1627,7 +1633,7 @@ if(saveExpenseRequestModel!=null) {
                                     startActivityForResult(theIntent,AddExpenseActivity.REQUEST_CODE);
                                 } else if (selectedObject.toString().equalsIgnoreCase("Delete")) {
                                     LineItemsModel lineItems = dataSet.get(listPosition);
-                                    if (lineItems.getLineItemID() != 0 && lineItems.getFlag().equalsIgnoreCase(AppsConstant.OLD_FLAG)) {
+                                    if (lineItems.getLineItemID().equalsIgnoreCase("0") && lineItems.getFlag().equalsIgnoreCase(AppsConstant.OLD_FLAG)) {
                                         lineItems.setFlag(AppsConstant.DELETE_FLAG);
                                         holder.lineItemId.setVisibility(View.GONE);
                                         dataSet.set(listPosition, lineItems);
@@ -1695,7 +1701,7 @@ if(saveExpenseRequestModel!=null) {
 
             //New Line Item Data
 
-            if (item.getLineItemID() == 0 && !item.getFlag().equalsIgnoreCase(AppsConstant.DELETE_FLAG)) {
+            if (item.getLineItemID().equalsIgnoreCase("0") && !item.getFlag().equalsIgnoreCase(AppsConstant.DELETE_FLAG)) {
                 holder.lineItemId.setVisibility(View.VISIBLE);
                 if (item.getCategoryID() == 1) {
                     String[] fromDate = item.getDateFrom().split(" ");
@@ -1970,7 +1976,7 @@ if(saveExpenseRequestModel!=null) {
                 }
 
             } else {
-                saveExpenseItem.setForEmpID(Integer.parseInt(loginEmpId));
+                saveExpenseItem.setForEmpID(loginEmpId);
             }
             if (getApproverResponseModel != null && getApproverResponseModel.getGetApproverDetailsResult() != null) {
                 saveExpenseItem.setApproverName(approverTV.getText().toString());
@@ -2063,7 +2069,7 @@ if(saveExpenseRequestModel!=null) {
         public void onBindViewHolder(final ViewHolder holder, final int position) {
             final AdvanceListItemModel item = mDataset.get(position);
             holder.advanceListParentRL.setVisibility(View.GONE);
-            if (item.getAdvanceID() != 0 && item.getFlag().equalsIgnoreCase(AppsConstant.DELETE_FLAG)) {
+            if (!item.getAdvanceID().equalsIgnoreCase("0") && item.getFlag().equalsIgnoreCase(AppsConstant.DELETE_FLAG)) {
                 holder.advanceListParentRL.setVisibility(View.GONE);
 
             } else {
@@ -2453,7 +2459,7 @@ if(saveExpenseRequestModel!=null) {
             final DocListModel fileObject = mDataset.get(position);
             // fileObject.setFlag(AppsConstant.DELETE_FLAG);
             holder.documentParentLayout.setVisibility(View.GONE);
-            if (fileObject.getDocID() != 0 && fileObject.getFlag().equalsIgnoreCase(AppsConstant.DELETE_FLAG)) {
+            if (fileObject.getDocID()!=null && !fileObject.getDocID().equalsIgnoreCase("0") && fileObject.getFlag().equalsIgnoreCase(AppsConstant.DELETE_FLAG)) {
                 holder.documentParentLayout.setVisibility(View.GONE);
 
             } else {
@@ -2534,7 +2540,7 @@ if(saveExpenseRequestModel!=null) {
                     @Override
                     public void onClick(final View v) {
                         ArrayList<String> list = new ArrayList<>();
-                        if(fileObject.getDocID()!=0) {
+                        if(!fileObject.getDocID().equalsIgnoreCase("0")) {
                             list.add("Edit");
                             list.add("Delete");
                             list.add("Download");
@@ -2590,10 +2596,10 @@ if(saveExpenseRequestModel!=null) {
                                     dialog.show();
                                 } else if (selectedObject.toString().equalsIgnoreCase("Delete")) {
                                     DocListModel doc = mDataset.get(position);
-                                    if (doc.getDocID() != 0 && doc.getFlag().equalsIgnoreCase(AppsConstant.OLD_FLAG)) {
+                                    if (!doc.getDocID().equalsIgnoreCase("0") && doc.getFlag().equalsIgnoreCase(AppsConstant.OLD_FLAG)) {
                                         doc.setFlag(AppsConstant.DELETE_FLAG);
                                         mDataset.set(position, doc);
-                                    } else if (doc.getDocID() == 0 && doc.getFlag().equalsIgnoreCase(AppsConstant.NEW_FLAG)) {
+                                    } else if (doc.getDocID().equalsIgnoreCase("0")&& doc.getFlag().equalsIgnoreCase(AppsConstant.NEW_FLAG)) {
                                         mDataset.remove(position);
                                     }
                                     DocumentUploadAdapter.this.notifyDataSetChanged();

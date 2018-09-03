@@ -129,8 +129,9 @@ public class EditExpenseApprovalFragment extends BaseFragment {
     private String fromButton;
     private Button rejectBTN, returnBTN, approvalBTN,withdrawBTN;
     private ArrayList<DocListModel> uploadFileList;
-    private int empId = 0, claimTypeId = 0, projectId = 0;
-    private String requestId = "", approverId = "";
+    private int claimTypeId = 0;
+    private String projectId = "0";
+    private String requestId = "", approverId = "",empId="0";
     private String requestCode, reasonCode, amount;
     private SaveExpenseRequestModel saveExpenseRequestModel;
     private RecyclerView paymentRV;
@@ -335,7 +336,9 @@ public class EditExpenseApprovalFragment extends BaseFragment {
 
             }
 
-            if (saveExpenseRequestModel.getExpense().getExpenseItem().getProjectID() >0 ) {
+            if (saveExpenseRequestModel.getExpense().getExpenseItem().getProjectID()!=null &&
+                    !saveExpenseRequestModel.getExpense().getExpenseItem().getProjectID().
+                            equalsIgnoreCase("0")) {
 
                 projectLinearLayout.setVisibility(View.VISIBLE);
                 projectTV.setText(saveExpenseRequestModel.getExpense().getExpenseItem().getProjectName());
@@ -657,7 +660,7 @@ public class EditExpenseApprovalFragment extends BaseFragment {
 
             projectId = item.getProjectID();
 
-            if (item.getApproverID() != 0) {
+            if (!item.getApproverID().equalsIgnoreCase("0")) {
                 approverId = item.getApproverID() + "";
                 saveExpenceItem.setApproverID(item.getApproverID() + "");
                 saveExpenceItem.setApproverName(item.getApproverName());
@@ -666,8 +669,8 @@ public class EditExpenseApprovalFragment extends BaseFragment {
 
             if (projectTV.getText().toString().equalsIgnoreCase("")) {
 
-                saveExpenceItem.setProjectID(0);
-                projectId = 0;
+                saveExpenceItem.setProjectID("0");
+                projectId = "0";
                 saveExpenceItem.setProjectID(projectId);
             } else {
                 projectId = item.getProjectID();
@@ -815,10 +818,11 @@ public class EditExpenseApprovalFragment extends BaseFragment {
                 saveExpenseRequestModel.getExpense().getExpenseItem().getLineItems() != null) {
 
             approverId = saveExpenseRequestModel.getExpense().getExpenseItem().getApproverID() + "";
-            if(saveExpenseRequestModel.getExpense().getExpenseItem().getProjectID()>0) {
+            if(saveExpenseRequestModel.getExpense().getExpenseItem().getProjectID()!=null &&
+                    !saveExpenseRequestModel.getExpense().getExpenseItem().getProjectID().equalsIgnoreCase("0")) {
                 projectId = saveExpenseRequestModel.getExpense().getExpenseItem().getProjectID();
             }else{
-                projectId=0;
+                projectId="0";
             }
             empId = saveExpenseRequestModel.getExpense().getExpenseItem().getForEmpID();
             claimTypeId = saveExpenseRequestModel.getExpense().getExpenseItem().getClaimTypeID();
@@ -844,7 +848,7 @@ public class EditExpenseApprovalFragment extends BaseFragment {
             String[] monthList = sendPeriodicMonthData();
             if (monthList != null && monthList.length > 0) {
                 CommunicationManager.getInstance().sendPostRequest(this,
-                        AppRequestJSONString.getPeriodicMonthData(empId, Integer.parseInt(requestId), monthList),
+                        AppRequestJSONString.getPeriodicMonthData(empId,requestId, monthList),
                         CommunicationConstant.API_GET_MONTH_LIST, true);
             } else {
 
@@ -879,10 +883,10 @@ public class EditExpenseApprovalFragment extends BaseFragment {
                     advanceList = viewClaimSummaryResponseModel.getGetExpenseDetailResult().getExpenseItem().getAdvanceList();
                 }
                 claimTypeId = viewClaimSummaryResponseModel.getGetExpenseDetailResult().getExpenseItem().getClaimTypeID();
-                if (viewClaimSummaryResponseModel.getGetExpenseDetailResult().getExpenseItem().getProjectID() >0) {
+                if (viewClaimSummaryResponseModel.getGetExpenseDetailResult().getExpenseItem().getProjectID()!=null && !viewClaimSummaryResponseModel.getGetExpenseDetailResult().getExpenseItem().getProjectID().equalsIgnoreCase("0")) {
                     projectId = viewClaimSummaryResponseModel.getGetExpenseDetailResult().getExpenseItem().getProjectID();
                 } else {
-                    projectId = 0;
+                    projectId = "0";
                 }
                 if (viewClaimSummaryResponseModel.getGetExpenseDetailResult().getExpenseItem().getDocList() != null) {
                     uploadFileList = viewClaimSummaryResponseModel.getGetExpenseDetailResult().getExpenseItem().getDocList();
@@ -891,7 +895,7 @@ public class EditExpenseApprovalFragment extends BaseFragment {
                 String[] monthList = sendPeriodicMonthData();
                 if (monthList != null && monthList.length > 0) {
                     CommunicationManager.getInstance().sendPostRequest(this,
-                            AppRequestJSONString.getPeriodicMonthData(empId, Integer.parseInt(requestId), monthList),
+                            AppRequestJSONString.getPeriodicMonthData(empId, requestId, monthList),
                             CommunicationConstant.API_GET_MONTH_LIST, true);
                 } else {
 
@@ -1405,7 +1409,7 @@ public class EditExpenseApprovalFragment extends BaseFragment {
         public void onBindViewHolder(final ViewHolder holder, final int position) {
             final AdvanceListItemModel item = mDataset.get(position);
             holder.advanceListParentRL.setVisibility(View.GONE);
-            if (item.getAdvanceID() != 0 && item.getFlag().equalsIgnoreCase(AppsConstant.DELETE_FLAG)) {
+            if (!item.getAdvanceID().equalsIgnoreCase("0") && item.getFlag().equalsIgnoreCase(AppsConstant.DELETE_FLAG)) {
                 holder.advanceListParentRL.setVisibility(View.GONE);
 
             } else {
@@ -1807,7 +1811,8 @@ public class EditExpenseApprovalFragment extends BaseFragment {
 
             final DocListModel fileObject = mDataset.get(position);
             holder.documentParentLayout.setVisibility(View.GONE);
-            if (fileObject.getDocID() != 0 && fileObject.getFlag().equalsIgnoreCase(AppsConstant.DELETE_FLAG)) {
+            if (fileObject.getDocID()!=null && !fileObject.getDocID().equalsIgnoreCase("0")
+                    && fileObject.getFlag().equalsIgnoreCase(AppsConstant.DELETE_FLAG)) {
                 holder.documentParentLayout.setVisibility(View.GONE);
 
             } else {
@@ -1889,7 +1894,7 @@ public class EditExpenseApprovalFragment extends BaseFragment {
                     @Override
                     public void onClick(final View v) {
                         ArrayList<String> list = new ArrayList<>();
-                        if(fileObject.getDocID()!=0) {
+                        if(!fileObject.getDocID().equalsIgnoreCase("0")) {
                             list.add("Edit");
                             list.add("Delete");
                             list.add("Download");
@@ -1945,10 +1950,11 @@ public class EditExpenseApprovalFragment extends BaseFragment {
                                     dialog.show();
                                 } else if (selectedObject.toString().equalsIgnoreCase("Delete")) {
                                     DocListModel doc = mDataset.get(position);
-                                    if (doc.getDocID() != 0 && doc.getFlag().equalsIgnoreCase(AppsConstant.OLD_FLAG)) {
+                                    if (doc.getDocID()!=null && !doc.getDocID().equalsIgnoreCase("0")&& doc.getFlag().equalsIgnoreCase(AppsConstant.OLD_FLAG)) {
                                         doc.setFlag(AppsConstant.DELETE_FLAG);
                                         mDataset.set(position, doc);
-                                    } else if (doc.getDocID() == 0 && doc.getFlag().equalsIgnoreCase(AppsConstant.NEW_FLAG)) {
+                                    } else if (doc.getDocID().equalsIgnoreCase("0")
+                                            && doc.getFlag().equalsIgnoreCase(AppsConstant.NEW_FLAG)) {
                                         mDataset.remove(position);
                                     }
                                     DocumentUploadAdapter.this.notifyDataSetChanged();

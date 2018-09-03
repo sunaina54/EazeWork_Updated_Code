@@ -7,13 +7,13 @@ import java.io.Serializable;
  */
 
 public class TimeModificationResultModel extends GenericResponse implements Serializable {
-    private int ReqID;
+    private String ReqID;
 
-    public int getReqID() {
+    public String getReqID() {
         return ReqID;
     }
 
-    public void setReqID(int reqID) {
+    public void setReqID(String reqID) {
         ReqID = reqID;
     }
 }

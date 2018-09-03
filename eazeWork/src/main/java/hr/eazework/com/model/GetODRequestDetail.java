@@ -10,8 +10,16 @@ import java.io.Serializable;
 
 public class GetODRequestDetail implements Serializable {
     private AdvanceLoginDataRequestModel loginData;
-    private int reqID;
+    private String reqID;
     private String action;
+
+    public String getReqID() {
+        return reqID;
+    }
+
+    public void setReqID(String reqID) {
+        this.reqID = reqID;
+    }
 
     public String getAction() {
         return action;
@@ -21,13 +29,7 @@ public class GetODRequestDetail implements Serializable {
         this.action = action;
     }
 
-    public int getReqID() {
-        return reqID;
-    }
 
-    public void setReqID(int reqID) {
-        this.reqID = reqID;
-    }
 
     public AdvanceLoginDataRequestModel getLoginData() {
         return loginData;

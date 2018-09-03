@@ -10,11 +10,11 @@ import java.util.ArrayList;
 public class ODRequestDetail implements Serializable {
     private String ApprovalLevel;
     private String Button;
-    private int ForEmpID;
+    private String ForEmpID;
     private String PendEmpID;
     private String Remark;
     private String ReqCode;
-    private int ReqID;
+    private String ReqID;
     private int ReqStatus ;
     private String TotalDays;
     private String ForEmpName;
@@ -30,7 +30,7 @@ public class ODRequestDetail implements Serializable {
     private String[] Buttons;
     private int PendEmpId;
 
-    public void setForEmpID(int forEmpID) {
+    public void setForEmpID(String forEmpID) {
         ForEmpID = forEmpID;
     }
 
@@ -58,7 +58,7 @@ public class ODRequestDetail implements Serializable {
         Button = button;
     }
 
-    public int getForEmpID() {
+    public String getForEmpID() {
         return ForEmpID;
     }
 
@@ -86,11 +86,11 @@ public class ODRequestDetail implements Serializable {
         ReqCode = reqCode;
     }
 
-    public int getReqID() {
+    public String getReqID() {
         return ReqID;
     }
 
-    public void setReqID(int reqID) {
+    public void setReqID(String reqID) {
         ReqID = reqID;
     }
 

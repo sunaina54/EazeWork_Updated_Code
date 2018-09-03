@@ -9,16 +9,24 @@ import java.io.Serializable;
  */
 
 public class ApproverExpenseModel implements Serializable {
-    private int ForEmpID;
+    private String ForEmpID;
     private int ReqID;
     private String ProjectID;
     private String ClaimTypeID;
 
-    public int getForEmpID() {
+    /*public int getForEmpID() {
         return ForEmpID;
     }
 
     public void setForEmpID(int forEmpID) {
+        ForEmpID = forEmpID;
+    }*/
+
+    public String getForEmpID() {
+        return ForEmpID;
+    }
+
+    public void setForEmpID(String forEmpID) {
         ForEmpID = forEmpID;
     }
 

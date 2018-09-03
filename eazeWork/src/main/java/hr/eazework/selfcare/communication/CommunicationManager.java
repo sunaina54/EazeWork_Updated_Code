@@ -577,7 +577,7 @@ public class CommunicationManager extends CommunicationManagerBase {
                 key = CommunicationConstant.API_KEY_GET_EMP_ANNOUNCEMENT;
                 break;
         }
-        return CommunicationConstant.getMobileCareURl() + "/WCFService/" + key;
+        return CommunicationConstant.getMobileCareURl() + "/EWAPI/" + key;
     }
 
     public static String getMsisdn() {

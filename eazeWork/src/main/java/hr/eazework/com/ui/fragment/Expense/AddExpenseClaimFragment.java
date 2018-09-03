@@ -122,7 +122,8 @@ public class AddExpenseClaimFragment extends BaseFragment {
     private EditText detailsET, remarksET;
     private GetExpensePageInitResponseModel expensePageInitResponseModel;
     private ClaimTypeListItem claimTypeListItems;
-    private int claimTypeID, empId;
+    private int claimTypeID;
+    private String empId;
     private GetApproverResponseModel getApproverResponseModel;
     private ProjectListResponseModel projectListResponseModel;
     private AdvanceAdjustmentResponseModel advanceAdjustmentResponseModel;
@@ -450,7 +451,7 @@ public class AddExpenseClaimFragment extends BaseFragment {
                                 projectTV.setText(projectListItem.getProjectName());
                                 projectName = projectListItem.getProjectName();
                                 projectId = projectListItem.getProjectID();
-                                saveExpenseRequestModel.getExpense().getExpenseItem().setProjectID(Integer.parseInt(projectId));
+                                saveExpenseRequestModel.getExpense().getExpenseItem().setProjectID(projectId);
                                 saveExpenseRequestModel.getExpense().getExpenseItem().setProjectName(projectName);
 
                                 sendExpenseApproverData();
@@ -548,7 +549,7 @@ public class AddExpenseClaimFragment extends BaseFragment {
                     CommunicationConstant.API_GET_APPROVER_DETAILS, true);
         } else {
             CommunicationManager.getInstance().sendPostRequest(this,
-                    AppRequestJSONString.getExpenseApproverData(claimTypeID, Integer.parseInt(loginEmpId), projectId),
+                    AppRequestJSONString.getExpenseApproverData(claimTypeID, loginEmpId, projectId),
                     CommunicationConstant.API_GET_APPROVER_DETAILS, true);
         }
     }
@@ -579,7 +580,7 @@ public class AddExpenseClaimFragment extends BaseFragment {
 
         } else {
             CommunicationManager.getInstance().sendPostRequest(this,
-                    AppRequestJSONString.getProjectData(claimTypeID, Integer.parseInt(loginEmpId)),
+                    AppRequestJSONString.getProjectData(claimTypeID, loginEmpId),
                     CommunicationConstant.API_GET_PROJECT_LIST_DETAILS, true);
         }
     }
@@ -657,7 +658,7 @@ public class AddExpenseClaimFragment extends BaseFragment {
                         if (monthList != null && monthList.length > 0) {
 
                             CommunicationManager.getInstance().sendPostRequest(this,
-                                    AppRequestJSONString.getPeriodicMonthData(empId, 0, monthList),
+                                    AppRequestJSONString.getPeriodicMonthData(empId, "0", monthList),
                                     CommunicationConstant.API_GET_MONTH_LIST, true);
                         } else {
                             CommunicationManager.getInstance().sendPostRequest(this,
@@ -685,7 +686,7 @@ public class AddExpenseClaimFragment extends BaseFragment {
                         String[] monthList = sendPeriodicMonthData();
                         if (monthList != null && monthList.length > 0) {
                             CommunicationManager.getInstance().sendPostRequest(this,
-                                    AppRequestJSONString.getPeriodicMonthData(Integer.parseInt(loginEmpId), 0, monthList),
+                                    AppRequestJSONString.getPeriodicMonthData(loginEmpId, "0", monthList),
                                     CommunicationConstant.API_GET_MONTH_LIST, true);
                         } else {
                             CommunicationManager.getInstance().sendPostRequest(this,
@@ -741,7 +742,7 @@ public class AddExpenseClaimFragment extends BaseFragment {
                     String[] monthList = sendPeriodicMonthData();
                     if (monthList != null && monthList.length > 0) {
                         CommunicationManager.getInstance().sendPostRequest(this,
-                                AppRequestJSONString.getPeriodicMonthData(empId, 0, monthList),
+                                AppRequestJSONString.getPeriodicMonthData(empId, "0", monthList),
                                 CommunicationConstant.API_GET_MONTH_LIST, true);
                     } else {
                         CommunicationManager.getInstance().sendPostRequest(this,
@@ -777,7 +778,7 @@ public class AddExpenseClaimFragment extends BaseFragment {
                     String[] monthList = sendPeriodicMonthData();
                     if (monthList!=null && monthList.length > 0) {
                         CommunicationManager.getInstance().sendPostRequest(this,
-                                AppRequestJSONString.getPeriodicMonthData(Integer.parseInt(loginEmpId), 0, monthList),
+                                AppRequestJSONString.getPeriodicMonthData(loginEmpId, "0", monthList),
                                 CommunicationConstant.API_GET_MONTH_LIST, true);
                     } else {
                         CommunicationManager.getInstance().sendPostRequest(this,
@@ -848,7 +849,7 @@ public class AddExpenseClaimFragment extends BaseFragment {
                                 if (saveExpenseRequestModel != null) {
                                     if (saveExpenseRequestModel.getExpense() != null) {
                                         if (saveExpenseRequestModel.getExpense().getExpenseItem() != null &&
-                                                saveExpenseRequestModel.getExpense().getExpenseItem().getForEmpID() == item.getEmpID()) {
+                                                saveExpenseRequestModel.getExpense().getExpenseItem().getForEmpID().equalsIgnoreCase(item.getEmpID())) {
                                             onBehalfTV.setText(item.getName());
                                             empId = item.getEmpID();
                                             employeeList = item;
@@ -858,7 +859,7 @@ public class AddExpenseClaimFragment extends BaseFragment {
                                         }
                                     }
                                 }
-                                if (item.getEmpID() == Integer.parseInt(loginEmpId)) {
+                                if (item.getEmpID().equalsIgnoreCase(loginEmpId)) {
                                     onBehalfTV.setText(item.getName());
                                     empId = item.getEmpID();
                                     employeeList = item;
@@ -893,7 +894,7 @@ public class AddExpenseClaimFragment extends BaseFragment {
                     }
 
                 } else {
-                    saveExpenseRequestModel.getExpense().getExpenseItem().setForEmpID(Integer.parseInt(loginEmpId));
+                    saveExpenseRequestModel.getExpense().getExpenseItem().setForEmpID(loginEmpId);
                 }
 
 

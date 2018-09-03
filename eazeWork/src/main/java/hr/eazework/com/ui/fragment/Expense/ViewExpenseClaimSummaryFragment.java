@@ -404,7 +404,7 @@ public class ViewExpenseClaimSummaryFragment extends BaseFragment {
         netAmountTV.setText(item.getNetAmountToBePaid());
 
         forEmpId = item.getForEmpID() + "";
-        if (item.getApproverID() != 0) {
+        if (!item.getApproverID().equalsIgnoreCase("0")) {
             approverID = item.getApproverID() + "";
             approverName = item.getApproverName();
         }
@@ -417,7 +417,7 @@ public class ViewExpenseClaimSummaryFragment extends BaseFragment {
             claimTypeID = item.getClaimTypeID();
         }
 
-        if (item.getProjectID() != 0) {
+        if (!item.getProjectID().equalsIgnoreCase("0")) {
             projectId = item.getProjectID() + "";
         }
 

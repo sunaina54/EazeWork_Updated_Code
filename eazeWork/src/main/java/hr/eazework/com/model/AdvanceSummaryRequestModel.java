@@ -10,22 +10,22 @@ import java.io.Serializable;
 
 public class AdvanceSummaryRequestModel implements Serializable {
     private AdvanceLoginDataRequestModel loginData;
-    private int reqID;
-    private int advanceID;
+    private String reqID;
+    private String advanceID;
 
-    public int getAdvanceID() {
+    public String getAdvanceID() {
         return advanceID;
     }
 
-    public void setAdvanceID(int advanceID) {
+    public void setAdvanceID(String advanceID) {
         this.advanceID = advanceID;
     }
 
-    public int getReqID() {
+    public String getReqID() {
         return reqID;
     }
 
-    public void setReqID(int reqID) {
+    public void setReqID(String reqID) {
         this.reqID = reqID;
     }
 

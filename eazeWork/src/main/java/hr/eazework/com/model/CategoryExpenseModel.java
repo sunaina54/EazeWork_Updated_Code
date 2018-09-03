@@ -9,24 +9,33 @@ import java.io.Serializable;
  */
 
 public class CategoryExpenseModel implements Serializable {
-    private int ForEmpID;
-    private int ReqID;
+    private String ForEmpID;
+    private String ReqID;
 
-    public int getReqID() {
+    public String getReqID() {
         return ReqID;
     }
 
-    public void setReqID(int reqID) {
+    public void setReqID(String reqID) {
         ReqID = reqID;
     }
 
-    public int getForEmpID() {
+    /*public int getForEmpID() {
         return ForEmpID;
     }
 
     public void setForEmpID(int forEmpID) {
         ForEmpID = forEmpID;
+    }*/
+
+    public String getForEmpID() {
+        return ForEmpID;
     }
+
+    public void setForEmpID(String forEmpID) {
+        ForEmpID = forEmpID;
+    }
+
     static public CategoryExpenseModel create(String serializedData) {
         // Use GSON to instantiate this class using the JSON representation of the state
         Gson gson = new Gson();

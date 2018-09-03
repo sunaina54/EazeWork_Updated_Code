@@ -30,7 +30,7 @@ public class LineItemsModel extends GenericResponse implements Serializable {
     private String InputUnit;
     private String LimitedTo;
     private String LineItemDetail;
-    private int LineItemID ;
+    private String LineItemID ;
     private String PolicyCurrencyCode;
     private String PolicyID;
     private String PolicyLimitValue;
@@ -271,11 +271,11 @@ public class LineItemsModel extends GenericResponse implements Serializable {
         LineItemDetail = lineItemDetail;
     }
 
-    public int getLineItemID() {
+    public String getLineItemID() {
         return LineItemID;
     }
 
-    public void setLineItemID(int lineItemID) {
+    public void setLineItemID(String lineItemID) {
         LineItemID = lineItemID;
     }
 

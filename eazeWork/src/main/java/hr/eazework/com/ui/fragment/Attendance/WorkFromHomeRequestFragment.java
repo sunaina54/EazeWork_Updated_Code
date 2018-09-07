@@ -831,12 +831,11 @@ public class WorkFromHomeRequestFragment extends BaseFragment {
                 isSubmitClicked = true;
                 new AlertCustomDialog(context, "Please Enter To Date");
                 return;
-            } else if (remarksET.getText().toString().equalsIgnoreCase("")) {
+            } /*else if (remarksET.getText().toString().equalsIgnoreCase("")) {
                 isSubmitClicked = true;
-
                 new AlertCustomDialog(context, "Please Enter Remarks");
                 return;
-            } else {
+            }*/ else {
                 wfhRequestDetailModel.setStartDate(fromDate);
                 wfhRequestDetailModel.setEndDate(toDate);
                 wfhRequestDetailModel.setForEmpID(empId);

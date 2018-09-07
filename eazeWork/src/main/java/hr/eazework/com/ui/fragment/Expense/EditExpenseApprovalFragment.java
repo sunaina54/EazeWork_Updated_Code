@@ -1436,11 +1436,10 @@ public class EditExpenseApprovalFragment extends BaseFragment {
                         }
                         netAmountTV.setText(totalAmountTobeAdjusted + "");
                         AdvanceListItemModel listItemModel = mDataset.get(position);
-                        if (listItemModel.getTranID() != 0 && listItemModel.getFlag().equalsIgnoreCase(AppsConstant.OLD_FLAG)) {
+                        if (listItemModel.getTranID()!=null && !listItemModel.getTranID().equalsIgnoreCase("0") && listItemModel.getFlag().equalsIgnoreCase(AppsConstant.OLD_FLAG)) {
                             listItemModel.setFlag(AppsConstant.DELETE_FLAG);
                             mDataset.set(position, listItemModel);
-                        } else if (listItemModel.getTranID() == 0 && listItemModel.getFlag().equalsIgnoreCase(AppsConstant.NEW_FLAG)) {
-
+                        } else if (listItemModel.getTranID()!=null && listItemModel.getTranID().equalsIgnoreCase("0")&& listItemModel.getFlag().equalsIgnoreCase(AppsConstant.NEW_FLAG)) {
                             mDataset.remove(position);
                         }
                         AdjustmentDetailAdapter.this.notifyDataSetChanged();
@@ -2130,7 +2129,7 @@ public class EditExpenseApprovalFragment extends BaseFragment {
                     item.setReqCode(model.getReqCode());
                     item.setAdvanceID(model.getAdvanceID());
                     item.setReason(model.getReason());
-                    item.setTranID(0);
+                    item.setTranID("0");
                     item.setFlag("N");
                     advanceList.add(item);
                     refreshAdjustmentRecycle(advanceList);

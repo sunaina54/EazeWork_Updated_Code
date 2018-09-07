@@ -2185,7 +2185,7 @@ public class AddExpenseClaimFragment extends BaseFragment {
                     item.setReqCode(model.getReqCode());
                     item.setAdvanceID(model.getAdvanceID());
                     item.setReason(model.getReason());
-                    item.setTranID(0);
+                    item.setTranID("0");
                     item.setFlag("N");
                     advanceList.add(item);
                     refreshAdjustmentRecycle(advanceList);

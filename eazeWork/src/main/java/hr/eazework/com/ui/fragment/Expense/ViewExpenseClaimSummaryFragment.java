@@ -74,7 +74,7 @@ public class ViewExpenseClaimSummaryFragment extends BaseFragment {
     public static String TAG="ViewExpenseClaimSummaryFragment";
     private String screenName = "ViewExpenseClaimSummaryFragment";
     private Preferences preferences;
-    private TextView totalApprovedAmtTV, claimForTV, descriptionTV, currencyTV, claimTypeTV, submittedByTV, statusTV, advanceVoucherTV, submittedOnTV;
+    private TextView totalApprovedAmtTV, expPendingWithTV,claimForTV, descriptionTV, currencyTV, claimTypeTV, submittedByTV, statusTV, advanceVoucherTV, submittedOnTV;
     private TextView dateTV, nameTV, remarksReasonTV, remarksStatusTV, totalExpenseClaimedTV, netAmountTV;
     private LinearLayout errorLinearLayout, expenseErrorLl, remarksLinearLayout;
     private ExpenseItemListModel expenseItemListModel;
@@ -179,6 +179,7 @@ public class ViewExpenseClaimSummaryFragment extends BaseFragment {
         add_expenseIV = (ImageView) view.findViewById(R.id.add_expenseIV);
         add_expenseIV.setVisibility(View.GONE);
         claimForTV = (TextView) view.findViewById(R.id.claimForTV);
+        expPendingWithTV = (TextView) view.findViewById(R.id.expPendingWithTV);
         descriptionTV = (TextView) view.findViewById(R.id.descriptionTV);
         currencyTV = (TextView) view.findViewById(R.id.currencyTV);
         statusTV = (TextView) view.findViewById(R.id.statusTV);
@@ -407,6 +408,8 @@ public class ViewExpenseClaimSummaryFragment extends BaseFragment {
         if (!item.getApproverID().equalsIgnoreCase("0")) {
             approverID = item.getApproverID() + "";
             approverName = item.getApproverName();
+            expPendingWithTV.setText(item.getApproverName());
+
         }
 
         if (item.getDescription() != null) {

@@ -167,6 +167,36 @@
                         android:layout_height="wrap_content" />
                 </LinearLayout>
                 <LinearLayout
+                    android:id="@+id/currencyLinearLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="1"
+                    android:orientation="horizontal"
+                    >
+                    <TextView
+                        android:textSize="@dimen/font_12"
+                        style="@style/textView"
+                        android:text="@string/currency"
+                        android:layout_width="0dp"
+                        android:layout_weight="0.4"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="@dimen/padding_default"
+                        android:paddingRight="@dimen/padding_default"
+                        android:text=":"
+                        android:textColor="@color/black" />
+                    <TextView
+                        android:id="@+id/currencyTV"
+                        android:textSize="@dimen/font_12"
+                        style="@style/textViewYellow"
+                        android:text="-"
+                        android:layout_width="0dp"
+                        android:layout_weight="0.6"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:weightSum="1"
@@ -224,6 +254,7 @@
                         android:layout_weight="0.6"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
+
                 <Button
                     android:layout_marginRight="5dp"
                     style="@style/button"

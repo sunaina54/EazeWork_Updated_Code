@@ -9,10 +9,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
@@ -44,6 +46,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import hr.eazework.Slider.Slider;
 import hr.eazework.Slider.adapter.Slide;
@@ -60,6 +64,7 @@ import hr.eazework.com.model.ExpenseStatusModel;
 import hr.eazework.com.model.FileInfo;
 import hr.eazework.com.model.GeoCoderModel;
 import hr.eazework.com.model.GetAnnouncementRequestModel;
+import hr.eazework.com.model.GetAnnouncementResult;
 import hr.eazework.com.model.GetAnnouncementResultResponseModel;
 import hr.eazework.com.model.LeaveBalanceModel;
 import hr.eazework.com.model.LoginUserModel;
@@ -103,6 +108,15 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
 
     public static final String TAG = "HomeFragment";
 
+    private boolean mustLoopSlides;
+    private int slideShowInterval = 2000;
+    private Handler handler = new Handler();
+    private int currentPageNumber;
+    private int slideCount;
+    int currentPage = 0;
+    Timer timer;
+    final long DELAY_MS = 500;//delay in milliseconds before task is to be executed
+    final long PERIOD_MS = 3000;
 
     private static String screenName = "HomeFragment";
     ArrayList<MainItemModel> itemList;
@@ -145,7 +159,8 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
         showHideProgressView(true);
         MainActivity.isAnimationLoaded = false;
         getHomeData();
-        getAnnouncementData();
+       // getAnnouncementData();
+
         MenuItemModel model = ModelManager.getInstance().getMenuItemModel();
         if (model == null) {
             getMenuData();
@@ -182,16 +197,21 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
         pager = (EnhancedWrapContentViewPager) rootView.findViewById(R.id.pager);
         btnViewPagerLayout = (LinearLayout) rootView.findViewById(R.id.btnViewPagerLayout);
         pagerlayout = (LinearLayout) rootView.findViewById(R.id.pagerlayout);
+       // viewAnnouncementData();
+         getAnnouncementData();
         pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 btnAction(position);
+
                 // perform functioning
 
             }
 
             @Override
             public void onPageSelected(int position) {
+                currentPageNumber = position;
+                Log.d("current slide",currentPageNumber+"");
 
             }
 
@@ -939,6 +959,7 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
 
                         JSONObject empProfileData = object.optJSONObject("EmpProfile");
                         updateEmpProfileData(empProfileData);
+
                         JSONObject expenseData = object.optJSONObject("ExpenseStatus");
                         Log.d("Expense Result", expenseData.toString());
                         updateExpenseMethods(expenseData);
@@ -1022,6 +1043,7 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
                     if (announcementRes.getGetAnnouncementResult().getAnnouncementItems() != null &&
                             announcementRes.getGetAnnouncementResult().getAnnouncementItems().size() > 0) {
                         homeCarasoleRL.setVisibility(View.VISIBLE);
+                        slideCount=announcementRes.getGetAnnouncementResult().getAnnouncementItems().size();
                         refreshAnnouncementResult(announcementRes.getGetAnnouncementResult().getAnnouncementItems());
                     }
                 } else {
@@ -1048,7 +1070,7 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
                 && announcementRes.getGetAnnouncementResult().getAnnouncementItems().size() > 0) {
             refreshAnnouncementResult(announcementRes.getGetAnnouncementResult().getAnnouncementItems());
         }
-
+        //viewAnnouncementData();
     }
 
 
@@ -1313,10 +1335,16 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
 
     public class ViewPagerAdapter extends FragmentPagerAdapter {
         ArrayList<AnnouncementItemsModel> announcementList;
+        AnnouncementItemsModel announcementItemsModel;
 
         public ViewPagerAdapter(FragmentManager fm, ArrayList<AnnouncementItemsModel> announcementItemsModels) {
             super(fm);
             announcementList = announcementItemsModels;
+        }
+
+        public ViewPagerAdapter(FragmentManager fm, AnnouncementItemsModel announcementItemsModels) {
+            super(fm);
+            announcementItemsModels = announcementItemsModels;
         }
 
         @Override
@@ -1333,6 +1361,9 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
 
             return announcementList.size();
         }
+
+
+
     }
 
 
@@ -1341,8 +1372,62 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
                 && announcementRes.getGetAnnouncementResult().getAnnouncementItems() != null
                 && announcementRes.getGetAnnouncementResult().getAnnouncementItems().size() > 0) {
             viewPagerAdapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager(), announcementRes.getGetAnnouncementResult().getAnnouncementItems());
+
             pager.setAdapter(viewPagerAdapter);
+            if (announcementRes.getGetAnnouncementResult().
+                    getAnnouncementItems().size() > 1) {
+                Log.d("list animation:","true list size");
+                setupTimer();
+
+            }
+
         }
 
     }
+
+    private void viewAnnouncementData(){
+       ArrayList <AnnouncementItemsModel> itemsModel=new ArrayList<>();
+        itemsModel.add(new AnnouncementItemsModel(0,"http://cssslider.com/sliders/demo-20/data1/images/picjumbo.com_img_4635.jpg",getResources().getDimensionPixelSize(R.dimen.slider_image_corner)));
+        itemsModel.add(new AnnouncementItemsModel(1,"http://cssslider.com/sliders/demo-12/data1/images/picjumbo.com_hnck1995.jpg",getResources().getDimensionPixelSize(R.dimen.slider_image_corner)));
+        itemsModel.add(new AnnouncementItemsModel(2,"http://cssslider.com/sliders/demo-19/data1/images/picjumbo.com_hnck1588.jpg",getResources().getDimensionPixelSize(R.dimen.slider_image_corner)));
+        GetAnnouncementResult announcementResult=new GetAnnouncementResult();
+        announcementResult.setAnnouncementItems(itemsModel);
+        announcementRes = new GetAnnouncementResultResponseModel();
+        announcementRes.setGetAnnouncementResult(announcementResult);
+        slideCount=announcementRes.getGetAnnouncementResult().getAnnouncementItems().size();
+        refreshAnnouncementResult(announcementRes.getGetAnnouncementResult().getAnnouncementItems());
+    }
+
+    private void setupTimer() {
+        mustLoopSlides=true;
+        try {
+            if (mustLoopSlides) {
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            if (currentPageNumber < slideCount)
+                                currentPageNumber += 1;
+                            else
+                                currentPageNumber = 1;
+
+                            pager.setCurrentItem(currentPageNumber - 1, true);
+
+                            handler.removeCallbacksAndMessages(null);
+                            handler.postDelayed(this, slideShowInterval);
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, slideShowInterval);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
 }

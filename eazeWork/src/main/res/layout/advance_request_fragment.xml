@@ -229,7 +229,8 @@
                                     android:layout_weight="0.7"
                                     android:background="@drawable/focus_style_gray"
                                     android:ems="10"
-                                    android:maxLength="50"
+                                    android:hint="@string/remarksLimit"
+                                    android:maxLength="250"
                                     android:padding="@dimen/margin_default"
                                     android:textColor="@color/black"
                                     android:textSize="@dimen/font_14" />

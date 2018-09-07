@@ -602,10 +602,12 @@ public class Camera2BasicFragment extends Fragment implements View.OnClickListen
                 //mCameraId = cameraId;
 
                 if (cameraForB == AppsConstant.FRONT_CAMREA_OPEN) {
-                    if (manager.getCameraIdList()!=null && manager.getCameraIdList().length > 0) {
-                        mCameraId = manager.getCameraIdList()[1];
-                    } else {
-                        mCameraId = manager.getCameraIdList()[0];
+                    if(manager!=null) {
+                        if (manager.getCameraIdList() != null && manager.getCameraIdList().length > 0) {
+                            mCameraId = manager.getCameraIdList()[1];
+                        } else {
+                            mCameraId = manager.getCameraIdList()[0];
+                        }
                     }
                 } else {
                     mCameraId = manager.getCameraIdList()[0];

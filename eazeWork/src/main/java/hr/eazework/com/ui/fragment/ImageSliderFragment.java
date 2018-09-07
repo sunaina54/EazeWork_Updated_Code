@@ -40,8 +40,9 @@ public class ImageSliderFragment extends Fragment {
 
     private void setupScreen(View view) {
         sliderImageIV = (ImageView) view.findViewById(R.id.sliderImageIV);
-        String UrlFile="http://www.eazework.net/test";
+       String UrlFile="http://www.eazework.net/test";
         String imageUrl= UrlFile+announcementItemsModel.getFilePath().replace("..","");
+       // String imageUrl= announcementItemsModel.getFilePath();
         loadImage(sliderImageIV,imageUrl);
     }
 

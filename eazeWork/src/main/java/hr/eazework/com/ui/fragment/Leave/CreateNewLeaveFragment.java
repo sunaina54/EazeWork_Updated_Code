@@ -669,6 +669,7 @@ public class CreateNewLeaveFragment extends BaseFragment implements OnCheckedCha
         String empCode = employItem.getEmpID();
 
         String remark = etRemark.getText().toString();
+
         if (isRhSelected) {
             if (selectedRs == null || selectedRs.equalsIgnoreCase("")) {
                 isSubmitClicked = true;

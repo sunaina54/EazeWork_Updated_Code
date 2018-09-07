@@ -438,7 +438,11 @@ public class TimeAndAttendanceSummaryFragment extends BaseFragment {
             holder.daysTV.setText(item.getTotalDays());
             holder.pendingWithTV.setText(item.getPendWithName());
             holder.statusTV.setText(item.getStatusDesc());
-            holder.viewBTN.setText(item.getButtons()[0]);
+
+
+            if(item.getButtons()!=null && item.getButtons().length>0) {
+                holder.viewBTN.setText(item.getButtons()[0]);
+            }
 
             holder.viewBTN.setOnClickListener(new View.OnClickListener() {
                 @Override

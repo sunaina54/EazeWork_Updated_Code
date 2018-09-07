@@ -293,7 +293,7 @@ public class ExpenseApprovalFragment extends BaseFragment {
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
 
-            private TextView voucherNoTV, dateTV, descriptionTV, requestForTV, statusTV, requestedAmountTV, approvedAmountTV;
+            private TextView currencyTV,voucherNoTV, dateTV, descriptionTV, requestForTV, statusTV, requestedAmountTV, approvedAmountTV;
             private Button actionBTN,viewBTN;
 
 
@@ -303,6 +303,7 @@ public class ExpenseApprovalFragment extends BaseFragment {
                 voucherNoTV = (TextView) v.findViewById(R.id.voucherNoTV);
                 dateTV = (TextView) v.findViewById(R.id.dateTV);
                 descriptionTV = (TextView) v.findViewById(R.id.descriptionTV);
+                currencyTV = (TextView) v.findViewById(R.id.currencyTV);
                 requestForTV = (TextView) v.findViewById(R.id.requestForTV);
                 statusTV = (TextView) v.findViewById(R.id.statusTV);
                 viewBTN = (Button) v.findViewById(R.id.viewBTN);
@@ -347,6 +348,7 @@ public class ExpenseApprovalFragment extends BaseFragment {
             holder.requestForTV.setText(item.getName());
             holder.requestedAmountTV.setText(item.getRequested());
             holder.approvedAmountTV.setText(item.getApproved());
+            holder.currencyTV.setText(item.getCurrencyCode());
             holder.statusTV.setText(item.getReqStatusDesc());
             if(item.getEditYN()!= null && item.getEditYN().equalsIgnoreCase("Y")){
                 holder.actionBTN.setVisibility(View.VISIBLE);

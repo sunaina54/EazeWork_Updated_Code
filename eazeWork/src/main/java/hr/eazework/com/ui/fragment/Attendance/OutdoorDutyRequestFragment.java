@@ -724,11 +724,11 @@ public class OutdoorDutyRequestFragment extends BaseFragment {
                 isSubmitClicked = true;
                 new AlertCustomDialog(context, getResources().getString(R.string.enter_end_time));
                 return;
-            } else if (remarksET.getText().toString().equalsIgnoreCase("")) {
+            }/* else if (remarksET.getText().toString().equalsIgnoreCase("")) {
                 isSubmitClicked = true;
                 new AlertCustomDialog(context, getResources().getString(R.string.enter_remarks));
                 return;
-            } else {
+            } */else {
                 odReqDetailModel.setForEmpID(empId);
                 odReqDetailModel.setReqID(reqId);
                 odReqDetailModel.setDate(fromDate);

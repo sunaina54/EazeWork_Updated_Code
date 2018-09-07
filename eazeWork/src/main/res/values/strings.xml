@@ -164,6 +164,7 @@
     <string name="voucher_no">Voucher No</string>
     <string name="description">Description</string>
     <string name="feedback">Feedback</string>
+    <string name="remarksLimit">"Remarks should not be more than 250 characters.</string>
     <string name="rating">Rating</string>
     <string name="request_for">Request For</string>
     <string name="amount">Amount</string>
@@ -287,6 +288,8 @@
     <string name="Time_Modification_Request">Time Modification</string>
     <string name="Attendance_Request">Backdated Attendance</string>
     <string name="enter_out_date">Please Enter Out Date</string>
+
+
     <string name="enter_in_date">Please Enter In Date</string>
     <string name="enter_in_time">Please Enter In Time</string>
     <string name="enter_out_time">Please Enter Out Time</string>

@@ -3,11 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="hr.eazework.com"
     android:versionCode="26"
-    android:versionName="1.1.5">
+    android:versionName="1.1.6">
 
     <uses-sdk
         android:minSdkVersion="17"
-        android:targetSdkVersion="25" />
+        android:targetSdkVersion="26" />
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />

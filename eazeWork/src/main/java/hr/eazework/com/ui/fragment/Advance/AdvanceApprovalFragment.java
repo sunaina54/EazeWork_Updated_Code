@@ -329,7 +329,7 @@ public class AdvanceApprovalFragment extends BaseFragment {
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
 
-            private TextView voucherNoTV, dateTV, descriptionTV, requestForTV, amountTV, descLabelTV;
+            private TextView currencyTV,voucherNoTV, dateTV, descriptionTV, requestForTV, amountTV, descLabelTV;
             private Button actionBTN,viewBTN;
             private LinearLayout statusLinearLayout;
 
@@ -338,6 +338,7 @@ public class AdvanceApprovalFragment extends BaseFragment {
                 super(v);
 
                 voucherNoTV = (TextView) v.findViewById(R.id.voucherNoTV);
+                currencyTV = (TextView) v.findViewById(R.id.currencyTV);
                 dateTV = (TextView) v.findViewById(R.id.dateTV);
                 descriptionTV = (TextView) v.findViewById(R.id.descriptionTV);
                 requestForTV = (TextView) v.findViewById(R.id.requestForTV);
@@ -388,6 +389,7 @@ public class AdvanceApprovalFragment extends BaseFragment {
 
             }
             holder.voucherNoTV.setText(item.getReqCode());
+            holder.currencyTV.setText(item.getCurrencyCode());
             holder.dateTV.setText(item.getReqDate());
             holder.descriptionTV.setText(item.getReason());
             holder.requestForTV.setText(item.getName());

@@ -215,16 +215,21 @@ public class ViewTimeModificationSummary extends BaseFragment {
 
             String[] reqTime = item.getReqTime().split(" ");
             String[] reqOutTime = item.getReqOutTime().split(" ");
-            if (reqTime.length == 3) {
-                requestedInTimeTV.setText(reqTime[1] + " " + reqTime[2]);
-            } else {
-                requestedInTimeTV.setText(reqTime[1]);
+            if(item.getReqTime()!=null &&
+                    !item.getReqTime().equalsIgnoreCase("")) {
+                if (reqTime.length == 3) {
+                    requestedInTimeTV.setText(reqTime[1] + " " + reqTime[2]);
+                } else {
+                    requestedInTimeTV.setText(reqTime[1]);
+                }
             }
-
-            if (reqOutTime.length == 3) {
-                requestedOutTimeTV.setText(reqOutTime[1] + " " + reqOutTime[2]);
-            } else {
-                requestedOutTimeTV.setText(reqOutTime[1]);
+            if(item.getReqOutTime()!=null &&
+                    !item.getReqOutTime().equalsIgnoreCase("")) {
+                if (reqOutTime.length == 3) {
+                    requestedOutTimeTV.setText(reqOutTime[1] + " " + reqOutTime[2]);
+                } else {
+                    requestedOutTimeTV.setText(reqOutTime[1]);
+                }
             }
         }
     }

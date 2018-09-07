@@ -610,10 +610,10 @@ if(saveExpenseRequestModel!=null) {
                                         if (advanceList != null && advanceList.size() > 0) {
                                             for (int j = 0; j < advanceList.size(); j++) {
                                                 AdvanceListItemModel advanceModel = advanceList.get(j);
-                                                if (advanceModel.getTranID() != 0) {
+                                                if (advanceModel.getTranID()!=null && !advanceModel.getTranID().equalsIgnoreCase("0")) {
                                                     advanceModel.setFlag(AppsConstant.DELETE_FLAG);
                                                     advanceList.set(j, advanceModel);
-                                                } else if (advanceModel.getTranID() == 0) {
+                                                } else if (advanceModel.getTranID()!=null && advanceModel.getTranID().equalsIgnoreCase("0")) {
                                                     advanceList.remove(j);
                                                 }
                                             }
@@ -2091,10 +2091,10 @@ if(saveExpenseRequestModel!=null) {
                         }
 
                         AdvanceListItemModel listItemModel = mDataset.get(position);
-                        if (listItemModel.getTranID() != 0 && listItemModel.getFlag().equalsIgnoreCase(AppsConstant.OLD_FLAG)) {
+                        if (listItemModel.getTranID()!=null && !listItemModel.getTranID().equalsIgnoreCase("0") && listItemModel.getFlag().equalsIgnoreCase(AppsConstant.OLD_FLAG)) {
                             listItemModel.setFlag(AppsConstant.DELETE_FLAG);
                             mDataset.set(position, listItemModel);
-                        } else if (listItemModel.getTranID() == 0 && listItemModel.getFlag().equalsIgnoreCase(AppsConstant.NEW_FLAG)) {
+                        } else if (listItemModel.getTranID()!=null && listItemModel.getTranID().equalsIgnoreCase("0") && listItemModel.getFlag().equalsIgnoreCase(AppsConstant.NEW_FLAG)) {
 
                             mDataset.remove(position);
                         }
@@ -2773,7 +2773,7 @@ if(saveExpenseRequestModel!=null) {
                     item.setReqCode(model.getReqCode());
                     item.setAdvanceID(model.getAdvanceID());
                     item.setReason(model.getReason());
-                    item.setTranID(0);
+                    item.setTranID("0");
                     item.setFlag("N");
                     advanceList.add(item);
                     refreshAdjustmentRecycle(advanceList);

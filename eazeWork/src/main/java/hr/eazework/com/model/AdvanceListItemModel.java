@@ -15,7 +15,7 @@ public class AdvanceListItemModel implements Serializable {
     private String Flag;
     private String ReqCode;
     private int SeqNo;
-    private int TranID ;
+    private String TranID ;
     private String Reason;
 
     public String getPaidAmount() {
@@ -74,11 +74,11 @@ public class AdvanceListItemModel implements Serializable {
         SeqNo = seqNo;
     }
 
-    public int getTranID() {
+    public String getTranID() {
         return TranID;
     }
 
-    public void setTranID(int tranID) {
+    public void setTranID(String tranID) {
         TranID = tranID;
     }
     static public AdvanceListItemModel create(String serializedData) {

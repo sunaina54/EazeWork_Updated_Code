@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -181,6 +182,11 @@ public class EditTeamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 if(!TextUtils.isEmpty(getItem(position).getmFieldValue())) {
                     vh2.editText.setText(getItem(position).getmFieldValue());
                 } else {
+                    if(model.getmFieldCode().equalsIgnoreCase("EA00000002")){
+                        vh2.editText.setText("");
+                        vh2.editText.setFilters(new InputFilter[] { new InputFilter.LengthFilter(250) });
+
+                    }
                     vh2.editText.setText("");
                 }
 
@@ -591,4 +597,6 @@ public class EditTeamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             this.textView = (TextView) itemView.findViewById(R.id.tv_title);
         }
     }
+
+
 }

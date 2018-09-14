@@ -361,6 +361,7 @@ public class BackdatedAttendanceActivity extends BaseActivity {
                         && summaryResponseModel.getGetAttendanceReqDetailResult().getErrorCode().equalsIgnoreCase(AppsConstant.SUCCESS)
                         && summaryResponseModel.getGetAttendanceReqDetailResult().getAttendanceReqDetail() != null) {
                     reqDetail = summaryResponseModel.getGetAttendanceReqDetailResult().getAttendanceReqDetail();
+                    remarksLl.setVisibility(View.VISIBLE);
                     updateUIForApproval(summaryResponseModel.getGetAttendanceReqDetailResult().getAttendanceReqDetail());
                     refreshRemarksList(summaryResponseModel.getGetAttendanceReqDetailResult().getAttendanceReqDetail().getRemarkList());
                 }
@@ -459,7 +460,7 @@ public class BackdatedAttendanceActivity extends BaseActivity {
         datePickerDialog1 = CalenderUtils.pickDateFromCalender(context, tv_in_date, tv_in_day, AppsConstant.DATE_FORMATE);
         datePickerDialog2 = CalenderUtils.pickDateFromCalender(context, tv_out_date, tv_out_day, AppsConstant.DATE_FORMATE);
 
-        remarksET.setText(item.getRemark());
+        remarksET.setText("");
         setupButtons(item);
     }
 

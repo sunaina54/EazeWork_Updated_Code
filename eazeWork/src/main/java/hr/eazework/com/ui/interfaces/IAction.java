@@ -56,6 +56,8 @@ public interface IAction {
 	int VIEW_OD=52;
 	int VIEW_EXPENSE=53;
 	int VIEW_ADVANCE=54;
+	int RAISE_TICKET=55;
+	int RAISE_TICKET_ADV=56;
 
 
 

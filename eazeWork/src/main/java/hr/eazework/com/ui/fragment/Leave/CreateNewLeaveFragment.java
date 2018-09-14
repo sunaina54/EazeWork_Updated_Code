@@ -148,7 +148,7 @@ public class CreateNewLeaveFragment extends BaseFragment implements OnCheckedCha
     private static final int PERMISSION_REQUEST_CODE = 3;
 
     private LeaveReqsItem leaveReqsItem;
-    private String defaultFromDateLabel = "From Date", defaultToDateLable = "To Date", value = "--/--/----", defaultLeaveLable = "Select Leave";
+    private String defaultFromDateLabel = "Start Date", defaultToDateLable = "End Date", value = "--/--/----", defaultLeaveLable = "Select Leave";
 
     public LeaveReqsItem getLeaveReqsItem() {
         return leaveReqsItem;
@@ -735,17 +735,17 @@ public class CreateNewLeaveFragment extends BaseFragment implements OnCheckedCha
             return;
         }
         if (this.startDate == null) {
-            Toast.makeText(getActivity(), "Please select from date.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Please select start date.", Toast.LENGTH_LONG).show();
             isSubmitClicked = true;
             return;
         }
         if (this.toDate == null) {
-            Toast.makeText(getActivity(), "Please select to date.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Please select end date.", Toast.LENGTH_LONG).show();
             isSubmitClicked = true;
             return;
         }
         if (getTotalDay(this.startDate, this.toDate) <= 0) {
-            Toast.makeText(getActivity(), "Please select to date later than from date.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Please select end date later than start date.", Toast.LENGTH_LONG).show();
             isSubmitClicked = true;
             return;
         }
@@ -816,11 +816,11 @@ public class CreateNewLeaveFragment extends BaseFragment implements OnCheckedCha
         if (leaveTypeModel != null) {
             boolean isCompensatory = leaveTypeModel.getLeaveId().equalsIgnoreCase("E008001000") && leaveTypeModel.getProcessStep().equalsIgnoreCase("1");
 
-            ((TextView) rootView.findViewById(R.id.tv_from_date_top)).setText(isCompensatory ? "Date Worked" : "From Date");
-            ((TextView) rootView.findViewById(R.id.tv_to_date_top)).setText(isCompensatory ? "Compensatory Off Date" : "To Date");
+            ((TextView) rootView.findViewById(R.id.tv_from_date_top)).setText(isCompensatory ? "Date Worked" : "Start Date");
+            ((TextView) rootView.findViewById(R.id.tv_to_date_top)).setText(isCompensatory ? "Compensatory Off Date" : "End Date");
 
-            ((TextView) rootView.findViewById(R.id.tv_from_day)).setText(isCompensatory ? "" : "From Date");
-            ((TextView) rootView.findViewById(R.id.tv_to_day)).setText(isCompensatory ? "" : "To Date");
+            ((TextView) rootView.findViewById(R.id.tv_from_day)).setText(isCompensatory ? "" : "Start Date");
+            ((TextView) rootView.findViewById(R.id.tv_to_day)).setText(isCompensatory ? "" : "End Date");
 
             if (isCompensatory) {
                 rootView.findViewById(R.id.ll_avail_leaves).setVisibility(View.GONE);
@@ -879,8 +879,8 @@ public class CreateNewLeaveFragment extends BaseFragment implements OnCheckedCha
             }
         } else {
             availableLeaves = 0;
-            ((TextView) rootView.findViewById(R.id.tv_from_date_top)).setText("From Date");
-            ((TextView) rootView.findViewById(R.id.tv_to_date_top)).setText("To Date");
+            ((TextView) rootView.findViewById(R.id.tv_from_date_top)).setText("Start Date");
+            ((TextView) rootView.findViewById(R.id.tv_to_date_top)).setText("End Date");
 
             rootView.findViewById(R.id.ll_avail_leaves).setVisibility(View.GONE);
             rootView.findViewById(R.id.ll_consume_leaves).setVisibility(View.GONE);
@@ -1368,15 +1368,15 @@ public class CreateNewLeaveFragment extends BaseFragment implements OnCheckedCha
                     return;
                 }
                 if (startDate == null) {
-                    Utility.displayMessage(getContext(), "Please select from date.");
+                    Utility.displayMessage(getContext(), "Please select start date.");
                     return;
                 }
                 if (toDate == null) {
-                    Utility.displayMessage(getContext(), "Please select to date.");
+                    Utility.displayMessage(getContext(), "Please select end date.");
                     return;
                 }
                 if (getTotalDay(startDate, toDate) < 0) {
-                    Utility.displayMessage(getContext(), "Please select to date later than from date.");
+                    Utility.displayMessage(getContext(), "Please select end date later than start date.");
                     return;
                 }
                 showHideProgressView(true);

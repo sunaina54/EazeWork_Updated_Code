@@ -690,6 +690,8 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
                 list.add("Work From Home");
             }
 
+
+
             if (list.size() > 0) {
                 ((MainActivity) getActivity()).setMenuList(list);
                 ((MainActivity) getActivity()).menuPlus.setVisibility(View.VISIBLE);

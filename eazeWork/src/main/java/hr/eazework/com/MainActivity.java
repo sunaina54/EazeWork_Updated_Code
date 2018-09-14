@@ -89,6 +89,7 @@ import hr.eazework.com.ui.fragment.Attendance.TimeAndAttendanceSummaryFragment;
 import hr.eazework.com.ui.fragment.Attendance.TourRequestFragment;
 import hr.eazework.com.ui.fragment.Team.UserProfile;
 import hr.eazework.com.ui.fragment.Advance.ViewAdvanceRequestSummaryFragment;
+import hr.eazework.com.ui.fragment.Ticket.CreateTicketFragment;
 import hr.eazework.com.ui.fragment.ViewDataBase;
 import hr.eazework.com.ui.fragment.Expense.ViewExpenseClaimSummaryFragment;
 import hr.eazework.com.ui.fragment.Leave.ViewLeaveFragment;
@@ -668,6 +669,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
                             TourRequestFragment.TAG);
                 }
                 break;
+
             case IAction.CREATE_EMPLOYEE_VIEW:
                 if (isFragmentExistsInBackStack(CreateEmployeeFragment.TAG)) {
                     if (getTopFragment() instanceof CreateEmployeeFragment)

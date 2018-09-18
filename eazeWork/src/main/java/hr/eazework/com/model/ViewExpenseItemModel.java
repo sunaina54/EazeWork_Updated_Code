@@ -32,7 +32,7 @@ public class ViewExpenseItemModel extends GenericResponse implements Serializabl
     private String ReqStatusDesc;
     private String ShowProject;
     private String ApproverName;
-    private int VerifierID ;
+    private String VerifierID ;
     private String TotalExpenseClaimed;
     private String NetAmountToBePaid;
     private String SubmitteByEmpID;
@@ -290,11 +290,11 @@ public class ViewExpenseItemModel extends GenericResponse implements Serializabl
         ShowProject = showProject;
     }
 
-    public int getVerifierID() {
+    public String getVerifierID() {
         return VerifierID;
     }
 
-    public void setVerifierID(int verifierID) {
+    public void setVerifierID(String verifierID) {
         VerifierID = verifierID;
     }
 

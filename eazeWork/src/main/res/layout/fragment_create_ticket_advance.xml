@@ -183,7 +183,52 @@
                             </FrameLayout>
 
                         </LinearLayout>
+                        <LinearLayout
+                            android:id="@+id/subCategoryLl"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
+                            android:orientation="horizontal"
+                            android:weightSum="1">
 
+
+                            <TextView
+                                style="@style/textView"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.4"
+                                android:padding="@dimen/margin_7"
+                                android:text="@string/subCategory" />
+
+
+                            <FrameLayout
+                                android:layout_width="0dp"
+                                android:layout_height="50dp"
+                                android:layout_weight="0.6">
+
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="45dp"
+                                    android:layout_gravity="center"
+                                    android:paddingEnd="@dimen/margin_10"
+                                    android:paddingStart="@dimen/margin_10"
+                                    android:src="@drawable/choicelist" />
+
+                                <TextView
+                                    android:id="@+id/subCategoryTV"
+                                    style="@style/editTextView"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:background="@color/transparent"
+                                    android:paddingBottom="@dimen/margin_21"
+                                    android:paddingEnd="@dimen/margin_10"
+                                    android:paddingStart="@dimen/margin_10"
+                                    android:paddingTop="@dimen/margin_10"
+                                    android:text="Select Sub Category" />
+                            </FrameLayout>
+
+                        </LinearLayout>
                         <LinearLayout
                             android:id="@+id/priorityLl"
                             android:layout_width="fill_parent"
@@ -278,6 +323,15 @@
                     android:id="@+id/remarksDataLl">
                     <include layout="@layout/remarks_layout"></include>
                 </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/feedbackLL">
+                    <include
+                        layout="@layout/feedback_layout"></include>
+                </LinearLayout>
+
 
                 <LinearLayout
                     android:layout_width="match_parent"

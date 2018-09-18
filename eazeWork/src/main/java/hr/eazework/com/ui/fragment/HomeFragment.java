@@ -690,6 +690,8 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
                 list.add("Work From Home");
             }
 
+      /*      list.add("Raise Ticket(Simple)");
+            list.add("Raise Ticket(Advanced)");*/
 
 
             if (list.size() > 0) {

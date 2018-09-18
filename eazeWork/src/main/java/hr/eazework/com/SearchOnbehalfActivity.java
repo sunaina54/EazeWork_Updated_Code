@@ -26,6 +26,7 @@ import hr.eazework.com.ui.fragment.Leave.CreateNewLeaveFragment;
 import hr.eazework.com.ui.fragment.Attendance.OutdoorDutyRequestFragment;
 import hr.eazework.com.ui.fragment.Attendance.TourRequestFragment;
 import hr.eazework.com.ui.fragment.Attendance.WorkFromHomeRequestFragment;
+import hr.eazework.com.ui.fragment.Ticket.CreateTicketAdvanceFragment;
 import hr.eazework.com.ui.fragment.Ticket.CreateTicketFragment;
 import hr.eazework.com.ui.util.AppsConstant;
 import hr.eazework.com.ui.util.Preferences;
@@ -52,6 +53,7 @@ public class SearchOnbehalfActivity extends BaseActivity {
     public static String SELECTED_OD_EMP="selectedODEmp";
     public static String SELECTED_TOUR_EMP="selectedTourEmp";
     public static String SELECTED_TICKET_EMP="selectedTicketEmp";
+    public static String SELECTED_TICKET_EMP_ADV="selectedTicketEmpAdv";
     private ImageView ibRightIV,clearTextIV;
     private LinearLayout progressContainer,noRecordLayout,rl_edit_team_member;
     private String screenName="";
@@ -235,6 +237,14 @@ public class SearchOnbehalfActivity extends BaseActivity {
             CommunicationManager.getInstance().sendPostRequest(this,
                     AppRequestJSONString.searchOnBehalfRequest(request),
                     CommunicationConstant.API_GET_TOUR_EMP_LIST, true);
+        }else if(CreateTicketFragment.TICKET_EMP == SELECTED_TYPE) {
+            CommunicationManager.getInstance().sendPostRequest(this,
+                    AppRequestJSONString.searchOnBehalfRequest(request),
+                    CommunicationConstant.API_GET_TOUR_EMP_LIST, true);
+        }else if(CreateTicketAdvanceFragment.TICKET_EMP_ADV == SELECTED_TYPE) {
+            CommunicationManager.getInstance().sendPostRequest(this,
+                    AppRequestJSONString.searchOnBehalfRequest(request),
+                    CommunicationConstant.API_GET_TOUR_EMP_LIST, true);
         }
     }
 
@@ -301,11 +311,13 @@ public class SearchOnbehalfActivity extends BaseActivity {
                     theIntent.putExtra(SELECTED_OD_EMP,item);
                     theIntent.putExtra(SELECTED_TOUR_EMP,item);
                     theIntent.putExtra(SELECTED_TICKET_EMP,item);
+                    theIntent.putExtra(SELECTED_TICKET_EMP_ADV,item);
                     setResult(OutdoorDutyRequestFragment.OD_EMP,theIntent);
                     setResult(WorkFromHomeRequestFragment.WFH_EMP,theIntent);
                     setResult(CreateNewLeaveFragment.LEAVE_EMP,theIntent);
                     setResult(TourRequestFragment.TOUR_EMP,theIntent);
                     setResult(CreateTicketFragment.TICKET_EMP,theIntent);
+                    setResult(CreateTicketAdvanceFragment.TICKET_EMP_ADV,theIntent);
                     finish();
                 }
             });

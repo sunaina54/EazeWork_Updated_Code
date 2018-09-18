@@ -214,7 +214,11 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
                             performUserAction(IAction.TOUR, null, null);
                         } else if (selectedObject.toString().equalsIgnoreCase("Work From Home")) {
                             performUserAction(IAction.WORK_FROM_HOME, null, null);
-                        }
+                        }/*else if (selectedObject.toString().equalsIgnoreCase("Raise Ticket(Simple)")) {
+                            performUserAction(IAction.RAISE_TICKET, null, null);
+                        }else if (selectedObject.toString().equalsIgnoreCase("Raise Ticket(Advanced)")) {
+                            performUserAction(IAction.RAISE_TICKET_ADV, null, null);
+                        }*/
                         builder.dismiss();
                     }
                 });
@@ -669,7 +673,26 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
                             TourRequestFragment.TAG);
                 }
                 break;
-
+            case IAction.RAISE_TICKET:
+                if (isFragmentExistsInBackStack(CreateTicketFragment.TAG)) {
+                    if (getTopFragment() instanceof CreateTicketFragment)
+                        return;
+                    popBackStack(CreateTicketFragment.TAG, 0);
+                } else {
+                    addFragment(R.id.content_frame, new CreateTicketFragment(),
+                            CreateTicketFragment.TAG);
+                }
+                break;
+            case IAction.RAISE_TICKET_ADV:
+                if (isFragmentExistsInBackStack(CreateTicketFragment.TAG)) {
+                    if (getTopFragment() instanceof CreateTicketFragment)
+                        return;
+                    popBackStack(CreateTicketFragment.TAG, 0);
+                } else {
+                    addFragment(R.id.content_frame, new CreateTicketFragment(),
+                            CreateTicketFragment.TAG);
+                }
+                break;
             case IAction.CREATE_EMPLOYEE_VIEW:
                 if (isFragmentExistsInBackStack(CreateEmployeeFragment.TAG)) {
                     if (getTopFragment() instanceof CreateEmployeeFragment)

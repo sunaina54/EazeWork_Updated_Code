@@ -164,7 +164,8 @@
     <string name="voucher_no">Voucher No</string>
     <string name="description">Description</string>
     <string name="feedback">Feedback</string>
-    <string name="remarksLimit">"Remarks should not be more than 250 characters.</string>
+    <string name="remarksLimit"></string>
+    <string name="remarksLimit1">"Remarks should not be more than 250 characters.</string>
     <string name="rating">Rating</string>
     <string name="request_for">Request For</string>
     <string name="amount">Amount</string>

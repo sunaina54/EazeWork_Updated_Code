@@ -1,6 +1,5 @@
 package hr.eazework.com.ui.fragment.Ticket;
 
-
 import android.Manifest;
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
@@ -11,7 +10,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -43,21 +41,12 @@ import hr.eazework.com.MainActivity;
 import hr.eazework.com.R;
 import hr.eazework.com.SearchOnbehalfActivity;
 import hr.eazework.com.model.AdvanceRequestResponseModel;
-import hr.eazework.com.model.CorpEmpParamListItem;
 import hr.eazework.com.model.EmployItem;
-import hr.eazework.com.model.GetCorpEmpParamResultResponse;
-import hr.eazework.com.model.GetDetailsOnEmpChangeResponseModel;
-import hr.eazework.com.model.LeaveRejectResponseModel;
 import hr.eazework.com.model.SupportDocsItemModel;
-import hr.eazework.com.model.TourCustomListResponse;
-import hr.eazework.com.model.TourResponseModel;
-import hr.eazework.com.model.TourSummaryResponse;
 import hr.eazework.com.ui.adapter.DocumentUploadAdapter;
 import hr.eazework.com.ui.customview.CustomBuilder;
 import hr.eazework.com.ui.customview.CustomDialog;
 import hr.eazework.com.ui.fragment.Attendance.AttendanceApprovalFragment;
-import hr.eazework.com.ui.fragment.Attendance.TimeAndAttendanceSummaryFragment;
-import hr.eazework.com.ui.fragment.Attendance.TourRequestFragment;
 import hr.eazework.com.ui.fragment.BaseFragment;
 import hr.eazework.com.ui.interfaces.IAction;
 import hr.eazework.com.ui.util.AppsConstant;
@@ -75,15 +64,15 @@ import static android.app.Activity.RESULT_OK;
 import static hr.eazework.com.ui.util.ImageUtil.rotateImage;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Created by SUNAINA on 14-09-2018.
  */
-public class CreateTicketFragment extends BaseFragment {
 
+public class CreateTicketAdvanceFragment extends BaseFragment {
     private Context context;
     private AdvanceRequestResponseModel advanceRequestResponseModel;
     private List<String> extensionList;
-    public static final String TAG = "CreateTicketFragment";
-    private String screenName = "CreateTicketFragment";
+    public static final String TAG = "CreateTicketAdvanceFragment";
+    private String screenName = "CreateTicketAdvanceFragment";
     private String fromButton;
     private String empId;
     private boolean isSubmitClicked = true;
@@ -94,7 +83,7 @@ public class CreateTicketFragment extends BaseFragment {
     private EditText remarksET,subjectET;
     private RelativeLayout searchLayout;
     private EmployItem employItem;
-    public static int TICKET_EMP = 5;
+    public static int TICKET_EMP_ADV = 6;
     private LinearLayout errorLinearLayout;
     private RecyclerView expenseRecyclerView;
     private ImageView plus_create_newIV;
@@ -166,8 +155,8 @@ public class CreateTicketFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 Intent theIntent = new Intent(getActivity(), SearchOnbehalfActivity.class);
-                theIntent.putExtra("SearchType", TICKET_EMP);
-                startActivityForResult(theIntent, TICKET_EMP);
+                theIntent.putExtra("SearchType", TICKET_EMP_ADV);
+                startActivityForResult(theIntent, TICKET_EMP_ADV);
             }
         });
         errorLinearLayout = (LinearLayout) rootView.findViewById(R.id.errorDocTV);
@@ -193,10 +182,10 @@ public class CreateTicketFragment extends BaseFragment {
                             public void onClick(CustomBuilder builder, Object selectedObject) {
                                 if (selectedObject.toString().equalsIgnoreCase("Take a photo")) {
                                     if (!PermissionUtil.checkCameraPermission(getContext()) || !PermissionUtil.checkStoragePermission(getContext())) {
-                                        PermissionUtil.askAllPermissionCamera(CreateTicketFragment.this);
+                                        PermissionUtil.askAllPermissionCamera(CreateTicketAdvanceFragment.this);
                                     }
                                     if (PermissionUtil.checkCameraPermission(getContext()) && PermissionUtil.checkStoragePermission(getContext())) {
-                                        Utility.openCamera(getActivity(), CreateTicketFragment.this, AppsConstant.BACK_CAMREA_OPEN, "ForStore", screenName);
+                                        Utility.openCamera(getActivity(), CreateTicketAdvanceFragment  .this, AppsConstant.BACK_CAMREA_OPEN, "ForStore", screenName);
                                         customBuilder.dismiss();
                                     }
                                 } else if (selectedObject.toString().equalsIgnoreCase("Gallery")) {
@@ -213,10 +202,14 @@ public class CreateTicketFragment extends BaseFragment {
                 customBuilder.show();
             }
         });
+
         sendAdvanceRequestData();
-
     }
-
+    public void sendAdvanceRequestData() {
+        CommunicationManager.getInstance().sendPostRequest(this,
+                AppRequestJSONString.getAdvanceSummaryData(),
+                CommunicationConstant.API_GET_ADVANCE_PAGE_INIT, true);
+    }
     private void galleryIntent() {
         // Use the GET_CONTENT intent from the utility class
         Intent target = FileUtils.createGetContentIntent();
@@ -233,7 +226,7 @@ public class CreateTicketFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == TICKET_EMP) {
+        if (requestCode == TICKET_EMP_ADV) {
             if (data != null) {
                 EmployItem item = (EmployItem) data.getSerializableExtra(SearchOnbehalfActivity.SELECTED_TOUR_EMP);
                 if (item != null) {
@@ -508,11 +501,6 @@ public class CreateTicketFragment extends BaseFragment {
         this.requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
     }
 
-    public void sendAdvanceRequestData() {
-        CommunicationManager.getInstance().sendPostRequest(this,
-                AppRequestJSONString.getAdvanceSummaryData(),
-                CommunicationConstant.API_GET_ADVANCE_PAGE_INIT, true);
-    }
     @Override
     public void validateResponse(ResponseData response) {
 
@@ -682,4 +670,6 @@ public class CreateTicketFragment extends BaseFragment {
         super.validateResponse(response);
     }
 
+
 }
+

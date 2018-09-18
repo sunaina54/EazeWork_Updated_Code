@@ -1122,6 +1122,16 @@ public class TourRequestFragment extends BaseFragment {
                 new AlertCustomDialog(context, getResources().getString(R.string.select_user));
                 return;
             }
+            if (startDate.equalsIgnoreCase("") || startDate.equalsIgnoreCase("--/--/----")) {
+                isSubmitClicked = true;
+                new AlertCustomDialog(context, "Please Enter Start Date");
+                return;
+            }
+            if (endDate.equalsIgnoreCase("") || endDate.equalsIgnoreCase("--/--/----")) {
+                isSubmitClicked = true;
+                new AlertCustomDialog(context, "Please Enter End Date");
+                return;
+            }
 
             if (empChangeResponseModel != null && empChangeResponseModel.getGetDetailsOnEmpChangeResult() != null
                     && empChangeResponseModel.getGetDetailsOnEmpChangeResult().getShowTravelYN().equalsIgnoreCase("Y")) {

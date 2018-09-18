@@ -978,7 +978,8 @@ public class AddExpenseFragment extends MyBaseFragment {
         public void onBindViewHolder(final ViewHolder holder, final int position) {
 
             final SupportDocsItemModel fileObject = mDataset.get(position);
-            if (!fileObject.getDocID().equalsIgnoreCase("0") && fileObject.getFlag().equalsIgnoreCase(AppsConstant.DELETE_FLAG)) {
+            if (fileObject.getDocID()!=null && !fileObject.getDocID().equalsIgnoreCase("0")
+                    && fileObject.getFlag().equalsIgnoreCase(AppsConstant.DELETE_FLAG)) {
 
             } else {
                 String fileType = "";
@@ -1056,7 +1057,7 @@ public class AddExpenseFragment extends MyBaseFragment {
                     @Override
                     public void onClick(final View v) {
                         ArrayList<String> list = new ArrayList<>();
-                        if (!fileObject.getDocID().equalsIgnoreCase("0") ) {
+                        if (fileObject.getDocID()!=null && !fileObject.getDocID().equalsIgnoreCase("0") ) {
                             list.add("Edit");
                             list.add("Delete");
                             list.add("Download");
@@ -1110,7 +1111,7 @@ public class AddExpenseFragment extends MyBaseFragment {
 
                                     dialog.show();
                                 } else if (selectedObject.toString().equalsIgnoreCase("Delete")) {
-                                    if (!fileObject.getDocID().equalsIgnoreCase("0") ) {
+                                    if (fileObject.getDocID()!=null && !fileObject.getDocID().equalsIgnoreCase("0") ) {
                                         fileObject.setFlag(AppsConstant.DELETE_FLAG);
                                         uploadFileList.set(uploadFileList.indexOf(fileObject), fileObject);
                                     } else {
@@ -1123,7 +1124,7 @@ public class AddExpenseFragment extends MyBaseFragment {
 
                                 } else if (selectedObject.toString().equalsIgnoreCase("Download")) {
 
-                                    if (fileObject.getDocID().equalsIgnoreCase("0") ) {
+                                    if (fileObject.getDocID()!=null && fileObject.getDocID().equalsIgnoreCase("0") ) {
                                         return;
                                     }
                                     String filePath = fileObject.getDocPath().replace("~", "");

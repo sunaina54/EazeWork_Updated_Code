@@ -673,8 +673,13 @@ public class CreateNewLeaveFragment extends BaseFragment implements OnCheckedCha
         if (isRhSelected) {
             if (selectedRs == null || selectedRs.equalsIgnoreCase("")) {
                 isSubmitClicked = true;
-                Toast.makeText(getActivity(), "Please select leave date", Toast.LENGTH_LONG).show();
+                Utility.showHidePregress(progressbar, false);
+                MainActivity.isAnimationLoaded = false;
+                new AlertCustomDialog(context, "Please select leave date");
                 return;
+               /* isSubmitClicked = true;
+                Toast.makeText(getActivity(), "Please select leave date", Toast.LENGTH_LONG).show();
+                return;*/
             }
             showHideProgressView(true);
             setActiveInActive(false);
@@ -701,14 +706,24 @@ public class CreateNewLeaveFragment extends BaseFragment implements OnCheckedCha
         boolean isCompensatory = leaveTypeModel.getLeaveId().equalsIgnoreCase("E008001000") && leaveTypeModel.getProcessStep().equalsIgnoreCase("1");
         if (isCompensatory) {
             if (this.startDate == null) {
-                Toast.makeText(getActivity(), "Please select Date Worked", Toast.LENGTH_LONG).show();
                 isSubmitClicked = true;
+                Utility.showHidePregress(progressbar, false);
+                MainActivity.isAnimationLoaded = false;
+                new AlertCustomDialog(context, "Please select Date Worked");
                 return;
+             /*   Toast.makeText(getActivity(), "Please select Date Worked", Toast.LENGTH_LONG).show();
+                isSubmitClicked = true;
+                return;*/
             }
             if (this.toDate == null) {
-                Toast.makeText(getActivity(), "Please select Compensatory Off Date", Toast.LENGTH_LONG).show();
                 isSubmitClicked = true;
+                Utility.showHidePregress(progressbar, false);
+                MainActivity.isAnimationLoaded = false;
+                new AlertCustomDialog(context, "Please select Compensatory Off Date");
                 return;
+            /*    Toast.makeText(getActivity(), "Please select Compensatory Off Date", Toast.LENGTH_LONG).show();
+                isSubmitClicked = true;
+                return;*/
             }
             showHideProgressView(true);
             setActiveInActive(false);
@@ -735,19 +750,34 @@ public class CreateNewLeaveFragment extends BaseFragment implements OnCheckedCha
             return;
         }
         if (this.startDate == null) {
-            Toast.makeText(getActivity(), "Please select start date.", Toast.LENGTH_LONG).show();
             isSubmitClicked = true;
+            Utility.showHidePregress(progressbar, false);
+            MainActivity.isAnimationLoaded = false;
+            new AlertCustomDialog(context, "Please select start date.");
             return;
+            //Toast.makeText(getActivity(), "Please select start date.", Toast.LENGTH_LONG).show();
+           // isSubmitClicked = true;
+          //  return;
         }
         if (this.toDate == null) {
-            Toast.makeText(getActivity(), "Please select end date.", Toast.LENGTH_LONG).show();
             isSubmitClicked = true;
+            Utility.showHidePregress(progressbar, false);
+            MainActivity.isAnimationLoaded = false;
+            new AlertCustomDialog(context, "Please select end date.");
             return;
+           // Toast.makeText(getActivity(), "Please select end date.", Toast.LENGTH_LONG).show();
+         //   isSubmitClicked = true;
+           // return;
         }
         if (getTotalDay(this.startDate, this.toDate) <= 0) {
-            Toast.makeText(getActivity(), "Please select end date later than start date.", Toast.LENGTH_LONG).show();
             isSubmitClicked = true;
-            return;
+            Utility.showHidePregress(progressbar, false);
+            MainActivity.isAnimationLoaded = false;
+            new AlertCustomDialog(context, "Please select end date later than start date.");
+                return;
+            /*  Toast.makeText(getActivity(), "Please select end date later than start date.", Toast.LENGTH_LONG).show();
+            isSubmitClicked = true;
+            return;*/
         }
 
         showHideProgressView(true);

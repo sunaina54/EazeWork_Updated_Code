@@ -72,7 +72,8 @@ public class RetakeFragment extends Fragment {
         final File path = new File(imagePath);
 
 
-        if (!imagePurpose.equals(null) && imagePurpose.equals("ForPhoto") && path != null && path.exists()) {
+        if (!imagePurpose.equals(null) && imagePurpose.equals("ForPhoto") &&
+                path != null && path.exists()) {
             try {
                 bmp = rotateBmpFront(path);
             } catch (IllegalArgumentException e) {

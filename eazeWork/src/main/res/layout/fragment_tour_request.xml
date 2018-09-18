@@ -183,7 +183,7 @@
                                             android:id="@+id/tv_from_day"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:text="From Date"
+                                            android:text="Start Date"
                                             android:textColor="@color/white"
                                             android:textSize="@dimen/margin_13" />
 
@@ -252,7 +252,7 @@
                                             android:layout_height="wrap_content"
                                             android:ellipsize="end"
                                             android:singleLine="true"
-                                            android:text="To Date"
+                                            android:text="End Date"
                                             android:textColor="@color/white"
                                             android:textSize="@dimen/margin_13" />
 

@@ -603,7 +603,7 @@ public class Camera2BasicFragment extends Fragment implements View.OnClickListen
 
                 if (cameraForB == AppsConstant.FRONT_CAMREA_OPEN) {
                     if(manager!=null) {
-                        if (manager.getCameraIdList() != null && manager.getCameraIdList().length > 0) {
+                        if (manager.getCameraIdList() != null) {
                             mCameraId = manager.getCameraIdList()[1];
                         } else {
                             mCameraId = manager.getCameraIdList()[0];
@@ -879,7 +879,8 @@ public class Camera2BasicFragment extends Fragment implements View.OnClickListen
                                                @NonNull CaptureRequest request,
                                                @NonNull TotalCaptureResult result) {
                     //       showToast("Saved: " + mFile);
-                    if (purpose.equalsIgnoreCase("ForStore") || purpose.equalsIgnoreCase("ForPhoto")) {
+                    if (purpose.equalsIgnoreCase("ForStore")
+                            || purpose.equalsIgnoreCase("ForPhoto")) {
                         FragmentManager fm = getFragmentManager();
                         Fragment f = new RetakeFragment();
                         Bundle bundle = new Bundle();

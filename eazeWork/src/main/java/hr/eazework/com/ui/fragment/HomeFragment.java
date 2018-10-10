@@ -655,7 +655,30 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
                 }
             }
 
+            itemModel = menuItemModel.getItemModel(MenuItemModel.SELF_TICKET_KEY);
+            if (itemModel != null && itemModel.isAccess()) {
+               /* ExpenseStatusModel expenseStatusModel = ModelManager.getInstance().getExpenseStatusModel();
+                if (expenseStatusModel != null && expenseStatusModel.getExpenseStatusData() != null
+                        && expenseStatusModel.getExpenseStatusData().size() > 0) {
+                    if (expenseStatusModel.getExpenseStatusData().get(1) != null) {
+                        ExpenseStatusData expenseStatusData = expenseStatusModel.getExpenseStatusData().get(1);
+                        MainItemModel item = new MainItemModel("Expense",
+                                getString(R.string.msg_expense), getString(R.string.expense_balance),
+                                "" + (expenseStatusData == null ? "0" : expenseStatusData.getCurrencyCode() + " " + expenseStatusData.getAmount()), R.drawable.expense_claim, true);
+                        item.setObjectId(itemModel.getmObjectId());
+                        itemList.add(item);
+                    }
+                }*/
+
+                MainItemModel item = new MainItemModel("Ticket",
+                        getString(R.string.msg_expense), getString(R.string.expense_balance),
+                        "" + (""), R.drawable.expense_claim, true);
+                item.setObjectId(itemModel.getmObjectId());
+                itemList.add(item);
+            }
+
             ArrayList<String> list = new ArrayList<>();
+            String ticketAccess = "";
             itemModel = menuItemModel.getItemModel(MenuItemModel.CREATE_ADVANCE_KEY);
             if (itemModel != null && itemModel.isAccess()) {
                 list.add("Advance");
@@ -689,6 +712,58 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
             if (itemModel != null && itemModel.isAccess()) {
                 list.add("Work From Home");
             }
+
+            itemModel = menuItemModel.getItemModel(MenuItemModel.SELF_TICKET_KEY);
+            if (itemModel != null && itemModel.isAccess()) {
+                list.add(AppsConstant.TICKET_SELF);
+               // ticketAccess = AppsConstant.TICKET_ACCESS_SIMPLE;
+              //  preferences.saveString(AppsConstant.TICKET_ACCESS_KEY,ticketAccess);
+
+            }
+
+            itemModel = menuItemModel.getItemModel(MenuItemModel.OTHER_TICKET_KEY);
+            if (itemModel != null && itemModel.isAccess()) {
+                list.add(AppsConstant.TICKET_Other);
+            }
+
+    /*        preferences.remove(AppsConstant.TICKET_ACCESS_KEY);
+
+            itemModel = menuItemModel.getItemModel(MenuItemModel.SELF_TICKET_KEY);
+            if (itemModel != null && itemModel.isAccess()) {
+                list.add("Ticket");
+                ticketAccess = AppsConstant.TICKET_ACCESS_SIMPLE;
+                preferences.saveString(AppsConstant.TICKET_ACCESS_KEY,ticketAccess);
+
+            }else {
+                itemModel = menuItemModel.getItemModel(MenuItemModel.OTHER_TICKET_KEY);
+                if (itemModel != null && itemModel.isAccess()) {
+                    list.add("Ticket");
+                    ticketAccess= AppsConstant.TICKET_ACCESS_ADVANCE;
+                    preferences.saveString(AppsConstant.TICKET_ACCESS_KEY,ticketAccess);
+
+                }else if (ticketAccess.equalsIgnoreCase(AppsConstant.TICKET_ACCESS_SIMPLE) &&
+                        ticketAccess.equalsIgnoreCase(AppsConstant.TICKET_ACCESS_ADVANCE)) {
+                    list.add("Ticket");
+                    ticketAccess= AppsConstant.TICKET_ACCESS_BOTH;
+                    preferences.saveString(AppsConstant.TICKET_ACCESS_KEY,ticketAccess);
+
+                }
+            }*/
+
+           /* itemModel = menuItemModel.getItemModel(MenuItemModel.OTHER_TICKET_KEY);
+            if (itemModel != null && itemModel.isAccess()) {
+               // list.add("Ticket");
+                ticketAccess= AppsConstant.TICKET_ACCESS_ADVANCE;
+            }
+
+            if(!ticketAccess.equalsIgnoreCase("")){
+                if (ticketAccess.equalsIgnoreCase(AppsConstant.TICKET_ACCESS_SIMPLE) || ticketAccess.equalsIgnoreCase(AppsConstant.TICKET_ACCESS_ADVANCE)){
+                    list.add("Ticket");
+                }else if (ticketAccess.equalsIgnoreCase(AppsConstant.TICKET_ACCESS_SIMPLE) &&
+                        ticketAccess.equalsIgnoreCase(AppsConstant.TICKET_ACCESS_ADVANCE)) {
+                    list.add("Ticket");
+                }
+            }*/
 
       /*      list.add("Raise Ticket(Simple)");
             list.add("Raise Ticket(Advanced)");*/
@@ -824,6 +899,11 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
                 mUserActionListener.performUserAction(IAction.EXPENSE_CLAIM_SUMMARY, null, null);
             } else if (MenuItemModel.CREATE_ADVANCE_KEY.equalsIgnoreCase(itemModel.getmObjectId())) {
                 mUserActionListener.performUserAction(IAction.ADVANCE_EXPENSE_SUMMARY, null, null);
+            }else if(MenuItemModel.SELF_TICKET_KEY.equalsIgnoreCase(itemModel.getmObjectId())||
+                    MenuItemModel.OTHER_TICKET_KEY.equalsIgnoreCase(itemModel.getmObjectId())){
+                mUserActionListener.performUserAction(IAction.RAISE_TICKET_ADV_SUMMARY, null, null);
+
+
             }
         }
     }

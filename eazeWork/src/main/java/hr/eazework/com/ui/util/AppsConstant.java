@@ -20,6 +20,10 @@ public class AppsConstant {
             LEAVE_WITHDRAWAL="5",TOUR_EDIT="11",TOUR_WITHDRAWAL="12",VIEW_ACTION="V",EDIT_ACTION="E"
             ,OD_EDIT="32",OD_WITHDRAWAL="33",WFH_EDIT="13",WFH_WITHDRAWAL="14";
     public  static  final String SUCCESS="0";
+    public  static  final String SIMPLE_VIEW="S";
+    public  static  final String ADVANCE_VIEW="A";
+    public  static  final String Project_NAME="EazeWork";
+
 
     public static final int ADD_EXPENSE_CLAIM_FRAGMENT =1;
     public static final int VIEW_EDIT_EXPENSE_CLAIM_FRAGMENT =2;
@@ -117,5 +121,14 @@ public class AppsConstant {
         offlineAttendanceStatuses.add("OutLocation");
     }
     public static  String EDIT="EDIT",ADD="ADD",VIEW="VIEW";
+    public static String TICKET_ACCESS_SIMPLE ="TICKET_SIMPLE";
+    public static String TICKET_ACCESS_ADVANCE = "TICKET_ADVANCE";
+    public static String TICKET_ACCESS_BOTH = "TICKET_BOTH";
+    public static String TICKET_ACCESS_KEY = "TICKET_ACCESS_KEY";
+    public static String TICKET_SELF= "Ticket (Self)";
+    public static String TICKET_Other = "Ticket (Other)";
+    public static String TICKET_KEY = "TICKET_KEY";
+
+
 
 }

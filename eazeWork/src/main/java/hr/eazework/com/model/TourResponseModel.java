@@ -10,6 +10,7 @@ import java.io.Serializable;
 
 public class TourResponseModel implements Serializable {
     private SaveTourReqResultModel SaveTourReqResult;
+    private SaveTourReqResultModel SaveTicketResult;
     private SaveTourReqResultModel ApproveTourRequestResult;
 
     public SaveTourReqResultModel getApproveTourRequestResult() {
@@ -26,6 +27,14 @@ public class TourResponseModel implements Serializable {
 
     public void setSaveTourReqResult(SaveTourReqResultModel saveTourReqResult) {
         SaveTourReqResult = saveTourReqResult;
+    }
+
+    public SaveTourReqResultModel getSaveTicketResult() {
+        return SaveTicketResult;
+    }
+
+    public void setSaveTicketResult(SaveTourReqResultModel saveTicketResult) {
+        SaveTicketResult = saveTicketResult;
     }
 
     static public TourResponseModel create(String serializedData) {

@@ -19,8 +19,10 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import hr.eazework.com.model.ContactListModel;
 import hr.eazework.com.model.EmployItem;
 import hr.eazework.com.model.EmployResponse;
+import hr.eazework.com.model.GetContactListResponseModel;
 import hr.eazework.com.model.SearchOnBehalfItem;
 import hr.eazework.com.ui.fragment.Leave.CreateNewLeaveFragment;
 import hr.eazework.com.ui.fragment.Attendance.OutdoorDutyRequestFragment;
@@ -48,6 +50,7 @@ public class SearchOnbehalfActivity extends BaseActivity {
     private TextView tv_header_text;
     private RecyclerView recyclerView;
     private EmployResponse empResponse;
+    private GetContactListResponseModel contactListResponseModel;
     public static String SELECTED_EMP="seletedEmp";
     public static String SELECTED_WFH_EMP="selectedWFHEmp";
     public static String SELECTED_OD_EMP="selectedODEmp";
@@ -58,6 +61,7 @@ public class SearchOnbehalfActivity extends BaseActivity {
     private LinearLayout progressContainer,noRecordLayout,rl_edit_team_member;
     private String screenName="";
     private int SELECTED_TYPE;
+    private ArrayList<ContactListModel> contactList;
 
 
     @Override
@@ -74,6 +78,8 @@ public class SearchOnbehalfActivity extends BaseActivity {
         preferences = new Preferences(context);
         int textColor = Utility.getTextColorCode(preferences);
         int bgColor = Utility.getBgColorCode(context, preferences);
+      //  contactList = (ArrayList<ContactListModel>) getIntent().getSerializableExtra("ContactList");
+      // contactList = getIntent().getStringExtra("ContactList");
         searchLayout=(RelativeLayout)findViewById(R.id.searchLayout);
         ibRightIV=(ImageView)findViewById(R.id.ibRight) ;
         ibRightIV.setVisibility(View.GONE);
@@ -112,6 +118,7 @@ public class SearchOnbehalfActivity extends BaseActivity {
             }
         });
     }
+
     private void refreshRecycle(ArrayList<EmployItem> list){
         recyclerView.setVisibility(View.GONE);
         noRecordLayout.setVisibility(View.GONE);
@@ -119,6 +126,21 @@ public class SearchOnbehalfActivity extends BaseActivity {
         if(list!=null && list.size()>0){
             recyclerView.setVisibility(View.VISIBLE);
             CustomAdapter adapter = new CustomAdapter(list);
+            recyclerView.setAdapter(adapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+            adapter.notifyDataSetChanged();
+        }else{
+            noRecordLayout.setVisibility(View.VISIBLE);
+        }
+
+    }
+    private void refreshContactRecycle(ArrayList<ContactListModel> list){
+        recyclerView.setVisibility(View.GONE);
+        noRecordLayout.setVisibility(View.GONE);
+
+        if(list!=null && list.size()>0){
+            recyclerView.setVisibility(View.VISIBLE);
+            ContactAdapter adapter = new ContactAdapter(list);
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
             adapter.notifyDataSetChanged();
@@ -208,6 +230,26 @@ public class SearchOnbehalfActivity extends BaseActivity {
 
                 }
                 break;
+            case CommunicationConstant.API_GET_CONTACT_LIST:
+                Log.d("TAG","Ticket employee "+response.getResponseData());
+                contactListResponseModel=GetContactListResponseModel.create(response.getResponseData());
+                if(contactListResponseModel!=null && contactListResponseModel.getGetContactListResult()!=null &&
+                        !contactListResponseModel.getGetContactListResult().getErrorCode()
+                                .equalsIgnoreCase(AppsConstant.SUCCESS) ){
+                    new AlertCustomDialog(context,contactListResponseModel.getGetContactListResult().getErrorMessage());
+                    return;
+                }
+                if(contactListResponseModel!=null && contactListResponseModel.getGetContactListResult()!=null &&
+                        contactListResponseModel.getGetContactListResult().getErrorCode()
+                                .equalsIgnoreCase(AppsConstant.SUCCESS)){
+                    noRecordLayout.setVisibility(View.GONE);
+                    refreshContactRecycle(contactListResponseModel.getGetContactListResult().getContactList());
+
+                }else {
+
+                }
+                break;
+
             default:
                 break;
         }
@@ -217,10 +259,19 @@ public class SearchOnbehalfActivity extends BaseActivity {
 
     private  void searchOnBehalf(String str){
         progressContainer.setVisibility(View.VISIBLE);
-        request=new SearchOnBehalfItem();
-        request.setFromCount("1");
-        request.setToCount("-1");
-        request.setMatchStr(str);
+
+
+
+        if(CreateTicketAdvanceFragment.TICKET_EMP_ADV == SELECTED_TYPE){
+            request=new SearchOnBehalfItem();
+            request.setSelfOrOther("O");
+            request.setMatchStr(str);
+        }else {
+            request=new SearchOnBehalfItem();
+            request.setFromCount("1");
+            request.setToCount("-1");
+            request.setMatchStr(str);
+        }
         if(SELECTED_TYPE==CreateNewLeaveFragment.LEAVE_EMP) { //leave employee
             CommunicationManager.getInstance().sendPostRequest(this,
                     AppRequestJSONString.searchOnBehalfRequest(request),
@@ -237,14 +288,22 @@ public class SearchOnbehalfActivity extends BaseActivity {
             CommunicationManager.getInstance().sendPostRequest(this,
                     AppRequestJSONString.searchOnBehalfRequest(request),
                     CommunicationConstant.API_GET_TOUR_EMP_LIST, true);
-        }else if(CreateTicketFragment.TICKET_EMP == SELECTED_TYPE) {
+        }/*else if(CreateTicketFragment.TICKET_EMP == SELECTED_TYPE) {
             CommunicationManager.getInstance().sendPostRequest(this,
                     AppRequestJSONString.searchOnBehalfRequest(request),
                     CommunicationConstant.API_GET_TOUR_EMP_LIST, true);
-        }else if(CreateTicketAdvanceFragment.TICKET_EMP_ADV == SELECTED_TYPE) {
-            CommunicationManager.getInstance().sendPostRequest(this,
+        }*/else if(CreateTicketAdvanceFragment.TICKET_EMP_ADV == SELECTED_TYPE) {
+
+             CommunicationManager.getInstance().sendPostRequest(this,
                     AppRequestJSONString.searchOnBehalfRequest(request),
-                    CommunicationConstant.API_GET_TOUR_EMP_LIST, true);
+                    CommunicationConstant.API_GET_CONTACT_LIST, true);
+         /*  if(contactList!=null && contactList.size()>0) {
+               noRecordLayout.setVisibility(View.GONE);
+               refreshContactRecycle(contactList);
+           }else {
+               noRecordLayout.setVisibility(View.VISIBLE);
+
+           }*/
         }
     }
 
@@ -317,6 +376,93 @@ public class SearchOnbehalfActivity extends BaseActivity {
                     setResult(CreateNewLeaveFragment.LEAVE_EMP,theIntent);
                     setResult(TourRequestFragment.TOUR_EMP,theIntent);
                     setResult(CreateTicketFragment.TICKET_EMP,theIntent);
+                    setResult(CreateTicketAdvanceFragment.TICKET_EMP_ADV,theIntent);
+                    finish();
+                }
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return dataSet.size();
+        }
+
+        public void clearDataSource() {
+            dataSet.clear();
+            notifyDataSetChanged();
+        }
+
+    }
+
+    private class ContactAdapter extends
+            RecyclerView.Adapter<ContactAdapter.MyViewHolder> {
+        private ArrayList<ContactListModel> dataSet;
+
+
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+
+            private TextView empNameTV,empIdTV,empCodeTV;
+            private Button selectBT;
+            public MyViewHolder(View v) {
+                super(v);
+
+                empCodeTV=(TextView)v.findViewById(R.id.empCodeTV);
+                empIdTV=(TextView)v.findViewById(R.id.empIdTV);
+                empNameTV=(TextView)v.findViewById(R.id.empNameTV);
+                selectBT=(Button)v.findViewById(R.id.selectBT);
+
+
+            }
+        }
+
+        public void addAll(List<ContactListModel> list) {
+
+            dataSet.addAll(list);
+            notifyDataSetChanged();
+        }
+
+        public ContactAdapter(List<ContactListModel> data) {
+            this.dataSet = (ArrayList<ContactListModel>) data;
+
+        }
+
+        @Override
+        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.employ_list_item, parent, false);
+            MyViewHolder myViewHolder = new MyViewHolder(view);
+            return myViewHolder;
+        }
+
+
+        @Override
+        public void onBindViewHolder(final MyViewHolder holder, final int listPosition) {
+
+            final ContactListModel item = dataSet.get(listPosition);
+            if(item.getEmpCode()!=null){
+                holder.empCodeTV.setText(item.getEmpCode());
+
+            }
+            if(item.getName()!=null)
+                holder.empNameTV.setText(item.getName());
+          //  holder.empIdTV.setText(item.ge()+"");
+            holder.selectBT.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent theIntent=new Intent();
+                 /*   theIntent.putExtra(SELECTED_EMP,item);
+                    theIntent.putExtra(SELECTED_WFH_EMP,item);
+                    theIntent.putExtra(SELECTED_OD_EMP,item);
+                    theIntent.putExtra(SELECTED_TOUR_EMP,item);
+                    theIntent.putExtra(SELECTED_TICKET_EMP,item);*/
+                    theIntent.putExtra(SELECTED_TICKET_EMP_ADV,item);
+                   /* setResult(OutdoorDutyRequestFragment.OD_EMP,theIntent);
+                    setResult(WorkFromHomeRequestFragment.WFH_EMP,theIntent);
+                    setResult(CreateNewLeaveFragment.LEAVE_EMP,theIntent);
+                    setResult(TourRequestFragment.TOUR_EMP,theIntent);
+                    setResult(CreateTicketFragment.TICKET_EMP,theIntent);*/
                     setResult(CreateTicketAdvanceFragment.TICKET_EMP_ADV,theIntent);
                     finish();
                 }

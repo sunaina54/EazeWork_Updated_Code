@@ -58,6 +58,9 @@ public interface IAction {
 	int VIEW_ADVANCE=54;
 	int RAISE_TICKET=55;
 	int RAISE_TICKET_ADV=56;
+	int SELF_TICKET_SUMMARY=57;
+	int RAISE_TICKET_ADV_SUMMARY=58;
+
 
 
 

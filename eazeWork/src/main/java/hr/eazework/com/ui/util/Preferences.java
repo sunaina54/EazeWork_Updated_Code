@@ -67,6 +67,9 @@ public class Preferences {
         return preferences.getString(strKey, defaultValue);
     }
 
+
+
+
     public boolean getBoolean(String strKey, boolean defaultValue) {
         return preferences.getBoolean(strKey, defaultValue);
     }

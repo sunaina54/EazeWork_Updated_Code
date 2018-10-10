@@ -27,10 +27,12 @@ import java.util.Vector;
 
 import hr.eazework.com.R;
 import hr.eazework.com.model.AdvanceListItemModel;
+import hr.eazework.com.model.CategoryListItem;
 import hr.eazework.com.model.ClaimTypeListItem;
 import hr.eazework.com.model.CurrencyListModel;
 import hr.eazework.com.model.EmployeeListModel;
 import hr.eazework.com.model.ExpenseItemListModel;
+import hr.eazework.com.model.FeedbackRatingListModel;
 import hr.eazework.com.model.GetAdvanceDetailResultModel;
 import hr.eazework.com.model.GetEmpWFHResponseItem;
 import hr.eazework.com.model.HeadCategoryListModel;
@@ -384,6 +386,10 @@ public class CustomBuilder {
                 name = ((GetEmpWFHResponseItem) obj).getStatusDesc();
             }else if(obj instanceof LeaveReqsItem) {
                 name = ((LeaveReqsItem) obj).getStatusDesc();
+            }else if(obj instanceof CategoryListItem) {
+                name = ((CategoryListItem) obj).getValue();
+            }else if(obj instanceof FeedbackRatingListModel){
+
             }
             tvSelectUrCountry.setText(name);
 			/*if(isShowAsSelected)

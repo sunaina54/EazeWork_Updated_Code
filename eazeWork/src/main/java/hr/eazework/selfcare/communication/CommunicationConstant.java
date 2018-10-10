@@ -125,6 +125,12 @@ public class CommunicationConstant {
 	public static final String API_KEY_UPLOAD_PROFILE_PIC="EmployeeService.svc/UploadProfilePic";
 	public static final String API_KEY_GET_EMP_ATTENDANCE_DETAIL="AttendanceService.svc/GetEmpAttendanceDetail";
 	public static final String API_KEY_GET_EMP_ANNOUNCEMENT="CommonService.svc/GetAnnouncement";
+	public static final String API_KEY_GET_TICKET_PAGE_INIT="TicketService.svc/GetTicketPageInit";
+	public static final String API_KEY_GET_COMMON_LIST="TicketService.svc/GetCommonList";
+	public static final String API_KEY_SAVE_TICKET = "TicketService.svc/SaveTicket";
+	public static final String API_KEY_GET_TICKETS = "TicketService.svc/GetTickets";
+	public static final String API_KEY_GET_CONTACT_LIST= "TicketService.svc/GetContactList";
+
 
 
 	public static final int API_LOGIN_USER = 0;
@@ -223,8 +229,15 @@ public class CommunicationConstant {
 	public static final int API_UPLOAD_PROFILE_PIC=93;
 	public static final int API_GET_EMP_ATTENDANCE_DETAIL=94;
 	public static final int API_GET_ANNOUNCEMENT=95;
+	public static final int API_GET_TICKET_PAGE_INIT =96;
+	public static final int API_GET_COMMON_LIST =97;
+	public static final int API_SAVE_TICKET  =98;
+	public static final int API_GET_TICKETS = 99;
+	public static final int API_GET_CONTACT_LIST = 100;
 
-	public static String ADD_EXPENSE_RESPONSE="addExpense";
+
+
+    public static String ADD_EXPENSE_RESPONSE="addExpense";
 
 
 	public static boolean isProduction() {

@@ -12,7 +12,16 @@ public class SearchOnBehalfItem implements Serializable {
     private String fromCount;
     private String toCount;
     private String matchStr;
+    private String SelfOrOther="";
     private AdvanceLoginDataRequestModel loginData;
+
+    public String getSelfOrOther() {
+        return SelfOrOther;
+    }
+
+    public void setSelfOrOther(String selfOrOther) {
+        SelfOrOther = selfOrOther;
+    }
 
     public AdvanceLoginDataRequestModel getLoginData() {
         return loginData;

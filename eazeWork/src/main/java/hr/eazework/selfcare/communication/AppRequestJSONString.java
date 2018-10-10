@@ -59,7 +59,11 @@ import hr.eazework.com.model.SaveExpenseItem;
 import hr.eazework.com.model.SaveExpenseModel;
 import hr.eazework.com.model.SaveExpenseRequestModel;
 import hr.eazework.com.model.SearchOnBehalfItem;
+import hr.eazework.com.model.SubCategoryRequestModel;
 import hr.eazework.com.model.SupportDocsItemModel;
+import hr.eazework.com.model.TicketPageInitRequestModel;
+import hr.eazework.com.model.TicketSubmitRequestModel;
+import hr.eazework.com.model.TicketSummaryRequestModel;
 import hr.eazework.com.model.TimeModificationRequestModel;
 import hr.eazework.com.model.TourRequestModel;
 import hr.eazework.com.model.UploadProfilePicModel;
@@ -399,6 +403,25 @@ public class AppRequestJSONString {
         return advanceDetailRequestModel.serialize();
     }
 
+    // Ticket Init Request
+    public static String getTicketPageInitRequestData(TicketPageInitRequestModel ticketPageInitRequestModel) {
+        AdvanceLoginDataRequestModel loginData = new AdvanceLoginDataRequestModel();
+        loginData.setDeviceID(MyApplication.getDeviceId());
+        loginData.setSessionID(SharedPreference.getSessionId());
+        ticketPageInitRequestModel.setLoginData(loginData);
+        Log.d("Ticket Init Request",ticketPageInitRequestModel.serialize());
+        return ticketPageInitRequestModel.serialize();
+    }
+
+    public static String getSubCategoryData(SubCategoryRequestModel subCategoryRequestModel) {
+        AdvanceLoginDataRequestModel loginData = new AdvanceLoginDataRequestModel();
+        loginData.setDeviceID(MyApplication.getDeviceId());
+        loginData.setSessionID(SharedPreference.getSessionId());
+        subCategoryRequestModel.setLoginData(loginData);
+        Log.d("Ticket Init Request",subCategoryRequestModel.serialize());
+        return subCategoryRequestModel.serialize();
+    }
+
     public static String getAdvanceApprovalData(String role) {
         AdvanceLoginDataRequestModel loginData = new AdvanceLoginDataRequestModel();
         loginData.setDeviceID(MyApplication.getDeviceId());
@@ -490,6 +513,28 @@ public class AppRequestJSONString {
         return request;
     }
 
+
+    public static String ticketRequest(TicketSubmitRequestModel item){
+        AdvanceLoginDataRequestModel loginData = new AdvanceLoginDataRequestModel();
+        loginData.setDeviceID(MyApplication.getDeviceId());
+        loginData.setSessionID(SharedPreference.getSessionId());
+        item.setLoginData(loginData);
+        if(item.getTicketDetail()!=null &&
+                item.getTicketDetail().getDocList()!=null && item.getTicketDetail().getDocList().size()>0){
+            item.getTicketDetail().setDocList(prepareDocList(item.getTicketDetail().getDocList()));
+        }
+
+        if(item.getTicketDetail()!=null
+                && item.getTicketDetail().getDocList()!=null
+                && item.getTicketDetail().getDocList().size()>0){
+            item.getTicketDetail().setDocList(prepareDocList(item.getTicketDetail().getDocList()));
+        }
+
+        String request=item.serialize();
+        Log.d("TAG","Ticket Submission Request : "+request);
+        return request;
+    }
+
     public static String rejectRequest(WFHRejectRequestModel item){
         AdvanceLoginDataRequestModel loginData = new AdvanceLoginDataRequestModel();
         loginData.setDeviceID(MyApplication.getDeviceId());
@@ -529,6 +574,16 @@ public class AppRequestJSONString {
         item.setLoginData(loginData);
         String request=item.serialize();
         Log.d("TAG","WFH Summary: "+request);
+        return request;
+    }
+
+    public static String ticketSummary(TicketSummaryRequestModel item){
+        AdvanceLoginDataRequestModel loginData = new AdvanceLoginDataRequestModel();
+        loginData.setDeviceID(MyApplication.getDeviceId());
+        loginData.setSessionID(SharedPreference.getSessionId());
+        item.setLoginData(loginData);
+        String request=item.serialize();
+        Log.d("TAG","Ticket Summary Request: "+request);
         return request;
     }
 

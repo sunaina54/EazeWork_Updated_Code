@@ -3,6 +3,7 @@ package hr.eazework.selfcare.adapter;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -248,6 +249,7 @@ public class EditTeamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 vh2.textView.setText(model.getmFieldLabel());
                 if(!TextUtils.isEmpty(fileInfoModel.getmFilePath()) && model.getmFieldCode()!=null && model.getmFieldCode().equalsIgnoreCase("EW05000001")) {
                     vh2.imageView.setImageBitmap(ImageUtil.decodeBitmapToImage(model.getmFileInfoModel().getmBase64Data()));
+
                 }
 
                 if(!TextUtils.isEmpty(fileInfoModel.getmText())) {
@@ -263,6 +265,9 @@ public class EditTeamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                 getItem(position).getmFieldCode());
                     }
                 });
+
+
+
                 break;
             case TYPE_PROFILE:
 
@@ -293,6 +298,7 @@ public class EditTeamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 vh2.textView.setText(model.getmFieldLabel());
               //  if(model.getmFieldCode()!=null && model.getmFieldCode().equalsIgnoreCase("EC00000004")){
                 if(!TextUtils.isEmpty(fileInfoModel.getmFilePath()) && model.getmFieldCode()!=null && model.getmFieldCode().equalsIgnoreCase("EW08000001")) {
+
                     vh2.imageView.setImageBitmap(ImageUtil.decodeBitmapToImage(model.getmFileInfoModel().getmBase64Data()));
 
                 }
@@ -309,6 +315,9 @@ public class EditTeamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
                         listner.capturePhoto(position,model.getmFieldLabel().trim(),
                                 getItem(position).getmFieldCode());
+
+
+
                     }
                 });
                 break;
@@ -597,6 +606,7 @@ public class EditTeamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             this.textView = (TextView) itemView.findViewById(R.id.tv_title);
         }
     }
+
 
 
 }

@@ -67,6 +67,12 @@
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/feedbackWriteLL">
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <TextView
@@ -102,6 +108,8 @@
                     android:padding="@dimen/margin_10"
                     android:textColor="@color/black"
                     android:textSize="@dimen/font_14" />
+
+            </LinearLayout>
 
             </LinearLayout>
         </LinearLayout>

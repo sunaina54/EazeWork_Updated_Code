@@ -38,7 +38,8 @@ public class MenuItemModel implements Serializable {
     public static final String CREATE_EXPENSE_KEY="M0019";
     public static final String ADVANCE_KEY="M0020";
     public static final String EXPENSE_KEY="M0021";
-
+    public static final String SELF_TICKET_KEY="M0024";
+    public static final String OTHER_TICKET_KEY="M0025";
 
     public MenuItemModel(JSONObject jsonObject) {
         isAccess = jsonObject.optString("AccessYN", "N").equalsIgnoreCase("y");

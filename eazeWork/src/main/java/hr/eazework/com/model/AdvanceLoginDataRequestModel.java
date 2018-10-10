@@ -13,7 +13,6 @@ public class AdvanceLoginDataRequestModel implements Serializable {
     private String SessionID;
 
 
-
     public String getDeviceID() {
         return DeviceID;
     }

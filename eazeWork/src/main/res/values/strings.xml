@@ -189,6 +189,7 @@
     <string name="claim_amount">Claim Amount</string>
     <string name="status_policy">Status</string>
     <string name="request_id_voucher">Request ID</string>
+    <string name="ticket_id">Ticket ID</string>
     <string name="approved_amount">Approved Amount</string>
 
     <string name="emp_id">Emp Id</string>
@@ -200,6 +201,7 @@
     <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
 
     <string name="employee_name">Employee</string>
+    <string name="contact">Contact</string>
     <string name="start_date">Start Date</string>
     <string name="end_date">End Date</string>
     <string name="from_date">From Date</string>

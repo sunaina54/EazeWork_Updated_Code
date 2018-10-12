@@ -20,6 +20,8 @@ public class GetTicketPageInitResultModel extends GenericResponse
     private TicketDetailModel TicketDetail;
     private ArrayList<ContactListModel> ContactList;
     private String[] Buttons;
+    private String CategoryYN;
+    private String SubCategoryYN;
 
     public hr.eazework.com.model.TicketTypeList getTicketTypeList() {
         return TicketTypeList;
@@ -27,6 +29,22 @@ public class GetTicketPageInitResultModel extends GenericResponse
 
     public void setTicketTypeList(hr.eazework.com.model.TicketTypeList ticketTypeList) {
         TicketTypeList = ticketTypeList;
+    }
+
+    public String getSubCategoryYN() {
+        return SubCategoryYN;
+    }
+
+    public void setSubCategoryYN(String subCategoryYN) {
+        SubCategoryYN = subCategoryYN;
+    }
+
+    public String getCategoryYN() {
+        return CategoryYN;
+    }
+
+    public void setCategoryYN(String categoryYN) {
+        CategoryYN = categoryYN;
     }
 
     public String[] getButtons() {

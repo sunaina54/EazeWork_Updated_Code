@@ -45,6 +45,7 @@ import hr.eazework.com.model.ReasonCodeListItemModel;
 import hr.eazework.com.model.RoleListItem;
 import hr.eazework.com.model.SalaryMonthModel;
 import hr.eazework.com.model.TeamMember;
+import hr.eazework.com.model.TicketItem;
 import hr.eazework.com.model.TourReasonListModel;
 import hr.eazework.com.model.TypeWiseListModel;
 import hr.eazework.com.ui.util.Preferences;
@@ -388,9 +389,11 @@ public class CustomBuilder {
                 name = ((LeaveReqsItem) obj).getStatusDesc();
             }else if(obj instanceof CategoryListItem) {
                 name = ((CategoryListItem) obj).getValue();
-            }else if(obj instanceof FeedbackRatingListModel){
+            }else if(obj instanceof TicketItem) {
+                name = ((TicketItem) obj).getStatusDesc();
+            }/*else if(obj instanceof FeedbackRatingListModel){
 
-            }
+            }*/
             tvSelectUrCountry.setText(name);
 			/*if(isShowAsSelected)
 				ivSelected.setBackgroundResource(R.drawable.radio_checked);

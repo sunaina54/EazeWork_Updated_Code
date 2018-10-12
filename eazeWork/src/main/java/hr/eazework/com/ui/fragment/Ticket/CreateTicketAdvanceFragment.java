@@ -100,9 +100,9 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
     private boolean isSubmitClicked = true;
     private Button saveDraftBTN, deleteBTN, submitBTN, rejectBTN, approvalBTN;
     private Preferences preferences;
-    private TextView empNameTV, empCodeTV, categoryTV, subCategoryTV, priorityTV, feedbackRatingTV;
+    private TextView empNameTV, ticketTypeTV,empCodeTV, categoryTV, subCategoryTV, priorityTV, feedbackRatingTV;
     private View progressbar;
-    private EditText remarksET, subjectET, descriptionET;
+    private EditText remarksET, subjectET, descriptionET,feedbackET;
     private RelativeLayout searchLayout;
    // private EmployItem employItem;
     private ContactListModel employItem;
@@ -124,18 +124,20 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
     private String ticketFor = "";
     private String categoryCode = "", categoryType = "", subCategoryCode = "";
     private String feedbackCode = "";
-    private String priorityCode = "";
+    private String priorityCode = "",ticketTypeCode="";
     private TourResponseModel tourResponseModel;
 
 
-    private ArrayList<CategoryListItem> categoryList, feedbackRatingList, priorityList, subCategoryList;
-    private CategoryListItem categoryListItem, feedbackListItem, priorityListItem, subCategoryItem;
+    private ArrayList<CategoryListItem> categoryList, feedbackRatingList, priorityList,
+            subCategoryList,ticketTypeList;
+    private CategoryListItem categoryListItem, feedbackListItem, priorityListItem,
+            subCategoryItem,ticketTypeItem;
 
     private ArrayList<ContactListModel> contactList;
-    private LinearLayout subCategoryLl, RatingLl, feedbackLL,feedbackWriteLL;
+    private LinearLayout subCategoryLl, RatingLl, feedbackLL,ticketTypeLl,feedbackWriteLL,categoryLl;
     private TicketSubmitRequestModel ticketSubmitRequestModel;
     private TicketDetailModel ticketDetailModel;
-    private String simpleOrAdvance = "";
+    private String simpleOrAdvance = "",categoryYN="",subCategoryYN="";
 
     public String getScreenName() {
         return screenName;
@@ -199,15 +201,18 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
             }
         });
         progressbar = (LinearLayout) rootView.findViewById(R.id.ll_progress_container);
+        categoryLl = (LinearLayout) rootView.findViewById(R.id.categoryLl);
         subCategoryLl = (LinearLayout) rootView.findViewById(R.id.subCategoryLl);
         RatingLl = (LinearLayout) rootView.findViewById(R.id.RatingLl);
         feedbackLL = (LinearLayout) rootView.findViewById(R.id.feedbackLL);
+        ticketTypeLl = (LinearLayout) rootView.findViewById(R.id.ticketTypeLl);
         feedbackWriteLL = (LinearLayout) rootView.findViewById(R.id.feedbackWriteLL);
 
 
         empNameTV = (TextView) rootView.findViewById(R.id.empNameTV);
         empCodeTV = (TextView) rootView.findViewById(R.id.empCodeTV);
 
+        ticketTypeTV = (TextView) rootView.findViewById(R.id.ticketTypeTV);
         categoryTV = (TextView) rootView.findViewById(R.id.categoryTV);
         subCategoryTV = (TextView) rootView.findViewById(R.id.subCategoryTV);
         priorityTV = (TextView) rootView.findViewById(R.id.priorityTV);
@@ -216,6 +221,7 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
         descriptionET = (EditText) rootView.findViewById(R.id.descriptionET);
         remarksET = (EditText) rootView.findViewById(R.id.remarksET);
         subjectET = (EditText) rootView.findViewById(R.id.subjectET);
+        feedbackET = (EditText) rootView.findViewById(R.id.feedbackET);
         searchLayout = (RelativeLayout) rootView.findViewById(R.id.searchLayout);
         searchLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -276,7 +282,8 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
             @Override
             public void onClick(View view) {
                 subCategoryTV.setText("Select Sub Category");
-                if (categoryList != null && categoryList.size() > 0) {
+                if (categoryList != null && categoryList.size() > 0 && categoryYN!=null &&
+                        categoryYN.equalsIgnoreCase(AppsConstant.YES)) {
 
                     CustomBuilder categoryDialog = new CustomBuilder(getContext(), "Select Category", true);
                     categoryDialog.setSingleChoiceItems(categoryList, null, new CustomBuilder.OnClickListener() {
@@ -299,7 +306,8 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
         subCategoryTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (subCategoryList != null && subCategoryList.size() > 0) {
+                if (subCategoryList != null && subCategoryList.size() > 0
+                        && subCategoryYN.equalsIgnoreCase(AppsConstant.YES)) {
 
                     CustomBuilder categoryDialog = new CustomBuilder(getContext(), "Select Sub-Category", true);
                     categoryDialog.setSingleChoiceItems(subCategoryList, null, new CustomBuilder.OnClickListener() {
@@ -309,7 +317,7 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
                             subCategoryTV.setText(subCategoryItem.getValue());
                             //   categoryType = categoryListItem.getValue();
                             subCategoryCode = subCategoryItem.getCode();
-                            sendSubCategoryRequestData(subCategoryCode);
+
                             builder.dismiss();
                         }
                     });
@@ -321,6 +329,29 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
                 }
             }
         });
+
+        ticketTypeTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (ticketTypeList != null && ticketTypeList.size() > 0) {
+
+                    //  final ArrayList<TourReasonListModel> tourReasonListModel = empChangeResponseModel.getGetDetailsOnEmpChangeResult().getTourReasonList();
+                    CustomBuilder ticketTypeDialog = new CustomBuilder(getContext(), "Select Type", true);
+                    ticketTypeDialog.setSingleChoiceItems(ticketTypeList, null, new CustomBuilder.OnClickListener() {
+                        @Override
+                        public void onClick(CustomBuilder builder, Object selectedObject) {
+                            ticketTypeItem = (CategoryListItem) selectedObject;
+                            ticketTypeTV.setText(ticketTypeItem.getValue());
+                            ticketTypeCode = ticketTypeItem.getCode();
+                            builder.dismiss();
+                        }
+                    });
+                    ticketTypeDialog.show();
+
+                }
+            }
+        });
+
         priorityTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -368,6 +399,14 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
             saveDraftBTN.setVisibility(View.VISIBLE);
             uploadFileList = new ArrayList<SupportDocsItemModel>();
         }
+
+        saveDraftBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fromButton = "Save";
+                doSubmitOperation();
+            }
+        });
         sendAdvanceRequestData();
     }
 
@@ -375,6 +414,7 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
     /*    Utility.showHidePregress(progressbar, true);
         MainActivity.isAnimationLoaded = false;
         ((MainActivity) getActivity()).showHideProgress(true);*/
+
         CommunicationManager.getInstance().sendPostRequest(this,
                 AppRequestJSONString.getAdvanceSummaryData(),
                 CommunicationConstant.API_GET_ADVANCE_PAGE_INIT, true);
@@ -386,7 +426,9 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
             initRequestModel.setSelfOrOther(ticketFor);
         }
         initRequestModel.setTicektID(ticketId);
-
+        Utility.showHidePregress(progressbar, true);
+        MainActivity.isAnimationLoaded = false;
+        ((MainActivity) getActivity()).showHideProgress(true);
         CommunicationManager.getInstance().sendPostRequest(this,
                 AppRequestJSONString.getTicketPageInitRequestData(initRequestModel),
                 CommunicationConstant.API_GET_TICKET_PAGE_INIT, true);
@@ -402,7 +444,9 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
         pageInputModel.setParamCode(categoryCode);
         pageInputModel.setParamType(categoryType);
         subCategoryRequestModel.setPageInput(pageInputModel);
-
+        Utility.showHidePregress(progressbar, true);
+        MainActivity.isAnimationLoaded = false;
+        ((MainActivity) getActivity()).showHideProgress(true);
         CommunicationManager.getInstance().sendPostRequest(this,
                 AppRequestJSONString.getSubCategoryData(subCategoryRequestModel),
                 CommunicationConstant.API_GET_COMMON_LIST, true);
@@ -697,6 +741,7 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
         // Prepare request for ticket submission
         ticketSubmitRequestModel = new TicketSubmitRequestModel();
         ticketDetailModel = new TicketDetailModel();
+        Log.d("simpleOrAdvance value", simpleOrAdvance);
 
         if (fromButton.equalsIgnoreCase(AppsConstant.SUBMIT)) {
 
@@ -705,21 +750,31 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
                 new AlertCustomDialog(context, getResources().getString(R.string.select_user));
                 return;
             }
-            if (categoryTV.getText().toString().equalsIgnoreCase("")) {
+            if (categoryCode.equalsIgnoreCase("")&&
+                    categoryYN.equalsIgnoreCase(AppsConstant.YES)) {
                 isSubmitClicked = true;
                 new AlertCustomDialog(context, "Please select category");
                 return;
             }
 
-            if (subCategoryTV.getText().toString().equalsIgnoreCase("") && simpleOrAdvance.equalsIgnoreCase(AppsConstant.ADVANCE_VIEW)) {
+            if (subCategoryCode.equalsIgnoreCase("")
+                    && simpleOrAdvance.equalsIgnoreCase(AppsConstant.ADVANCE_VIEW)
+                    && subCategoryYN.equalsIgnoreCase(AppsConstant.YES)) {
                 isSubmitClicked = true;
                 new AlertCustomDialog(context, "Please select sub category");
                 return;
             }
 
-            if (priorityTV.getText().toString().equalsIgnoreCase("")) {
+            if (ticketTypeCode.equalsIgnoreCase("")
+                    && simpleOrAdvance.equalsIgnoreCase(AppsConstant.ADVANCE_VIEW)) {
                 isSubmitClicked = true;
-                new AlertCustomDialog(context, "Please select sub category");
+                new AlertCustomDialog(context, "Please select type");
+                return;
+            }
+
+            if (priorityCode.equalsIgnoreCase("")) {
+                isSubmitClicked = true;
+                new AlertCustomDialog(context, "Please select priority");
                 return;
             }
 
@@ -737,9 +792,24 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
 
             if (remarksET.getText().toString().equalsIgnoreCase("")) {
                 isSubmitClicked = true;
-                new AlertCustomDialog(context, "Please select remarks");
+                new AlertCustomDialog(context, "Please enter remarks");
                 return;
             }
+
+            if (feedbackCode.equalsIgnoreCase("")
+                    && simpleOrAdvance.equalsIgnoreCase(AppsConstant.ADVANCE_VIEW)) {
+                isSubmitClicked = true;
+                new AlertCustomDialog(context, "Please select rating");
+                return;
+            }
+
+            if (feedbackET.getText().toString().equalsIgnoreCase("")
+                    && simpleOrAdvance.equalsIgnoreCase(AppsConstant.ADVANCE_VIEW)) {
+                isSubmitClicked = true;
+                new AlertCustomDialog(context, "Please enter feedback");
+                return;
+            }
+
 
            /* else if (toDate.equalsIgnoreCase("") || toDate.equalsIgnoreCase("--/--/----")) {
                 isSubmitClicked = true;
@@ -756,14 +826,16 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
 
             ticketDetailModel.setTicketID(ticketId);
             ticketDetailModel.setTicketPriorityID(priorityCode);
-            ticketDetailModel.setTicketTypeID("");
+            ticketDetailModel.setTicketTypeID(ticketTypeCode);
             ticketDetailModel.setCategoryID(categoryCode);
             ticketDetailModel.setSubCategoryID(subCategoryCode);
             ticketDetailModel.setSubject(subjectET.getText().toString());
             ticketDetailModel.setComment(descriptionET.getText().toString());
             ticketDetailModel.setNewRemark(remarksET.getText().toString());
-
+            ticketDetailModel.setFeedback(feedbackET.getText().toString());
+            ticketDetailModel.setFeedbackCode(feedbackCode);
             ticketDetailModel.setFromButton(fromButton);
+
             if (uploadFileList != null && uploadFileList.size() > 0) {
                 for (int i = 0; i < uploadFileList.size(); i++) {
                     SupportDocsItemModel model = uploadFileList.get(i);
@@ -866,12 +938,14 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
 
             ticketDetailModel.setTicketID(ticketId);
             ticketDetailModel.setTicketPriorityID(priorityCode);
-            ticketDetailModel.setTicketTypeID("");
+            ticketDetailModel.setTicketTypeID(ticketTypeCode);
             ticketDetailModel.setCategoryID(categoryCode);
             ticketDetailModel.setSubCategoryID(subCategoryCode);
             ticketDetailModel.setSubject(subjectET.getText().toString());
             ticketDetailModel.setComment(descriptionET.getText().toString());
             ticketDetailModel.setNewRemark(remarksET.getText().toString());
+            ticketDetailModel.setFeedback(feedbackET.getText().toString());
+            ticketDetailModel.setFeedbackCode(feedbackCode);
 
             if (uploadFileList != null && uploadFileList.size() > 0) {
                 for (int i = 0; i < uploadFileList.size(); i++) {
@@ -973,6 +1047,12 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
                         priorityList = ticketPageInitResponseModel.getGetTicketPageInitResult().getPriorityList().getList();
                     }
 
+                    if (ticketPageInitResponseModel.getGetTicketPageInitResult().getTicketTypeList() != null
+                            && ticketPageInitResponseModel.getGetTicketPageInitResult().getTicketTypeList().getErrorCode().equalsIgnoreCase(AppsConstant.SUCCESS)
+                            && ticketPageInitResponseModel.getGetTicketPageInitResult().getTicketTypeList().getList() != null
+                            && ticketPageInitResponseModel.getGetTicketPageInitResult().getTicketTypeList().getList().size() > 0) {
+                        ticketTypeList = ticketPageInitResponseModel.getGetTicketPageInitResult().getTicketTypeList().getList();
+                    }
                     // if(ticketPageInitResponseModel.getGetTicketPageInitResult().getSimpleOrAdvanceView()!=null) {
                     updateUI(ticketPageInitResponseModel.getGetTicketPageInitResult());
                     //}
@@ -981,7 +1061,7 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
 
             case CommunicationConstant.API_GET_COMMON_LIST:
                 String subCategoryResp = response.getResponseData();
-                Log.d("TAG", "Ticket Init Response : " + subCategoryResp);
+                Log.d("TAG", "Sub category Response : " + subCategoryResp);
 
                 subCategoryResponseModel = SubCategoryResponseModel.create(subCategoryResp);
                 if (subCategoryResponseModel != null &&
@@ -1003,7 +1083,7 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
                 Log.d("TAG", "ticket submission response : " + ticketResponse);
                 tourResponseModel = TourResponseModel.create(ticketResponse);
                 if (tourResponseModel != null && tourResponseModel.getSaveTicketResult() != null
-                        && tourResponseModel.getSaveTourReqResult().getErrorCode().equalsIgnoreCase(AppsConstant.SUCCESS)) {
+                        && tourResponseModel.getSaveTicketResult().getErrorCode().equalsIgnoreCase(AppsConstant.SUCCESS)) {
                     if (screenName != null && screenName.equalsIgnoreCase(TimeAndAttendanceSummaryFragment.screenName)) {
                         isSubmitClicked = true;
                         CustomDialog.alertOkWithFinishFragment1(context, tourResponseModel.getSaveTicketResult().getErrorMessage(), mUserActionListener, IAction.TIME_ATTENDANCE_SUMMARY, true);
@@ -1164,10 +1244,26 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
 
     private void updateUI(GetTicketPageInitResultModel item) {
         searchLayout.setVisibility(View.VISIBLE);
+        categoryLl.setVisibility(View.VISIBLE);
         subCategoryLl.setVisibility(View.VISIBLE);
         RatingLl.setVisibility(View.VISIBLE);
         feedbackLL.setVisibility(View.VISIBLE);
+        ticketTypeLl.setVisibility(View.VISIBLE);
         simpleOrAdvance = item.getSimpleOrAdvanceView();
+        subCategoryYN = item.getSubCategoryYN();
+        categoryYN= item.getCategoryYN();
+        if(item.getCategoryYN()!=null &&
+                !item.getCategoryYN().equalsIgnoreCase("") &&
+                item.getCategoryYN().equalsIgnoreCase(AppsConstant.NO)){
+            categoryLl.setVisibility(View.GONE);
+        }
+
+        if(item.getSubCategoryYN()!=null &&
+                !item.getSubCategoryYN().equalsIgnoreCase("") &&
+                item.getSubCategoryYN().equalsIgnoreCase(AppsConstant.NO)){
+
+            subCategoryLl.setVisibility(View.GONE);
+        }
 
         if (item.getSimpleOrAdvanceView() != null
                 && item.getSimpleOrAdvanceView().equalsIgnoreCase(AppsConstant.SIMPLE_VIEW)) {
@@ -1175,6 +1271,7 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
             subCategoryLl.setVisibility(View.GONE);
             RatingLl.setVisibility(View.GONE);
             feedbackLL.setVisibility(View.GONE);
+            ticketTypeLl.setVisibility(View.GONE);
         }
 
         if (contactList != null && contactList.size() == 1) {
@@ -1214,6 +1311,16 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
 
     public void askLocationPermision() {
         this.requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+    }
+
+    // Edit Mode (via Dashboard flow)
+    private void updateUIWithData(){
+
+    }
+
+    // Edit Mode (via Approver flow)
+    private void updateUIWithApprovalData(){
+
     }
 }
 

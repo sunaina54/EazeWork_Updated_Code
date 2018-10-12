@@ -2,8 +2,12 @@ package hr.eazework.com.ui.fragment.Ticket;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.NavUtils;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,13 +23,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import hr.eazework.com.R;
-import hr.eazework.com.model.GetEmpWFHResponseItem;
+import hr.eazework.com.model.TicketItem;
 
 import hr.eazework.com.model.TicketItem;
 import hr.eazework.com.model.TicketResponseModel;
 import hr.eazework.com.model.TicketSummaryRequestModel;
 import hr.eazework.com.ui.customview.CustomBuilder;
+import hr.eazework.com.ui.fragment.Attendance.ViewOdSummaryFragment;
 import hr.eazework.com.ui.fragment.BaseFragment;
+import hr.eazework.com.ui.interfaces.IAction;
 import hr.eazework.com.ui.util.AppsConstant;
 import hr.eazework.com.ui.util.Utility;
 import hr.eazework.mframe.communication.ResponseData;
@@ -53,8 +59,8 @@ public class TicketSummaryFragment extends BaseFragment {
 
     private WFHSummaryAdapter summaryAdapter;
     private Button attendanceHistoryBTN;
-    private ArrayList<GetEmpWFHResponseItem> filterExpenseList;
-    private ArrayList<GetEmpWFHResponseItem> searchExpenseList;
+    private ArrayList<TicketItem> filterExpenseList;
+    private ArrayList<TicketItem> searchExpenseList;
     private RelativeLayout search_layout;
     private EditText searchET;
     private LinearLayout searchParentLayout;
@@ -62,6 +68,7 @@ public class TicketSummaryFragment extends BaseFragment {
     private String searchTag = null;
     private RelativeLayout norecordLayout;
     private View progressbar;
+    private LinearLayout searchTempLayout;
     private TicketResponseModel ticketResponseModel;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -73,7 +80,7 @@ public class TicketSummaryFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view=inflater.inflate(R.layout.fragment_tour_summary, container, false);
+        view=inflater.inflate(R.layout.fragment_ticket_summary, container, false);
         setupScreen(view);
         return view;
 
@@ -85,6 +92,8 @@ public class TicketSummaryFragment extends BaseFragment {
         searchExpenseList = new ArrayList<>();
         progressbar = (LinearLayout) view.findViewById(R.id.ll_progress_container);
         progressbar.bringToFront();
+        /*searchTempLayout = (LinearLayout) view.findViewById(R.id.searchTempLayout);
+        searchTempLayout.setVisibility(View.GONE);*/
         search_layout = (RelativeLayout) view.findViewById(R.id.search_layout);
         search_layout.setVisibility(View.INVISIBLE);
         searchET = (EditText) view.findViewById(R.id.searchET);
@@ -122,7 +131,8 @@ public class TicketSummaryFragment extends BaseFragment {
                 }
             }
         });
-    /*    searchET.addTextChangedListener(new TextWatcher() {
+
+        searchET.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -132,26 +142,26 @@ public class TicketSummaryFragment extends BaseFragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (searchTag != null) {
                     if (!s.toString().equalsIgnoreCase("")) {
-                        ArrayList<GetEmpWFHResponseItem> list = new ArrayList<>();
+                        ArrayList<TicketItem> list = new ArrayList<>();
                         if (searchTag.equalsIgnoreCase(getResources().getString(R.string.request_id_search_attendance))) {
-                            for (GetEmpWFHResponseItem item : getEmpWFHResponseModel.getGetEmpAttendanceRequestsResult().getRequests()) {
-                                if (item.getReqCode().toUpperCase().contains(s.toString().toUpperCase())) {
+                            for (TicketItem item : ticketResponseModel.getGetTicketsResult().getTickets()) {
+                                if (item.getTicketCode().toUpperCase().contains(s.toString().toUpperCase())) {
                                     list.add(item);
                                 }
                             }
                             refresh(list);
                         }
-                        if (searchTag.equalsIgnoreCase(getResources().getString(R.string.request_type_search_attendance))) {
-                            for (GetEmpWFHResponseItem item : getEmpWFHResponseModel.getGetEmpAttendanceRequestsResult().getRequests()) {
+                        /*if (searchTag.equalsIgnoreCase(getResources().getString(R.string.request_type_search_attendance))) {
+                            for (TicketItem item : ticketResponseModel.getGetTicketsResult().getTickets()) {
                                 if (item.getRequestTypeDesc().toUpperCase().contains(s.toString().toUpperCase())) {
                                     list.add(item);
                                 }
                             }
                             refresh(list);
-                        }
+                        }*/
                         if (searchTag.equalsIgnoreCase(getResources().getString(R.string.date_search))) {
-                            for (GetEmpWFHResponseItem item : getEmpWFHResponseModel.getGetEmpAttendanceRequestsResult().getRequests()) {
-                                if (item.getStartDate().toUpperCase().contains(s.toString().toUpperCase())) {
+                            for (TicketItem item : ticketResponseModel.getGetTicketsResult().getTickets()) {
+                                if (item.getDate().toUpperCase().contains(s.toString().toUpperCase())) {
                                     list.add(item);
                                 }
                             }
@@ -159,8 +169,8 @@ public class TicketSummaryFragment extends BaseFragment {
                         }
 
                         if (searchTag.equalsIgnoreCase(getResources().getString(R.string.pending_with_search))) {
-                            for (GetEmpWFHResponseItem item : getEmpWFHResponseModel.getGetEmpAttendanceRequestsResult().getRequests()) {
-                                if (item.getPendWithName().toUpperCase().contains(s.toString().toUpperCase())) {
+                            for (TicketItem item : ticketResponseModel.getGetTicketsResult().getTickets()) {
+                                if (item.getPendingWith().toUpperCase().contains(s.toString().toUpperCase())) {
                                     list.add(item);
                                 }
                             }
@@ -168,7 +178,7 @@ public class TicketSummaryFragment extends BaseFragment {
                         }
 
                     } else {
-                        refresh(getEmpWFHResponseModel.getGetEmpAttendanceRequestsResult().getRequests());
+                        refresh(ticketResponseModel.getGetTicketsResult().getTickets());
                     }
                 }
 
@@ -178,7 +188,7 @@ public class TicketSummaryFragment extends BaseFragment {
             public void afterTextChanged(Editable s) {
 
             }
-        });*/
+        });
     }
     @Override
     public void onClick(View v) {
@@ -193,7 +203,7 @@ public class TicketSummaryFragment extends BaseFragment {
                 searchET.setText("");
                 ArrayList<String> searchList = new ArrayList<>();
                 searchList.add(getResources().getString(R.string.request_id_search_attendance));
-                searchList.add(getResources().getString(R.string.request_type_search_attendance));
+             //   searchList.add(getResources().getString(R.string.request_type_search_attendance));
                 searchList.add(getResources().getString(R.string.date_search));
                 searchList.add(getResources().getString(R.string.pending_with_search));
                 CustomBuilder searchCustomBuilder = new CustomBuilder(getContext(), "Search By", false);
@@ -208,11 +218,11 @@ public class TicketSummaryFragment extends BaseFragment {
                             search_layout.setVisibility(View.VISIBLE);
                             searchTag = getResources().getString(R.string.request_id_search_attendance);
                             searchET.setHint("Enter Request ID");
-                        }else if (selectedObject.toString().equalsIgnoreCase(getResources().getString(R.string.request_type_search_attendance))) {
+                        }/*else if (selectedObject.toString().equalsIgnoreCase(getResources().getString(R.string.request_type_search_attendance))) {
                             search_layout.setVisibility(View.VISIBLE);
                             searchET.setHint("Enter Request Type");
                             searchTag = getResources().getString(R.string.request_type_search_attendance);
-                        }  else if (selectedObject.toString().equalsIgnoreCase(getResources().getString(R.string.date_search))) {
+                        }*/  else if (selectedObject.toString().equalsIgnoreCase(getResources().getString(R.string.date_search))) {
                             search_layout.setVisibility(View.VISIBLE);
                             searchET.setHint("Enter Date(dd/mm/yyyy)");
                             searchTag = getResources().getString(R.string.date_search);
@@ -233,37 +243,37 @@ public class TicketSummaryFragment extends BaseFragment {
                 break;
             case R.id.filterIV:
                 searchET.setText("");
-              /*  ArrayList<String> list = new ArrayList<>();
+                ArrayList<String> list = new ArrayList<>();
                 list.add("All");
-                ArrayList<GetEmpWFHResponseItem> listModels= Utility.prepareFilterListAttendance(getEmpWFHResponseModel.getGetEmpAttendanceRequestsResult().getRequests());
+                ArrayList<TicketItem> listModels= Utility.prepareFilterListTicket(ticketResponseModel.getGetTicketsResult().getTickets());
                 if(listModels!=null && listModels.size()>0) {
-                    for (GetEmpWFHResponseItem model : listModels) {
+                    for (TicketItem model : listModels) {
                         list.add(model.getStatusDesc());
                     }
-                    GetEmpWFHResponseItem itemListModel = new GetEmpWFHResponseItem();
+                    TicketItem itemListModel = new TicketItem();
                     itemListModel.setStatus("-1");
                     itemListModel.setStatusDesc("All");
                     listModels.add(0, itemListModel);
                 }
 
-                if (getEmpWFHResponseModel != null && getEmpWFHResponseModel.getGetEmpAttendanceRequestsResult() != null &&
-                        getEmpWFHResponseModel.getGetEmpAttendanceRequestsResult().getRequests() != null &&
-                        getEmpWFHResponseModel.getGetEmpAttendanceRequestsResult().getRequests().size() > 0) {
+                if (ticketResponseModel != null && ticketResponseModel.getGetTicketsResult() != null &&
+                        ticketResponseModel.getGetTicketsResult().getTickets() != null &&
+                        ticketResponseModel.getGetTicketsResult().getTickets().size() > 0) {
                     CustomBuilder customBuilder = new CustomBuilder(getContext(), "Filter By", true);
                     customBuilder.setSingleChoiceItems(listModels, null, new CustomBuilder.OnClickListener() {
                         @Override
                         public void onClick(CustomBuilder builder, Object selectedObject) {
-                            GetEmpWFHResponseItem model=(GetEmpWFHResponseItem)selectedObject;
+                            TicketItem model=(TicketItem)selectedObject;
 
                             if (model.getStatus().equalsIgnoreCase("-1")) {
-                                refresh(getEmpWFHResponseModel.getGetEmpAttendanceRequestsResult().getRequests());
+                                refresh(ticketResponseModel.getGetTicketsResult().getTickets());
 
                             }else {
                                 filterExpenseList = new ArrayList<>();
-                                for (int i = 0; i < getEmpWFHResponseModel.getGetEmpAttendanceRequestsResult().getRequests().size(); i++) {
-                                    if (getEmpWFHResponseModel.getGetEmpAttendanceRequestsResult().getRequests().get(i)
+                                for (int i = 0; i < ticketResponseModel.getGetTicketsResult().getTickets().size(); i++) {
+                                    if (ticketResponseModel.getGetTicketsResult().getTickets().get(i)
                                             .getStatusDesc().equalsIgnoreCase(model.getStatusDesc())) {
-                                        filterExpenseList.add(getEmpWFHResponseModel.getGetEmpAttendanceRequestsResult().getRequests().get(i));
+                                        filterExpenseList.add(ticketResponseModel.getGetTicketsResult().getTickets().get(i));
                                     }
                                 }
                                 refresh(filterExpenseList);
@@ -274,7 +284,7 @@ public class TicketSummaryFragment extends BaseFragment {
 
                     });
                     customBuilder.show();
-                }*/
+                }
                 break;
 
 
@@ -283,6 +293,8 @@ public class TicketSummaryFragment extends BaseFragment {
         }
         super.onClick(v);
     }
+
+
     public void sendRequestSummaryData() {
         ticketSummaryRequestModel=new TicketSummaryRequestModel();
         Utility.showHidePregress(progressbar, true);
@@ -302,7 +314,7 @@ public class TicketSummaryFragment extends BaseFragment {
                 errorLinearLayout.setVisibility(View.VISIBLE);
                 searchParentLayout.setVisibility(View.GONE);
                 ticketResponseModel = TicketResponseModel.create(str);
-                //getEmpWFHResponseModel = GetEmpWFHResponseModel.create(str);
+                //ticketResponseModel = ticketResponseModel.create(str);
                 if (ticketResponseModel != null && ticketResponseModel.getGetTicketsResult() != null &&
                         ticketResponseModel.getGetTicketsResult().getErrorCode().equalsIgnoreCase(AppsConstant.SUCCESS)
                         && ticketResponseModel.getGetTicketsResult().getTickets().size() > 0) {
@@ -386,8 +398,8 @@ public class TicketSummaryFragment extends BaseFragment {
         @Override
         public void onBindViewHolder(final MyViewHolder holder, final int listPosition) {
             final TicketItem item = dataSet.get(listPosition);
-            if(item.getTicketID()!=null) {
-                holder.ticketIdTV.setText(item.getTicketID());
+            if(item.getTicketCode()!=null) {
+                holder.ticketIdTV.setText(item.getTicketCode());
             }
             if(item.getDate()!=null) {
                 holder.dateTV.setText(item.getDate());
@@ -412,6 +424,38 @@ public class TicketSummaryFragment extends BaseFragment {
             if(item.getButtons()!=null && item.getButtons().length>0) {
                 holder.viewBTN.setText(item.getButtons()[0]);
             }
+
+
+
+            holder.viewBTN.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                   /* if(item.getStatusDesc()!=null &&
+                            item.getStatusDesc().equalsIgnoreCase("Feedback Completed")
+                            ||   item.getStatusDesc().equalsIgnoreCase("Feedback Pending")){
+                        ViewTicketFragment viewTicketFragment = new ViewTicketFragment();
+                        viewTicketFragment.setGetEmpWFHResponseItem(dataSet.get(listPosition));
+                        Fragment fragment=viewTicketFragment;
+                        mUserActionListener.performUserActionFragment(IAction.VIEW_TICKET,fragment,null);
+
+                    }*/
+
+                   
+                   if (!holder.viewBTN.getText().toString().
+                           equalsIgnoreCase("View")){
+                       // Edit
+                        CreateTicketAdvanceFragment ticketAdvanceFragment= new CreateTicketAdvanceFragment();
+                        Fragment fragment = ticketAdvanceFragment;
+                        mUserActionListener.performUserActionFragment(IAction.RAISE_TICKET_ADV, fragment,null);
+                   }else {
+                        // View Particular ticket
+                       ViewTicketFragment viewTicketFragment = new ViewTicketFragment();
+                     //  viewTicketFragment.setGetEmpWFHResponseItem(dataSet.get(listPosition));
+                       Fragment fragment=viewTicketFragment;
+                       mUserActionListener.performUserActionFragment(IAction.VIEW_TICKET,fragment,null);
+                   }
+                    }
+                });
 
 
          /*   if(item.getRequestTypeDesc().equalsIgnoreCase("OD")){
@@ -445,7 +489,7 @@ public class TicketSummaryFragment extends BaseFragment {
                         item.getStatusDesc()!=null &&
                         !item.getStatusDesc().equalsIgnoreCase(AppsConstant.DRAFT)  ) {
                     ViewWFHSummaryFragment viewWFHSummaryFragment = new ViewWFHSummaryFragment();
-                    viewWFHSummaryFragment.setGetEmpWFHResponseItem(dataSet.get(listPosition));
+                    viewWFHSummaryFragment.setTicketItem(dataSet.get(listPosition));
                     Fragment fragment=viewWFHSummaryFragment;
                     mUserActionListener.performUserActionFragment(IAction.VIEW_WFH,fragment,null);
                   *//*  FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
@@ -459,7 +503,7 @@ public class TicketSummaryFragment extends BaseFragment {
                             && item.getStatusDesc()!=null &&
                             item.getStatusDesc().equalsIgnoreCase(AppsConstant.DRAFT)) {
                         WorkFromHomeRequestFragment requestFragment = new WorkFromHomeRequestFragment();
-                        requestFragment.setGetEmpWFHResponseItem(dataSet.get(listPosition));
+                        requestFragment.setTicketItem(dataSet.get(listPosition));
                         Fragment fragment=requestFragment;
                         requestFragment.setScreenName(screenName);
                         mUserActionListener.performUserActionFragment(IAction.WORK_FROM_HOME,fragment,null);
@@ -474,7 +518,7 @@ public class TicketSummaryFragment extends BaseFragment {
                     if(item.getRequestTypeDesc()!=null && item.getRequestTypeDesc().equalsIgnoreCase(AppsConstant.OD) && item.getStatusDesc()!=null &&
                             !item.getStatusDesc().equalsIgnoreCase(AppsConstant.DRAFT)){
                         ViewOdSummaryFragment viewOdSummaryFragment = new ViewOdSummaryFragment();
-                        viewOdSummaryFragment.setGetEmpWFHResponseItem(dataSet.get(listPosition));
+                        viewOdSummaryFragment.setTicketItem(dataSet.get(listPosition));
                         Fragment fragment=viewOdSummaryFragment;
                         mUserActionListener.performUserActionFragment(IAction.VIEW_OD,fragment,null);
                        *//* FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
@@ -488,7 +532,7 @@ public class TicketSummaryFragment extends BaseFragment {
                             item.getRequestTypeDesc().equalsIgnoreCase(AppsConstant.OD) && item.getStatusDesc()!=null &&
                             item.getStatusDesc().equalsIgnoreCase(AppsConstant.DRAFT)){
                         OutdoorDutyRequestFragment outdoorDutyRequestFragment = new OutdoorDutyRequestFragment();
-                        outdoorDutyRequestFragment.setGetEmpWFHResponseItem(dataSet.get(listPosition));
+                        outdoorDutyRequestFragment.setTicketItem(dataSet.get(listPosition));
                         outdoorDutyRequestFragment.setScreenName(screenName);
 
                         Fragment fragment=outdoorDutyRequestFragment;
@@ -506,7 +550,7 @@ public class TicketSummaryFragment extends BaseFragment {
                             item.getStatusDesc()!=null &&
                             !item.getStatusDesc().equalsIgnoreCase(AppsConstant.DRAFT)){
                         ViewTourSummaryFragment viewTourSummaryFragment = new ViewTourSummaryFragment();
-                        viewTourSummaryFragment.setGetEmpWFHResponseItem(dataSet.get(listPosition));
+                        viewTourSummaryFragment.setTicketItem(dataSet.get(listPosition));
                         Fragment fragment=viewTourSummaryFragment;
                         mUserActionListener.performUserActionFragment(IAction.VIEW_TOUR,fragment,null);
                        *//* FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
@@ -520,7 +564,7 @@ public class TicketSummaryFragment extends BaseFragment {
                             item.getStatusDesc()!=null &&
                             item.getStatusDesc().equalsIgnoreCase(AppsConstant.DRAFT)){
                         TourRequestFragment tourRequestFragment = new TourRequestFragment();
-                        tourRequestFragment.setGetEmpWFHResponseItem(dataSet.get(listPosition));
+                        tourRequestFragment.setTicketItem(dataSet.get(listPosition));
                         tourRequestFragment.setScreenName(screenName);
                         Fragment fragment=tourRequestFragment;
                         mUserActionListener.performUserActionFragment(IAction.TOUR,fragment,null);
@@ -535,7 +579,7 @@ public class TicketSummaryFragment extends BaseFragment {
                             item.getRequestTypeDesc().equalsIgnoreCase(AppsConstant.TIME_MODIFICATION)
                             ||  item.getRequestTypeDesc().equalsIgnoreCase(AppsConstant.BACK_DATED_ATTENDANCE)){
                         ViewTimeModificationSummary viewTimeModificationSummary = new ViewTimeModificationSummary();
-                        viewTimeModificationSummary.setGetEmpWFHResponseItem(dataSet.get(listPosition));
+                        viewTimeModificationSummary.setTicketItem(dataSet.get(listPosition));
                         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                         fragmentTransaction.replace(R.id.view_advance_expense, viewTimeModificationSummary);

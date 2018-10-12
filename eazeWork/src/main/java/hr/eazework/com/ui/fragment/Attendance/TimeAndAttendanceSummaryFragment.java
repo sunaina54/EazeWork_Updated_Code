@@ -477,7 +477,8 @@ public class TimeAndAttendanceSummaryFragment extends BaseFragment {
                         fragmentTransaction.commit();*/
                     }
 
-                    if(item.getRequestTypeDesc()!=null && item.getRequestTypeDesc().equalsIgnoreCase(AppsConstant.OD) && item.getStatusDesc()!=null &&
+                    if(item.getRequestTypeDesc()!=null && item.getRequestTypeDesc().equalsIgnoreCase(AppsConstant.OD)
+                            && item.getStatusDesc()!=null &&
                             !item.getStatusDesc().equalsIgnoreCase(AppsConstant.DRAFT)){
                         ViewOdSummaryFragment viewOdSummaryFragment = new ViewOdSummaryFragment();
                         viewOdSummaryFragment.setGetEmpWFHResponseItem(dataSet.get(listPosition));

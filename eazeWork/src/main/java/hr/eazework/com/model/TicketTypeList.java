@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * Created by SUNAINA on 10-10-2018.
  */
 
-public class TicketTypeList implements Serializable {
+public class TicketTypeList extends GenericResponse implements Serializable {
     private ArrayList<CategoryListItem> list;
 
     public ArrayList<CategoryListItem> getList() {

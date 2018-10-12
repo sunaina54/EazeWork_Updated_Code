@@ -75,6 +75,7 @@ import hr.eazework.com.model.MenuItemModel;
 import hr.eazework.com.model.ModelManager;
 import hr.eazework.com.model.SupportDocsItemModel;
 import hr.eazework.com.model.TeamMember;
+import hr.eazework.com.model.TicketItem;
 import hr.eazework.com.ui.adapter.DocumentUploadAdapter;
 import hr.eazework.com.ui.customview.CustomBuilder;
 import hr.eazework.com.ui.customview.CustomDialog;
@@ -592,6 +593,20 @@ public class Utility {
         });
         set.addAll(list);
         ArrayList<GetEmpWFHResponseItem> newList = new ArrayList(set);
+        return newList;
+    }
+
+    public static ArrayList<TicketItem> prepareFilterListTicket(List<TicketItem> list){
+        Set set = new TreeSet(new Comparator() {
+            @Override
+            public int compare(Object o1, Object o2) {
+                String a= ((TicketItem)o1).getStatusDesc();
+                String b = ((TicketItem) o2).getStatusDesc();
+                return  a.compareTo(b);
+            }
+        });
+        set.addAll(list);
+        ArrayList<TicketItem> newList = new ArrayList(set);
         return newList;
     }
 

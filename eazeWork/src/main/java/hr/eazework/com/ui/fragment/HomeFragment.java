@@ -671,7 +671,7 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
                 }*/
 
                 MainItemModel item = new MainItemModel("Ticket",
-                        getString(R.string.msg_expense), getString(R.string.expense_balance),
+                        getString(R.string.msg_tickets), getString(R.string.open_tickets),
                         "" + (""), R.drawable.expense_claim, true);
                 item.setObjectId(itemModel.getmObjectId());
                 itemList.add(item);

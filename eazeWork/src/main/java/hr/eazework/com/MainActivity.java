@@ -92,6 +92,7 @@ import hr.eazework.com.ui.fragment.Advance.ViewAdvanceRequestSummaryFragment;
 import hr.eazework.com.ui.fragment.Ticket.CreateTicketAdvanceFragment;
 import hr.eazework.com.ui.fragment.Ticket.CreateTicketFragment;
 import hr.eazework.com.ui.fragment.Ticket.TicketSummaryFragment;
+import hr.eazework.com.ui.fragment.Ticket.ViewTicketFragment;
 import hr.eazework.com.ui.fragment.ViewDataBase;
 import hr.eazework.com.ui.fragment.Expense.ViewExpenseClaimSummaryFragment;
 import hr.eazework.com.ui.fragment.Leave.ViewLeaveFragment;
@@ -1025,7 +1026,16 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
                             WorkFromHomeRequestFragment.TAG);
                 }
                 break;
-
+            case IAction.VIEW_TICKET:
+                if (isFragmentExistsInBackStack(ViewTicketFragment.TAG)) {
+                    if (getTopFragment() instanceof ViewTicketFragment)
+                        return;
+                    popBackStack(ViewTicketFragment.TAG, 0);
+                } else {
+                    addFragment(R.id.content_frame, pView,
+                            ViewTicketFragment.TAG);
+                }
+                break;
             case IAction.EDIT_EXPENSE_APPROVAL:
                 if (isFragmentExistsInBackStack(EditExpenseApprovalFragment.TAG)) {
                     if (getTopFragment() instanceof EditExpenseApprovalFragment)
@@ -1516,6 +1526,8 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
             return "Expense View";
         } else if (fragment instanceof ViewAdvanceRequestSummaryFragment) {
             return "Advance View";
+        } else if (fragment instanceof TicketSummaryFragment) {
+            return "Ticket Summary";
         } else {
             return "";
         }

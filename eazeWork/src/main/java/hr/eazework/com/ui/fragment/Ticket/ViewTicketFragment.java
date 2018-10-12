@@ -2,7 +2,9 @@ package hr.eazework.com.ui.fragment.Ticket;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,19 +13,35 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import hr.eazework.com.MainActivity;
 import hr.eazework.com.R;
 import hr.eazework.com.model.EmployeeLeaveModel;
+import hr.eazework.com.model.GetTicketDetailResponseModel;
 import hr.eazework.com.model.GetWFHRequestDetail;
 import hr.eazework.com.model.LeaveReqsItem;
 import hr.eazework.com.model.LeaveRequestDetailsModel;
 import hr.eazework.com.model.MenuItemModel;
 import hr.eazework.com.model.ModelManager;
+import hr.eazework.com.model.RemarkListItem;
+import hr.eazework.com.model.SupportDocsItemModel;
+import hr.eazework.com.model.WFHRequestDetailItem;
+import hr.eazework.com.model.WFHSummaryResponse;
+import hr.eazework.com.model.WithdrawWFHResponse;
 import hr.eazework.com.ui.adapter.DocumentUploadAdapter;
+import hr.eazework.com.ui.adapter.RemarksAdapter;
+import hr.eazework.com.ui.customview.CustomDialog;
 import hr.eazework.com.ui.fragment.BaseFragment;
 import hr.eazework.com.ui.interfaces.IAction;
+import hr.eazework.com.ui.util.AppsConstant;
 import hr.eazework.com.ui.util.Preferences;
 import hr.eazework.com.ui.util.Utility;
+import hr.eazework.com.ui.util.custom.AlertCustomDialog;
+import hr.eazework.mframe.communication.ResponseData;
+import hr.eazework.selfcare.communication.AppRequestJSONString;
+import hr.eazework.selfcare.communication.CommunicationConstant;
+import hr.eazework.selfcare.communication.CommunicationManager;
 
 /**
  * Created by SUNAINA on 22-08-2018.
@@ -46,6 +64,7 @@ public class ViewTicketFragment extends BaseFragment {
     private EmployeeLeaveModel employeeLeaveModel;
     private LeaveReqsItem leaveReqsItem;
     private LinearLayout dateWorkedLl;
+    private GetTicketDetailResponseModel getTicketDetailResponseModel;
 
     private View progressbar;
 
@@ -80,11 +99,14 @@ public class ViewTicketFragment extends BaseFragment {
             public void onClick(View v) {
                 MenuItemModel menuItemModel = ModelManager.getInstance().getMenuItemModel();
                 if (menuItemModel != null) {
-                    MenuItemModel itemModel = menuItemModel.getItemModel(MenuItemModel.WORK_FROM_HOME);
-                    if (itemModel != null && itemModel.isAccess()) {
-                        mUserActionListener.performUserAction(IAction.WORK_FROM_HOME_SUMMARY, null, null);
+                    MenuItemModel itemModel = menuItemModel.getItemModel(MenuItemModel.SELF_TICKET_KEY);
+                    MenuItemModel itemModel1 = menuItemModel.getItemModel(MenuItemModel.OTHER_TICKET_KEY);
+
+                    if (itemModel != null && itemModel.isAccess() ||
+                            ( itemModel1 !=null && itemModel1.isAccess()) ) {
+                        mUserActionListener.performUserAction(IAction.RAISE_TICKET_ADV_SUMMARY, null, null);
                     } else {
-                        mUserActionListener.performUserAction(IAction.WORK_FROM_HOME_SUMMARY, null, null);
+                        mUserActionListener.performUserAction(IAction.RAISE_TICKET_ADV_SUMMARY, null, null);
                     }
                 }
             }
@@ -97,13 +119,13 @@ public class ViewTicketFragment extends BaseFragment {
         docLl = (LinearLayout) rootView.findViewById(R.id.docLl);
         plus_create_newIV = (ImageView) rootView.findViewById(R.id.plus_create_newIV);
         plus_create_newIV.setVisibility(View.GONE);
-        wfhSummaryLl = (LinearLayout) rootView.findViewById(R.id.wfhSummaryLl);
+      /*  wfhSummaryLl = (LinearLayout) rootView.findViewById(R.id.wfhSummaryLl);
         wfhSummaryLl.setVisibility(View.VISIBLE);
         tourSummaryLl = (LinearLayout) rootView.findViewById(R.id.tourSummaryLl);
         tourSummaryLl.setVisibility(View.GONE);
         odSummaryLl = (LinearLayout) rootView.findViewById(R.id.odSummaryLl);
         odSummaryLl.setVisibility(View.GONE);
-
+*/
         remarksLinearLayout = (LinearLayout) rootView.findViewById(R.id.remarksLinearLayout);
         remarksRV = (RecyclerView) rootView.findViewById(R.id.remarksRV);
 
@@ -119,8 +141,112 @@ public class ViewTicketFragment extends BaseFragment {
         endDateTV = (TextView) rootView.findViewById(R.id.endDateTV);
         daysTV = (TextView) rootView.findViewById(R.id.daysTV);
 
-
-
-
     }
+/*
+
+    private void sendViewRequestSummaryData() {
+        requestDetail = new GetWFHRequestDetail();
+        requestDetail.setReqID(getEmpWFHResponseItem.getReqID());
+        requestDetail.setAction(AppsConstant.VIEW_ACTION);
+        Utility.showHidePregress(progressbar, true);
+        CommunicationManager.getInstance().sendPostRequest(this,
+                AppRequestJSONString.WFHSummaryDetails(requestDetail),
+                CommunicationConstant.API_GET_WFH_REQUEST_DETAIL, true);
+    }
+
+    private void sendWithdrawRequestData() {
+        requestDetail = new GetWFHRequestDetail();
+        requestDetail.setReqStatus(getEmpWFHResponseItem.getStatus());
+        requestDetail.setReqID(getEmpWFHResponseItem.getReqID());
+        Utility.showHidePregress(progressbar, true);
+        CommunicationManager.getInstance().sendPostRequest(this,
+                AppRequestJSONString.WFHSummaryDetails(requestDetail),
+                CommunicationConstant.API_WITHDRAW_WFH_REQUEST, true);
+    }
+*/
+
+    @Override
+    public void validateResponse(ResponseData response) {
+        Utility.showHidePregress(progressbar, false);
+        switch (response.getRequestData().getReqApiId()) {
+            case CommunicationConstant.API_GET_TICKETS_DETAIL:
+                String str = response.getResponseData();
+                Log.d("TAG", "Ticket detail Response : " + str);
+                getTicketDetailResponseModel = GetTicketDetailResponseModel.create(str);
+              /*  if (getTicketDetailResponseModel != null && getTicketDetailResponseModel.getGetTicketDetailResult() != null
+                        && getTicketDetailResponseModel.getGetTicketDetailResult().getErrorCode().equalsIgnoreCase(AppsConstant.SUCCESS)
+                        && getTicketDetailResponseModel.getGetTicketDetailResult()!=null) {
+                    updateUI(getTicketDetailResponseModel.getGetWFHRequestDetailResult().getWFHRequestDetail());
+                    refreshRemarksList(getTicketDetailResponseModel.getGetWFHRequestDetailResult().getWFHRequestDetail().getRemarkList());
+                    refreshDocumentList(getTicketDetailResponseModel.getGetWFHRequestDetailResult().getWFHRequestDetail().getAttachments());
+                }*/
+
+                break;
+            case CommunicationConstant.API_WITHDRAW_WFH_REQUEST:
+                String strResponse = response.getResponseData();
+                Log.d("TAG", "WFH Response : " + strResponse);
+                WithdrawWFHResponse withdrawWFHResponse = WithdrawWFHResponse.create(strResponse);
+                if (withdrawWFHResponse != null && withdrawWFHResponse.getWithdrawWFHRequestResult() != null
+                        && withdrawWFHResponse.getWithdrawWFHRequestResult().getErrorCode().equalsIgnoreCase(AppsConstant.SUCCESS)) {
+                    CustomDialog.alertOkWithFinishFragment(context, withdrawWFHResponse.getWithdrawWFHRequestResult().getErrorMessage(), mUserActionListener, IAction.HOME_VIEW, true);
+                }else {
+                    new AlertCustomDialog(getActivity(), withdrawWFHResponse.getWithdrawWFHRequestResult().getErrorMessage());
+                }
+                break;
+            default:
+                break;
+        }
+        super.validateResponse(response);
+    }
+
+    private void updateUI(WFHRequestDetailItem item){
+        submittedByTV.setText(item.getSubmittedBy());
+        pendingWithTV.setText(item.getPendWithName());
+        requestIdTV.setText(item.getReqCode());
+        empNameTV.setText(item.getForEmpName());
+        statusTV.setText(item.getStatusDesc());
+        startDateTV.setText(item.getStartDate());
+        endDateTV.setText(item.getEndDate());
+        daysTV.setText(item.getTotalDays()+" " + "day(s)");
+        setupButtons(item);
+    }
+
+    private void refreshRemarksList(ArrayList<RemarkListItem> remarksItems) {
+        if (remarksItems != null && remarksItems.size() > 0) {
+            remarksLinearLayout.setVisibility(View.GONE);
+            remarksRV.setLayoutManager(new LinearLayoutManager(getActivity()));
+            remarksRV.setVisibility(View.VISIBLE);
+            RemarksAdapter adapter = new RemarksAdapter(remarksItems,context,screenName,remarksLinearLayout);
+            remarksRV.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+        } else {
+            remarksLinearLayout.setVisibility(View.VISIBLE);
+            remarksRV.setVisibility(View.GONE);
+        }
+    }
+
+    private void refreshDocumentList(ArrayList<SupportDocsItemModel> docListModels) {
+        if (docListModels != null && docListModels.size() > 0) {
+            errorLinearLayout.setVisibility(View.GONE);
+            documentRV.setLayoutManager(new LinearLayoutManager(getActivity()));
+            documentRV.setVisibility(View.VISIBLE);
+            documentViewAdapter = new DocumentUploadAdapter(docListModels,context,AppsConstant.VIEW,errorLinearLayout,getActivity());
+            documentRV.setAdapter(documentViewAdapter);
+            documentViewAdapter.notifyDataSetChanged();
+        } else {
+            errorLinearLayout.setVisibility(View.VISIBLE);
+            documentRV.setVisibility(View.GONE);
+        }
+    }
+
+    private void setupButtons(WFHRequestDetailItem item){
+        if(item.getButtons()!=null){
+            for(String button : item.getButtons() ){
+                if(button.equalsIgnoreCase(AppsConstant.WITHDRAW)){
+                    withdrawBTN.setVisibility(View.VISIBLE);
+                }
+            }
+        }
+    }
+
 }

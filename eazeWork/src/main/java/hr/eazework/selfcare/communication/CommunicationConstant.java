@@ -130,6 +130,7 @@ public class CommunicationConstant {
 	public static final String API_KEY_SAVE_TICKET = "TicketService.svc/SaveTicket";
 	public static final String API_KEY_GET_TICKETS = "TicketService.svc/GetTickets";
 	public static final String API_KEY_GET_CONTACT_LIST= "TicketService.svc/GetContactList";
+	public static final String API_KEY_GET_TICKETS_DETAIL = "TicketService.svc/GetTicketDetail";
 
 
 
@@ -233,9 +234,10 @@ public class CommunicationConstant {
 	public static final int API_GET_COMMON_LIST =97;
 	public static final int API_SAVE_TICKET  =98;
 	public static final int API_GET_TICKETS = 99;
+
 	public static final int API_GET_CONTACT_LIST = 100;
 
-
+	public static final int API_GET_TICKETS_DETAIL = 101;
 
     public static String ADD_EXPENSE_RESPONSE="addExpense";
 

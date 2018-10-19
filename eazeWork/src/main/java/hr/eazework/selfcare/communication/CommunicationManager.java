@@ -594,6 +594,9 @@ public class CommunicationManager extends CommunicationManagerBase {
             case CommunicationConstant.API_GET_TICKETS_DETAIL:
                 key = CommunicationConstant.API_KEY_GET_TICKETS_DETAIL;
                 break;
+            case CommunicationConstant.API_GET_PENDING_TICKETS:
+                key = CommunicationConstant.API_KEY_GET_PENDING_TICKETS;
+                break;
 
         }
         return CommunicationConstant.getMobileCareURl() + "/EWAPI/" + key;

@@ -46,15 +46,20 @@ import hr.eazework.com.model.CategoryListItem;
 import hr.eazework.com.model.ContactListModel;
 import hr.eazework.com.model.EmployItem;
 import hr.eazework.com.model.FeedbackRatingListModel;
+import hr.eazework.com.model.GetTicketDetailRequestModel;
+import hr.eazework.com.model.GetTicketDetailResponseModel;
+import hr.eazework.com.model.GetTicketDetailResultModel;
 import hr.eazework.com.model.GetTicketPageInitResultModel;
 import hr.eazework.com.model.PageInputModel;
 import hr.eazework.com.model.PartialDayDataModel;
 import hr.eazework.com.model.PartialDayModel;
 import hr.eazework.com.model.PriorityListModel;
+import hr.eazework.com.model.RemarkListItem;
 import hr.eazework.com.model.SubCategoryRequestModel;
 import hr.eazework.com.model.SubCategoryResponseModel;
 import hr.eazework.com.model.SupportDocsItemModel;
 import hr.eazework.com.model.TicketDetailModel;
+import hr.eazework.com.model.TicketItem;
 import hr.eazework.com.model.TicketPageInitRequestModel;
 import hr.eazework.com.model.TicketPageInitResponseModel;
 import hr.eazework.com.model.TicketSubmitRequestModel;
@@ -64,6 +69,7 @@ import hr.eazework.com.model.WFHRequestDetailItem;
 import hr.eazework.com.model.WFHRequestDetailModel;
 import hr.eazework.com.model.WFHRequestModel;
 import hr.eazework.com.ui.adapter.DocumentUploadAdapter;
+import hr.eazework.com.ui.adapter.RemarksAdapter;
 import hr.eazework.com.ui.customview.CustomBuilder;
 import hr.eazework.com.ui.customview.CustomDialog;
 import hr.eazework.com.ui.fragment.Attendance.AttendanceApprovalFragment;
@@ -100,11 +106,11 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
     private boolean isSubmitClicked = true;
     private Button saveDraftBTN, deleteBTN, submitBTN, rejectBTN, approvalBTN;
     private Preferences preferences;
-    private TextView empNameTV, ticketTypeTV,empCodeTV, categoryTV, subCategoryTV, priorityTV, feedbackRatingTV;
+    private TextView empNameTV, ticketTypeTV, empCodeTV, categoryTV, subCategoryTV, priorityTV, feedbackRatingTV;
     private View progressbar;
-    private EditText remarksET, subjectET, descriptionET,feedbackET;
+    private EditText remarksET, subjectET, descriptionET, feedbackET;
     private RelativeLayout searchLayout;
-   // private EmployItem employItem;
+    // private EmployItem employItem;
     private ContactListModel employItem;
     public static int TICKET_EMP_ADV = 6;
     private LinearLayout errorLinearLayout;
@@ -124,20 +130,22 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
     private String ticketFor = "";
     private String categoryCode = "", categoryType = "", subCategoryCode = "";
     private String feedbackCode = "";
-    private String priorityCode = "",ticketTypeCode="";
+    private String priorityCode = "", ticketTypeCode = "";
     private TourResponseModel tourResponseModel;
-
+    private GetTicketDetailResponseModel getTicketDetailResponseModel;
 
     private ArrayList<CategoryListItem> categoryList, feedbackRatingList, priorityList,
-            subCategoryList,ticketTypeList;
+            subCategoryList, ticketTypeList;
     private CategoryListItem categoryListItem, feedbackListItem, priorityListItem,
-            subCategoryItem,ticketTypeItem;
+            subCategoryItem, ticketTypeItem;
 
     private ArrayList<ContactListModel> contactList;
-    private LinearLayout subCategoryLl, RatingLl, feedbackLL,ticketTypeLl,feedbackWriteLL,categoryLl;
+    private LinearLayout subCategoryLl, remarksLinearLayout1, remarksLinearLayout, remarksDataLl, RatingLl, feedbackLL, ticketTypeLl, feedbackWriteLL, categoryLl;
     private TicketSubmitRequestModel ticketSubmitRequestModel;
     private TicketDetailModel ticketDetailModel;
-    private String simpleOrAdvance = "",categoryYN="",subCategoryYN="";
+    private String simpleOrAdvance = "", categoryYN = "", subCategoryYN = "";
+    private GetTicketDetailRequestModel requestDetail;
+    private RecyclerView remarksRV;
 
     public String getScreenName() {
         return screenName;
@@ -147,10 +155,29 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
         this.screenName = screenName;
     }
 
+    private TicketItem ticketItem, pendingTicketItem;
+
+    /* public TicketItem getPendingTicketItem() {
+         return pendingTicketItem;
+     }
+
+     public void setPendingTicketItem(TicketItem pendingTicketItem) {
+         this.pendingTicketItem = pendingTicketItem;
+     }
+ */
+    public TicketItem getTicketItem() {
+        return ticketItem;
+    }
+
+    public void setTicketItem(TicketItem ticketItem) {
+        this.ticketItem = ticketItem;
+    }
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
-        if (screenName != null && screenName.equalsIgnoreCase(AttendanceApprovalFragment.screenName)) {
+        if (screenName != null && screenName.equalsIgnoreCase(TicketApprovalFragment.screenName)) {
             this.setShowPlusMenu(false);
             this.setShowEditTeamButtons(false);
             // getActivity().getSupportActionBar().setTitle(mTitle);
@@ -173,6 +200,7 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
     }
 
     private void setupScreen() {
+
         preferences = new Preferences(getContext());
         int textColor = Utility.getTextColorCode(preferences);
         ((TextView) getActivity().findViewById(R.id.tv_header_text)).setTextColor(textColor);
@@ -203,12 +231,16 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
         progressbar = (LinearLayout) rootView.findViewById(R.id.ll_progress_container);
         categoryLl = (LinearLayout) rootView.findViewById(R.id.categoryLl);
         subCategoryLl = (LinearLayout) rootView.findViewById(R.id.subCategoryLl);
+        remarksLinearLayout1 = (LinearLayout) rootView.findViewById(R.id.remarksLinearLayout1);
+
         RatingLl = (LinearLayout) rootView.findViewById(R.id.RatingLl);
         feedbackLL = (LinearLayout) rootView.findViewById(R.id.feedbackLL);
         ticketTypeLl = (LinearLayout) rootView.findViewById(R.id.ticketTypeLl);
         feedbackWriteLL = (LinearLayout) rootView.findViewById(R.id.feedbackWriteLL);
-
-
+        remarksLinearLayout = (LinearLayout) rootView.findViewById(R.id.remarksLinearLayout);
+        remarksRV = (RecyclerView) rootView.findViewById(R.id.remarksRV);
+        remarksDataLl = (LinearLayout) rootView.findViewById(R.id.remarksDataLl);
+        remarksDataLl.setVisibility(View.GONE);
         empNameTV = (TextView) rootView.findViewById(R.id.empNameTV);
         empCodeTV = (TextView) rootView.findViewById(R.id.empCodeTV);
 
@@ -282,7 +314,7 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
             @Override
             public void onClick(View view) {
                 subCategoryTV.setText("Select Sub Category");
-                if (categoryList != null && categoryList.size() > 0 && categoryYN!=null &&
+                if (categoryList != null && categoryList.size() > 0 && categoryYN != null &&
                         categoryYN.equalsIgnoreCase(AppsConstant.YES)) {
 
                     CustomBuilder categoryDialog = new CustomBuilder(getContext(), "Select Category", true);
@@ -293,7 +325,12 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
                             categoryTV.setText(categoryListItem.getValue());
                             //   categoryType = categoryListItem.getValue();
                             categoryCode = categoryListItem.getCode();
-                            sendSubCategoryRequestData(categoryCode);
+                            if(ticketPageInitResponseModel!=null && ticketPageInitResponseModel.getGetTicketPageInitResult()!=null
+                                    && ticketPageInitResponseModel.getGetTicketPageInitResult().getSubCategoryYN()!=null &&
+                                    ticketPageInitResponseModel.getGetTicketPageInitResult().getSubCategoryYN().equalsIgnoreCase("Y")){
+                                sendSubCategoryRequestData(categoryCode);
+
+                            }
                             builder.dismiss();
                         }
                     });
@@ -374,7 +411,7 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
             }
         });
 
-        feedbackRatingTV.setOnClickListener(new View.OnClickListener() {
+/*        feedbackRatingTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (feedbackRatingList != null && feedbackRatingList.size() > 0) {
@@ -394,11 +431,8 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
 
                 }
             }
-        });
-        if (ticketId != null && ticketId.equalsIgnoreCase("0")) {
-            saveDraftBTN.setVisibility(View.VISIBLE);
-            uploadFileList = new ArrayList<SupportDocsItemModel>();
-        }
+        });*/
+
 
         saveDraftBTN.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -407,7 +441,40 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
                 doSubmitOperation();
             }
         });
-        sendAdvanceRequestData();
+
+        if (ticketItem != null && ticketItem.getTicketID() != null
+                && !ticketItem.getTicketID().equalsIgnoreCase("0")) {
+            if (screenName.equalsIgnoreCase(TicketApprovalFragment.screenName)) {
+                ticketId = ticketItem.getTicketID();
+                remarksDataLl.setVisibility(View.VISIBLE);
+                remarksLinearLayout1.setVisibility(View.VISIBLE);
+                sendViewRequestSummaryData();
+
+
+            } else if (screenName.equalsIgnoreCase(TicketSummaryFragment.screenName)) {
+                ticketId = ticketItem.getTicketID();
+                remarksDataLl.setVisibility(View.VISIBLE);
+                remarksLinearLayout1.setVisibility(View.VISIBLE);
+                sendViewRequestSummaryData();
+
+            }
+        }
+        /*else if (pendingTicketItem != null && pendingTicketItem.getTicketID() != null
+                && !pendingTicketItem.getTicketID().equalsIgnoreCase("0")) {
+
+            ticketId = pendingTicketItem.getTicketID();
+            remarksDataLl.setVisibility(View.VISIBLE);
+            remarksLinearLayout1.setVisibility(View.VISIBLE);
+            sendViewRequestSummaryData();
+        }*/
+        else if (ticketId != null && ticketId.equalsIgnoreCase("0")) {
+            uploadFileList = new ArrayList<SupportDocsItemModel>();
+            remarksLinearLayout1.setVisibility(View.GONE);
+            sendAdvanceRequestData();
+
+        }
+
+
     }
 
     public void sendAdvanceRequestData() {
@@ -476,7 +543,7 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
                     //String[] empname = item.getName().split("\\(");
                     empNameTV.setText(item.getName());
                     empId = item.getCustomerEmpID();
-                  //  empCodeTV.setText(item.getCustomerCorpID());
+                    //  empCodeTV.setText(item.getCustomerCorpID());
                     employItem = item;
                 }
 
@@ -750,7 +817,7 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
                 new AlertCustomDialog(context, getResources().getString(R.string.select_user));
                 return;
             }
-            if (categoryCode.equalsIgnoreCase("")&&
+            if (categoryCode.equalsIgnoreCase("") &&
                     categoryYN.equalsIgnoreCase(AppsConstant.YES)) {
                 isSubmitClicked = true;
                 new AlertCustomDialog(context, "Please select category");
@@ -789,26 +856,27 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
                 new AlertCustomDialog(context, "Please enter description");
                 return;
             }
-
-            if (remarksET.getText().toString().equalsIgnoreCase("")) {
-                isSubmitClicked = true;
-                new AlertCustomDialog(context, "Please enter remarks");
-                return;
+            if (screenName.equalsIgnoreCase(TicketSummaryFragment.screenName)) {
+                if (remarksET.getText().toString().equalsIgnoreCase("")) {
+                    isSubmitClicked = true;
+                    new AlertCustomDialog(context, "Please enter remarks");
+                    return;
+                }
             }
 
-            if (feedbackCode.equalsIgnoreCase("")
+          /*  if (feedbackCode.equalsIgnoreCase("")
                     && simpleOrAdvance.equalsIgnoreCase(AppsConstant.ADVANCE_VIEW)) {
                 isSubmitClicked = true;
                 new AlertCustomDialog(context, "Please select rating");
                 return;
-            }
+            }*/
 
-            if (feedbackET.getText().toString().equalsIgnoreCase("")
+          /*  if (feedbackET.getText().toString().equalsIgnoreCase("")
                     && simpleOrAdvance.equalsIgnoreCase(AppsConstant.ADVANCE_VIEW)) {
                 isSubmitClicked = true;
                 new AlertCustomDialog(context, "Please enter feedback");
                 return;
-            }
+            }*/
 
 
            /* else if (toDate.equalsIgnoreCase("") || toDate.equalsIgnoreCase("--/--/----")) {
@@ -831,9 +899,12 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
             ticketDetailModel.setSubCategoryID(subCategoryCode);
             ticketDetailModel.setSubject(subjectET.getText().toString());
             ticketDetailModel.setComment(descriptionET.getText().toString());
-            ticketDetailModel.setNewRemark(remarksET.getText().toString());
-            ticketDetailModel.setFeedback(feedbackET.getText().toString());
-            ticketDetailModel.setFeedbackCode(feedbackCode);
+            if (screenName.equalsIgnoreCase(TicketSummaryFragment.screenName)) {
+                ticketFor="S";
+                ticketDetailModel.setNewRemark(remarksET.getText().toString());
+            }
+            // ticketDetailModel.setFeedback(feedbackET.getText().toString());
+            // ticketDetailModel.setFeedbackCode(feedbackCode);
             ticketDetailModel.setFromButton(fromButton);
 
             if (uploadFileList != null && uploadFileList.size() > 0) {
@@ -906,33 +977,19 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
             }
         }*/
 
-        if (fromButton.equalsIgnoreCase(AppsConstant.SAVE_AS_DRAFT) ||
-                fromButton.equalsIgnoreCase(AppsConstant.DELETE)) {
+        if (fromButton.equalsIgnoreCase(AppsConstant.SAVE_AS_DRAFT)){
             if (empNameTV.getText().toString().equalsIgnoreCase("")) {
                 new AlertCustomDialog(context, getResources().getString(R.string.select_user));
                 return;
             }
-            if (getScreenName().equalsIgnoreCase(AppsConstant.PENDING_APPROVAL)) {
-             /*   if (wfhSummaryResponse != null && wfhSummaryResponse.getGetWFHRequestDetailResult() != null
+           /* if (getScreenName().equalsIgnoreCase(AppsConstant.PENDING_APPROVAL)) {
+             *//*   if (wfhSummaryResponse != null && wfhSummaryResponse.getGetWFHRequestDetailResult() != null
                         && wfhSummaryResponse.getGetWFHRequestDetailResult().getWFHRequestDetail() != null
                         && wfhSummaryResponse.getGetWFHRequestDetailResult().getWFHRequestDetail().getApprovalLevel() != null) {
                     wfhRequestDetailModel.setApprovalLevel(Integer.parseInt(wfhSummaryResponse.getGetWFHRequestDetailResult().
                             getWFHRequestDetail().getApprovalLevel()));
-                }*/
-            }
-           /* wfhRequestDetailModel.setStartDate(fromDate);
-            wfhRequestDetailModel.setEndDate(toDate);
-            wfhRequestDetailModel.setForEmpID(empId);
-            wfhRequestDetailModel.setReqID(reqId);
-            wfhRequestDetailModel.setStatus(status);
-            wfhRequestDetailModel.setRemarks(remarksET.getText().toString());
-            partialDayDataModel.setDayP50(dayP50);
-            partialDayDataModel.setDayFull(dayFull);
-
-            PartialDayModel partialDayModel = new PartialDayModel();
-            partialDayModel.setPartialDayData(partialDayDataModel);
-            wfhRequestDetailModel.setPartialDay(partialDayModel);
-            wfhRequestDetailModel.setButton(fromButton);*/
+                }*//*
+            }*/
             ticketDetailModel.setCustomerEmpID(empId);
             ticketDetailModel.setCustomerCorpID(customerCorpId);
 
@@ -943,9 +1000,12 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
             ticketDetailModel.setSubCategoryID(subCategoryCode);
             ticketDetailModel.setSubject(subjectET.getText().toString());
             ticketDetailModel.setComment(descriptionET.getText().toString());
-            ticketDetailModel.setNewRemark(remarksET.getText().toString());
-            ticketDetailModel.setFeedback(feedbackET.getText().toString());
-            ticketDetailModel.setFeedbackCode(feedbackCode);
+            ticketDetailModel.setFromButton(fromButton);
+            if (screenName.equalsIgnoreCase(TicketSummaryFragment.screenName)) {
+                ticketDetailModel.setNewRemark(remarksET.getText().toString());
+            }
+            //  ticketDetailModel.setFeedback(feedbackET.getText().toString());
+            //   ticketDetailModel.setFeedbackCode(feedbackCode);
 
             if (uploadFileList != null && uploadFileList.size() > 0) {
                 for (int i = 0; i < uploadFileList.size(); i++) {
@@ -975,6 +1035,20 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
 
         }
 
+    }
+
+    private void sendViewRequestSummaryData() {
+        requestDetail = new GetTicketDetailRequestModel();
+        if (ticketItem != null && ticketItem.getTicketID() != null &&
+                !ticketItem.getTicketID().equalsIgnoreCase("")) {
+            requestDetail.setTicketID(ticketItem.getTicketID());
+        }
+        requestDetail.setSimpleOrAdvance(ticketItem.getSimpleOrAdvance());
+
+        Utility.showHidePregress(progressbar, true);
+        CommunicationManager.getInstance().sendPostRequest(this,
+                AppRequestJSONString.ticketSummaryDetails(requestDetail),
+                CommunicationConstant.API_GET_TICKETS_DETAIL, true);
     }
 
     @Override
@@ -1054,7 +1128,9 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
                         ticketTypeList = ticketPageInitResponseModel.getGetTicketPageInitResult().getTicketTypeList().getList();
                     }
                     // if(ticketPageInitResponseModel.getGetTicketPageInitResult().getSimpleOrAdvanceView()!=null) {
-                    updateUI(ticketPageInitResponseModel.getGetTicketPageInitResult());
+                    if(ticketId.equalsIgnoreCase("0")) {
+                        updateUI(ticketPageInitResponseModel.getGetTicketPageInitResult());
+                    }
                     //}
                 }
                 break;
@@ -1084,9 +1160,12 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
                 tourResponseModel = TourResponseModel.create(ticketResponse);
                 if (tourResponseModel != null && tourResponseModel.getSaveTicketResult() != null
                         && tourResponseModel.getSaveTicketResult().getErrorCode().equalsIgnoreCase(AppsConstant.SUCCESS)) {
-                    if (screenName != null && screenName.equalsIgnoreCase(TimeAndAttendanceSummaryFragment.screenName)) {
+                    if (screenName != null && screenName.equalsIgnoreCase(TicketSummaryFragment.screenName)) {
                         isSubmitClicked = true;
-                        CustomDialog.alertOkWithFinishFragment1(context, tourResponseModel.getSaveTicketResult().getErrorMessage(), mUserActionListener, IAction.TIME_ATTENDANCE_SUMMARY, true);
+                        CustomDialog.alertOkWithFinishFragment1(context, tourResponseModel.getSaveTicketResult().getErrorMessage(), mUserActionListener, IAction.RAISE_TICKET_ADV_SUMMARY, true);
+                    }else if (screenName != null && screenName.equalsIgnoreCase(TicketApprovalFragment.screenName)) {
+                        isSubmitClicked = true;
+                        CustomDialog.alertOkWithFinishFragment1(context, tourResponseModel.getSaveTicketResult().getErrorMessage(), mUserActionListener, IAction.TICKET_APPROVAL, true);
                     } else {
                         isSubmitClicked = true;
                         CustomDialog.alertOkWithFinishFragment(context, tourResponseModel.getSaveTicketResult().getErrorMessage(), mUserActionListener, IAction.HOME_VIEW, true);
@@ -1097,144 +1176,24 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
                 }
                 break;
 
-          /*  case CommunicationConstant.API_GET_DETAILS_ON_EMP_CHANGE:
-                String responseData = response.getResponseData();
-                Log.d("TAG", "Emp Change response : " + responseData);
-                empChangeResponseModel = GetDetailsOnEmpChangeResponseModel.create(responseData);
-                if (empChangeResponseModel != null && empChangeResponseModel.getGetDetailsOnEmpChangeResult() != null
-                        && empChangeResponseModel.getGetDetailsOnEmpChangeResult().getErrorCode().equalsIgnoreCase(AppsConstant.SUCCESS)) {
-                    //  if (screenName!=null && !screenName.equalsIgnoreCase(AppsConstant.PENDING_APPROVAL)) {
-                    if (empChangeResponseModel.getGetDetailsOnEmpChangeResult().getShowTravelYN().equalsIgnoreCase(AppsConstant.YES)) {
-                        travelFromLl.setVisibility(View.VISIBLE);
-                        travelToLl.setVisibility(View.VISIBLE);
-                    }
-                    if (empChangeResponseModel.getGetDetailsOnEmpChangeResult().getShowReasonYN().equalsIgnoreCase(AppsConstant.YES)) {
-                        reasonLl.setVisibility(View.VISIBLE);
-                    }
-                    sendTourRequestCustomFieldList();
-                    //}
-                } else {
-                    new AlertCustomDialog(getActivity(), empChangeResponseModel.getGetDetailsOnEmpChangeResult().getErrorMessage());
-                }
-                break;
-            case CommunicationConstant.API_GET_TOUR_CUSTOM_FIELD_LIST:
-                String resp = response.getResponseData();
-                Log.d("TAG", "Custom List response : " + resp);
-                tourCustomListResponse = TourCustomListResponse.create(resp);
-
-                if (tourCustomListResponse != null && tourCustomListResponse.getGetTourRequestCustomFieldListResult() != null
-                        && tourCustomListResponse.getGetTourRequestCustomFieldListResult().getErrorCode().equalsIgnoreCase(AppsConstant.SUCCESS)
-                        && tourCustomListResponse.getGetTourRequestCustomFieldListResult().getCustomFields() != null
-                        && tourCustomListResponse.getGetTourRequestCustomFieldListResult().getCustomFields().size() > 0) {
-                    customFieldsModel = tourCustomListResponse.getGetTourRequestCustomFieldListResult().getCustomFields();
-                    refreshCustomFields(customFieldsModel);
-                    sendAdvanceRequestData();
-                }
-                break;
-            case CommunicationConstant.API_GET_CORPEMP_PARAM:
-                String responseData1 = response.getResponseData();
-                try {
-                    ((RelativeLayout) rootView.findViewById(R.id.searchLayout)).setVisibility(View.GONE);
-                    if (responseData1 != null) {
-                        empNameTV.setText("");
-                        GetCorpEmpParamResultResponse corpEmpParamResultResponse = GetCorpEmpParamResultResponse.create(responseData1);
-                        if (corpEmpParamResultResponse != null && corpEmpParamResultResponse.getGetCorpEmpParamResult() != null &&
-                                corpEmpParamResultResponse.getGetCorpEmpParamResult().getErrorCode() != null && corpEmpParamResultResponse.getGetCorpEmpParamResult().getErrorCode().equalsIgnoreCase("0")) {
-
-                            if (corpEmpParamResultResponse.getGetCorpEmpParamResult().getCorpEmpParamList() != null &&
-                                    corpEmpParamResultResponse.getGetCorpEmpParamResult().getCorpEmpParamList().size() > 0) {
-                               *//* if (corpEmpParamResultResponse.getGetCorpEmpParamResult().getCorpEmpParamList().get(0).getParam() != null && corpEmpParamResultResponse.getGetCorpEmpParamResult().getCorpEmpParamList().get(0).getValue() != null) {
-
-                                    if (corpEmpParamResultResponse.getGetCorpEmpParamResult().getCorpEmpParamList().get(0).getParam().equalsIgnoreCase("TourOnBehalfOfYN")
-                                            && corpEmpParamResultResponse.getGetCorpEmpParamResult().getCorpEmpParamList().get(0).getValue().equalsIgnoreCase("Y")) {
-                                        ((RelativeLayout) rootView.findViewById(R.id.searchLayout)).setVisibility(View.VISIBLE);
-                                    }
-                                }*//*
-
-                                for (CorpEmpParamListItem item : corpEmpParamResultResponse.getGetCorpEmpParamResult().getCorpEmpParamList()) {
-                                    if (item.getParam().equalsIgnoreCase("TourOnBehalfOfYN") && item.getValue().equalsIgnoreCase("Y")) {
-                                        ((RelativeLayout) rootView.findViewById(R.id.searchLayout)).setVisibility(View.VISIBLE);
-
-                                    }
-
-                                    if (item.getParam().equalsIgnoreCase("TourSelfInitYN") && item.getValue().equalsIgnoreCase("Y")) {
-                                        employItem.setEmpID(Long.parseLong(loginUserModel.getUserModel().getEmpId()));
-                                        empId = loginUserModel.getUserModel().getEmpId();
-                                        employItem.setName(loginUserModel.getUserModel().getUserName());
-                                        employItem.setEmpCode(loginUserModel.getUserModel().getEmpCode());
-                                        empNameTV.setText(employItem.getName());
-
-                                    }
-                                }
-                            }
-                            if (empId != null) {
-                                setTravelAndReasonData();
-                            }
-                        } else {
-
-                        }
-                    }
-                } catch (Exception e) {
-                    Crashlytics.logException(e);
-                    Log.e("Leave", e.getMessage(), e);
-                }
-
-                break;
-            case CommunicationConstant.API_GET_TOUR_REQUEST_DETAIL:
+            case CommunicationConstant.API_GET_TICKETS_DETAIL:
                 String str = response.getResponseData();
-                Log.d("TAG", "Tour Response : " + str);
-                tourSummaryResponse = TourSummaryResponse.create(str);
-                if (tourSummaryResponse != null && tourSummaryResponse.getGetTourRequestDetailResult() != null
-                        && tourSummaryResponse.getGetTourRequestDetailResult().getErrorCode().equalsIgnoreCase(AppsConstant.SUCCESS)
-                        && tourSummaryResponse.getGetTourRequestDetailResult().getTourRequestDetail() != null) {
-                    status = tourSummaryResponse.getGetTourRequestDetailResult().getTourRequestDetail().getReqStatus();
-                    updateUI(tourSummaryResponse.getGetTourRequestDetailResult().getTourRequestDetail());
-                    refreshRemarksList(tourSummaryResponse.getGetTourRequestDetailResult().getTourRequestDetail().getRemarkList());
-                    uploadFileList = tourSummaryResponse.getGetTourRequestDetailResult().getTourRequestDetail().getAttachments();
-                    refreshDocumentList(tourSummaryResponse.getGetTourRequestDetailResult().getTourRequestDetail().getAttachments());
+                Log.d("TAG", "Ticket detail Response : " + str);
+                getTicketDetailResponseModel = GetTicketDetailResponseModel.create(str);
+
+                if (getTicketDetailResponseModel != null && getTicketDetailResponseModel.
+                        getGetTicketDetailResult() != null
+                        && getTicketDetailResponseModel.getGetTicketDetailResult().
+                        getErrorCode().equalsIgnoreCase(AppsConstant.SUCCESS)) {
+                    sendTicketInitRequestData();
+                    updateUIWithData(getTicketDetailResponseModel.getGetTicketDetailResult());
+                    refreshRemarksList(getTicketDetailResponseModel.getGetTicketDetailResult().getRemarks());
+                    uploadFileList = getTicketDetailResponseModel.getGetTicketDetailResult().getDocList();
+                    refreshDocumentList(getTicketDetailResponseModel.getGetTicketDetailResult().getDocList());
                 }
 
                 break;
-            case CommunicationConstant.API_SAVE_TOUR_REQUEST:
-                String tourResponse = response.getResponseData();
-                Log.d("TAG", "wfh response : " + tourResponse);
-                tourResponseModel = TourResponseModel.create(tourResponse);
-                if (tourResponseModel != null && tourResponseModel.getSaveTourReqResult() != null
-                        && tourResponseModel.getSaveTourReqResult().getErrorCode().equalsIgnoreCase(AppsConstant.SUCCESS)) {
-                    if (screenName != null && screenName.equalsIgnoreCase(TimeAndAttendanceSummaryFragment.screenName)) {
-                        isSubmitClicked = true;
-                        CustomDialog.alertOkWithFinishFragment1(context, tourResponseModel.getSaveTourReqResult().getErrorMessage(), mUserActionListener, IAction.TIME_ATTENDANCE_SUMMARY, true);
-                    } else {
-                        isSubmitClicked = true;
-                        CustomDialog.alertOkWithFinishFragment(context, tourResponseModel.getSaveTourReqResult().getErrorMessage(), mUserActionListener, IAction.HOME_VIEW, true);
-                    }
-                } else {
-                    isSubmitClicked = true;
-                    new AlertCustomDialog(getActivity(), tourResponseModel.getSaveTourReqResult().getErrorMessage());
-                }
-                break;
-            case CommunicationConstant.API_REJECT_TOUR_REQUEST:
-                String respData = response.getResponseData();
-                Log.d("TAG", "reject response : " + respData);
-                LeaveRejectResponseModel rejectTourResponse = LeaveRejectResponseModel.create(respData);
-                if (rejectTourResponse != null && rejectTourResponse.getRejectTourRequestResult() != null
-                        && rejectTourResponse.getRejectTourRequestResult().getErrorCode().equalsIgnoreCase(AppsConstant.SUCCESS)) {
-                    CustomDialog.alertOkWithFinishFragment1(context, rejectTourResponse.getRejectTourRequestResult().getErrorMessage(), mUserActionListener, IAction.ATTENDANCE, true);
-                } else {
-                    new AlertCustomDialog(getActivity(), rejectTourResponse.getRejectTourRequestResult().getErrorMessage());
-                }
-                break;
-            case CommunicationConstant.API_APPROVE_TOUR_REQUEST:
-                String tourResp = response.getResponseData();
-                Log.d("TAG", "Tour approval response : " + tourResp);
-                TourResponseModel tourResponseModel = TourResponseModel.create(tourResp);
-                if (tourResponseModel != null && tourResponseModel.getApproveTourRequestResult() != null
-                        && tourResponseModel.getApproveTourRequestResult().getErrorCode().equalsIgnoreCase(AppsConstant.SUCCESS)) {
-                    CustomDialog.alertOkWithFinishFragment1(context, tourResponseModel.getApproveTourRequestResult().getErrorMessage(), mUserActionListener, IAction.ATTENDANCE, true);
-                } else {
-                    new AlertCustomDialog(getActivity(), tourResponseModel.getApproveTourRequestResult().getErrorMessage());
-                }
-                break;*/
+
             default:
                 break;
         }
@@ -1243,44 +1202,50 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
 
 
     private void updateUI(GetTicketPageInitResultModel item) {
+        // remarksLinearLayout1.setVisibility(View.GONE);
         searchLayout.setVisibility(View.VISIBLE);
         categoryLl.setVisibility(View.VISIBLE);
         subCategoryLl.setVisibility(View.VISIBLE);
-        RatingLl.setVisibility(View.VISIBLE);
-        feedbackLL.setVisibility(View.VISIBLE);
+        // RatingLl.setVisibility(View.VISIBLE);
+        //feedbackLL.setVisibility(View.VISIBLE);
         ticketTypeLl.setVisibility(View.VISIBLE);
         simpleOrAdvance = item.getSimpleOrAdvanceView();
         subCategoryYN = item.getSubCategoryYN();
-        categoryYN= item.getCategoryYN();
-        if(item.getCategoryYN()!=null &&
+        categoryYN = item.getCategoryYN();
+        if (item.getCategoryYN() != null &&
                 !item.getCategoryYN().equalsIgnoreCase("") &&
-                item.getCategoryYN().equalsIgnoreCase(AppsConstant.NO)){
+                item.getCategoryYN().equalsIgnoreCase(AppsConstant.NO)) {
             categoryLl.setVisibility(View.GONE);
         }
 
-        if(item.getSubCategoryYN()!=null &&
+        if (item.getSubCategoryYN() != null &&
                 !item.getSubCategoryYN().equalsIgnoreCase("") &&
-                item.getSubCategoryYN().equalsIgnoreCase(AppsConstant.NO)){
+                item.getSubCategoryYN().equalsIgnoreCase(AppsConstant.NO)) {
 
             subCategoryLl.setVisibility(View.GONE);
         }
 
         if (item.getSimpleOrAdvanceView() != null
-                && item.getSimpleOrAdvanceView().equalsIgnoreCase(AppsConstant.SIMPLE_VIEW)) {
-            searchLayout.setVisibility(View.GONE);
+                && item.getSimpleOrAdvanceView().
+                equalsIgnoreCase(AppsConstant.SIMPLE_VIEW)) {
+            //searchLayout.setVisibility(View.GONE);
             subCategoryLl.setVisibility(View.GONE);
-            RatingLl.setVisibility(View.GONE);
-            feedbackLL.setVisibility(View.GONE);
+            //   RatingLl.setVisibility(View.GONE);
+            //   feedbackLL.setVisibility(View.GONE);
             ticketTypeLl.setVisibility(View.GONE);
+            if (ticketFor.equalsIgnoreCase(AppsConstant.SELF)) {
+                saveDraftBTN.setVisibility(View.VISIBLE);
+            }
         }
 
-        if (contactList != null && contactList.size() == 1) {
+        if (contactList != null && ticketFor.equalsIgnoreCase("S")) {
             searchLayout.setVisibility(View.GONE);
             empNameTV.setText(contactList.get(0).getName());
             empId = contactList.get(0).getCustomerEmpID();
             customerCorpId = contactList.get(0).getCustomerCorpID();
 
         }
+
 
         //setupButtons(item);
 
@@ -1314,12 +1279,163 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
     }
 
     // Edit Mode (via Dashboard flow)
-    private void updateUIWithData(){
+    private void updateUIWithData(GetTicketDetailResultModel item) {
+        searchLayout.setVisibility(View.GONE);
+        // change ticketitem to item
+        if(ticketItem.getStatusDesc().equalsIgnoreCase(AppsConstant.DRAFT)){
+            plus_create_newIV.setVisibility(View.VISIBLE);
+            ticketTypeLl.setVisibility(View.GONE);
+
+
+            if(ticketPageInitResponseModel!=null && ticketPageInitResponseModel.getGetTicketPageInitResult()!=null
+                    && ticketPageInitResponseModel.getGetTicketPageInitResult().getSubCategoryYN()!=null ){
+                if(ticketPageInitResponseModel.getGetTicketPageInitResult().
+                        getSubCategoryYN().equalsIgnoreCase("N")){
+                    subCategoryYN="N";
+                    subCategoryLl.setVisibility(View.GONE);
+
+                }/*else if(ticketPageInitResponseModel.getGetTicketPageInitResult().
+                        getSubCategoryYN().equalsIgnoreCase("Y")){
+                    subCategoryYN="Y";
+                    subCategoryLl.setVisibility(View.VISIBLE);
+                }*/
+
+            }
+
+            if(ticketPageInitResponseModel!=null && ticketPageInitResponseModel.getGetTicketPageInitResult()!=null
+                    && ticketPageInitResponseModel.getGetTicketPageInitResult().getCategoryYN()!=null){
+                   if(ticketPageInitResponseModel.getGetTicketPageInitResult().getCategoryYN()
+                            .equalsIgnoreCase("N")) {
+                       categoryYN="N";
+                       categoryLl.setVisibility(View.GONE);
+                   }else if(ticketPageInitResponseModel.getGetTicketPageInitResult().
+                           getCategoryYN().equalsIgnoreCase("Y")){
+                       categoryYN="Y";
+                       categoryLl.setVisibility(View.VISIBLE);
+                   }
+            }
+
+            ticketTypeLl.setVisibility(View.GONE);
+        }else {
+            plus_create_newIV.setVisibility(View.GONE);
+            categoryTV.setEnabled(false);
+            subCategoryTV.setEnabled(false);
+            ticketTypeTV.setEnabled(false);
+            priorityTV.setEnabled(false);
+            subjectET.setEnabled(false);
+            descriptionET.setEnabled(false);
+
+            if(!item.getCategoryDesc().equalsIgnoreCase("")){
+                categoryLl.setVisibility(View.VISIBLE);
+            }
+
+            if(!item.getSubCategoryDesc().equalsIgnoreCase("")){
+                subCategoryLl.setVisibility(View.VISIBLE);
+            }
+
+            if (!item.getTicketTypeDesc().equalsIgnoreCase("")) {
+                ticketTypeLl.setVisibility(View.VISIBLE);
+            }
+
+        }
+
+        if (item.getCategoryDesc() != null &&
+                !item.getCategoryDesc().equalsIgnoreCase("")) {
+          //  categoryLl.setVisibility(View.VISIBLE);
+            categoryTV.setText(item.getCategoryDesc());
+            categoryCode = item.getCategoryID();
+
+        }
+
+        if (item.getSubCategoryDesc() != null) {
+        //    subCategoryLl.setVisibility(View.VISIBLE);
+            subCategoryTV.setText(item.getSubCategoryDesc());
+            subCategoryCode = item.getSubCategoryID();
+
+
+        }
+
+        if (item.getTicketTypeDesc() != null) {
+           // ticketTypeLl.setVisibility(View.VISIBLE);
+            ticketTypeTV.setText(item.getTicketTypeDesc());
+            ticketTypeCode = item.getTicketCode();
+
+        }
+
+
+        if (item.getCustomerEmpName() != null) {
+            empNameTV.setText(item.getCustomerEmpName());
+            empId = item.getCustomerEmpID();
+        }
+
+
+
+        if (item.getTicketPriorityDesc() != null) {
+
+            priorityTV.setText(item.getTicketPriorityDesc());
+            priorityCode = item.getTicketPriorityID();
+
+        }
+
+        if (item.getSubject() != null) {
+            subjectET.setText(item.getSubject());
+        }
+
+        if (item.getComment() != null) {
+            descriptionET.setText(item.getComment());
+
+        }
 
     }
 
+    private void disableField(GetTicketDetailResultModel item) {
+
+
+    }
+
+
+    private void refreshRemarksList(ArrayList<RemarkListItem> remarksItems) {
+        if (remarksItems != null && remarksItems.size() > 0) {
+            remarksLinearLayout.setVisibility(View.GONE);
+            remarksRV.setLayoutManager(new LinearLayoutManager(getActivity()));
+            remarksRV.setVisibility(View.VISIBLE);
+            RemarksAdapter adapter = new RemarksAdapter(remarksItems, context, screenName, remarksLinearLayout);
+            remarksRV.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+        } else {
+            remarksLinearLayout.setVisibility(View.VISIBLE);
+            remarksRV.setVisibility(View.GONE);
+        }
+    }
+
+    private void refreshDocumentList(ArrayList<SupportDocsItemModel> uploadFileList) {
+        if (uploadFileList != null && uploadFileList.size() > 0) {
+            errorLinearLayout.setVisibility(View.GONE);
+            expenseRecyclerView.setVisibility(View.VISIBLE);
+            DocumentUploadAdapter adapter = null;
+            if (screenName.equalsIgnoreCase(TicketSummaryFragment.screenName)) {
+                if(ticketItem!=null && ticketItem.getStatusDesc()!=null && !ticketItem.getStatusDesc().equalsIgnoreCase("")) {
+                    if (ticketItem.getStatusDesc().equalsIgnoreCase("Draft")) {
+                        adapter = new DocumentUploadAdapter(uploadFileList, context, AppsConstant.EDIT, errorLinearLayout, getActivity());
+                    } else {
+                        adapter = new DocumentUploadAdapter(uploadFileList, context, AppsConstant.VIEW, errorLinearLayout, getActivity());
+
+                    }
+                }
+            } else {
+                adapter = new DocumentUploadAdapter(uploadFileList, context, AppsConstant.VIEW, errorLinearLayout, getActivity());
+            }
+            expenseRecyclerView.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+        } else {
+            errorLinearLayout.setVisibility(View.VISIBLE);
+            expenseRecyclerView.setVisibility(View.GONE);
+        }
+    }
+
     // Edit Mode (via Approver flow)
-    private void updateUIWithApprovalData(){
+    private void updateUIWithApprovalData() {
+
 
     }
 }

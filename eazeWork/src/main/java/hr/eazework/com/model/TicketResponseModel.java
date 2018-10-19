@@ -10,6 +10,7 @@ import java.io.Serializable;
 
 public class TicketResponseModel implements Serializable {
     private GetTicketsResultModel GetTicketsResult;
+    private GetTicketsResultModel GetPendingTicketsResult;
 
     public GetTicketsResultModel getGetTicketsResult() {
         return GetTicketsResult;
@@ -17,6 +18,14 @@ public class TicketResponseModel implements Serializable {
 
     public void setGetTicketsResult(GetTicketsResultModel getTicketsResult) {
         GetTicketsResult = getTicketsResult;
+    }
+
+    public GetTicketsResultModel getGetPendingTicketsResult() {
+        return GetPendingTicketsResult;
+    }
+
+    public void setGetPendingTicketsResult(GetTicketsResultModel getPendingTicketsResult) {
+        GetPendingTicketsResult = getPendingTicketsResult;
     }
 
     static public TicketResponseModel create(String serializedData) {

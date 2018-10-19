@@ -91,6 +91,7 @@ import hr.eazework.com.ui.fragment.Team.UserProfile;
 import hr.eazework.com.ui.fragment.Advance.ViewAdvanceRequestSummaryFragment;
 import hr.eazework.com.ui.fragment.Ticket.CreateTicketAdvanceFragment;
 import hr.eazework.com.ui.fragment.Ticket.CreateTicketFragment;
+import hr.eazework.com.ui.fragment.Ticket.TicketApprovalFragment;
 import hr.eazework.com.ui.fragment.Ticket.TicketSummaryFragment;
 import hr.eazework.com.ui.fragment.Ticket.ViewTicketFragment;
 import hr.eazework.com.ui.fragment.ViewDataBase;
@@ -106,6 +107,7 @@ import hr.eazework.com.ui.interfaces.UserActionListner;
 import hr.eazework.com.ui.util.AppsConstant;
 import hr.eazework.com.ui.util.BUNDLE_KEYS;
 import hr.eazework.com.ui.util.EventDataSource;
+import hr.eazework.com.ui.util.PermissionUtil;
 import hr.eazework.com.ui.util.Preferences;
 import hr.eazework.com.ui.util.SharedPreference;
 import hr.eazework.com.ui.util.Utility;
@@ -221,14 +223,47 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
                             performUserAction(IAction.TOUR, null, null);
                         } else if (selectedObject.toString().equalsIgnoreCase("Work From Home")) {
                             performUserAction(IAction.WORK_FROM_HOME, null, null);
-                        } else if (selectedObject.toString().equalsIgnoreCase(AppsConstant.TICKET_SELF)) {
-                            SharedPreference.saveSharedPreferenceData(AppsConstant.Project_NAME,
-                                    AppsConstant.TICKET_KEY, "S", contextActivity);
-                            performUserAction(IAction.RAISE_TICKET_ADV, null, null);
-                        } else if (selectedObject.toString().equalsIgnoreCase(AppsConstant.TICKET_Other)) {
-                            SharedPreference.saveSharedPreferenceData(AppsConstant.Project_NAME,
-                                    AppsConstant.TICKET_KEY, "O", contextActivity);
-                            performUserAction(IAction.RAISE_TICKET_ADV, null, null);
+                        } else if (selectedObject.toString().equalsIgnoreCase("Ticket")) {
+                            String ticketAceessValue = SharedPreference.getSharedPreferenceData(AppsConstant.Project_NAME,
+                                    AppsConstant.TICKET_MENU_ACCESS, contextActivity);
+                            if (ticketAceessValue.equalsIgnoreCase(AppsConstant.SELF)) {
+
+                                SharedPreference.saveSharedPreferenceData(AppsConstant.Project_NAME,
+                                        AppsConstant.TICKET_KEY, "S", contextActivity);
+                                performUserAction(IAction.RAISE_TICKET_ADV, null, null);
+
+                            }else if(ticketAceessValue.equalsIgnoreCase(AppsConstant.OTHER)){
+                                SharedPreference.saveSharedPreferenceData(AppsConstant.Project_NAME,
+                                        AppsConstant.TICKET_KEY, "O", contextActivity);
+                                performUserAction(IAction.RAISE_TICKET_ADV, null, null);
+
+                            }else if(ticketAceessValue.equalsIgnoreCase(AppsConstant.TICKET_ACCESS_BOTH)){
+                                ArrayList<String> list = new ArrayList<>();
+                                list.add("Ticket (Self)");
+                                list.add("Ticket (Other)");
+
+                                final CustomBuilder customTicketBuilder = new CustomBuilder(MainActivity.this, "Ticket For", false);
+                                customTicketBuilder.setSingleChoiceItems(list, null, new CustomBuilder.OnClickListener() {
+                                            @Override
+                                            public void onClick(CustomBuilder builder, Object selectedObject) {
+                                                if (selectedObject.toString().equalsIgnoreCase(AppsConstant.TICKET_SELF)) {
+                                                    SharedPreference.saveSharedPreferenceData(AppsConstant.Project_NAME,
+                                                            AppsConstant.TICKET_KEY, "S", contextActivity);
+                                                customTicketBuilder.dismiss();
+                                                    performUserAction(IAction.RAISE_TICKET_ADV, null, null);
+
+                                                } else if (selectedObject.toString().equalsIgnoreCase(AppsConstant.TICKET_Other)) {
+                                                    SharedPreference.saveSharedPreferenceData(AppsConstant.Project_NAME,
+                                                            AppsConstant.TICKET_KEY, "O", contextActivity);
+                                              customTicketBuilder.dismiss();
+                                                    performUserAction(IAction.RAISE_TICKET_ADV, null, null);
+
+                                                }
+                                            }
+                                        }
+                                );
+                                customTicketBuilder.show();
+                            }
 
                         }
                         builder.dismiss();
@@ -335,8 +370,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
                     performUserAction(IAction.EXPENSE_CLAIM_SUMMARY, null, null);
                 } else if (MenuItemModel.CREATE_ADVANCE_KEY.equalsIgnoreCase(itemModel.getmObjectId())) {
                     performUserAction(IAction.ADVANCE_EXPENSE_SUMMARY, null, null);
-                }  else if (MenuItemModel.SELF_TICKET_KEY.equalsIgnoreCase(itemModel.getmObjectId())
-                        || MenuItemModel.OTHER_TICKET_KEY.equalsIgnoreCase(itemModel.getmObjectId())){
+                } else if (MenuItemModel.TICKET_KEY.equalsIgnoreCase(itemModel.getmObjectId())) {
                     performUserAction(IAction.RAISE_TICKET_ADV_SUMMARY, null, null);
                 } /*else if (MenuItemModel.WORK_FROM_HOME.equalsIgnoreCase(itemModel.getmObjectId())) {
                     performUserAction(IAction.WORK_FROM_HOME_SUMMARY, null, null);
@@ -430,6 +464,17 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
                 } else {
                     addFragment(R.id.content_frame, new AttendanceApprovalFragment(),
                             AttendanceApprovalFragment.TAG);
+                }
+                break;
+            case IAction.TICKET_APPROVAL:
+
+                if (isFragmentExistsInBackStack(TicketApprovalFragment.TAG)) {
+                    if (getTopFragment() instanceof TicketApprovalFragment)
+                        return;
+                    popBackStack(TicketApprovalFragment.TAG, 0);
+                } else {
+                    addFragment(R.id.content_frame, new TicketApprovalFragment(),
+                            TicketApprovalFragment.TAG);
                 }
                 break;
             case IAction.MEMBER_APPROVAL:
@@ -699,6 +744,16 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
                             TourRequestFragment.TAG);
                 }
                 break;
+            case IAction.RAISE_TICKET_ADV:
+                if (isFragmentExistsInBackStack(CreateTicketAdvanceFragment.TAG)) {
+                    if (getTopFragment() instanceof CreateTicketAdvanceFragment)
+                        return;
+                    popBackStack(CreateTicketAdvanceFragment.TAG, 0);
+                } else {
+                    addFragment(R.id.content_frame, new CreateTicketAdvanceFragment(),
+                            CreateTicketAdvanceFragment.TAG);
+                }
+                break;
          /*   case IAction.RAISE_TICKET:
                 if (isFragmentExistsInBackStack(CreateTicketFragment.TAG)) {
                     if (getTopFragment() instanceof CreateTicketFragment)
@@ -719,19 +774,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
                             CreateTicketFragment.TAG);
                 }
                 break;*/
-            case IAction.RAISE_TICKET_ADV:
-                //   String ticket_value = preferences.getString(AppsConstant.TICKET_ACCESS_KEY,"");
-                //   Log.d("Ticket Value",ticket_value);
 
-                if (isFragmentExistsInBackStack(CreateTicketAdvanceFragment.TAG)) {
-                    if (getTopFragment() instanceof CreateTicketAdvanceFragment)
-                        return;
-                    popBackStack(CreateTicketFragment.TAG, 0);
-                } else {
-                    addFragment(R.id.content_frame, new CreateTicketAdvanceFragment(),
-                            CreateTicketAdvanceFragment.TAG);
-                }
-                break;
             case IAction.CREATE_EMPLOYEE_VIEW:
                 if (isFragmentExistsInBackStack(CreateEmployeeFragment.TAG)) {
                     if (getTopFragment() instanceof CreateEmployeeFragment)
@@ -895,6 +938,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 
     }
 
+
     @Override
     public void performUserActionFragment(int pActionType, Fragment pView, Object pData) {
         switch (pActionType) {
@@ -926,6 +970,17 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
                     addFragment(R.id.content_frame, new TimeAndAttendanceSummaryFragment(), TimeAndAttendanceSummaryFragment.TAG);
                 }
                 break;
+
+            /*case IAction.RAISE_TICKET_ADV_SUMMARY:
+                if (isFragmentExistsInBackStack(TicketSummaryFragment.TAG)) {
+                    if (getTopFragment() instanceof TicketSummaryFragment)
+                        return;
+                    popBackStack(TicketSummaryFragment.TAG, 0);
+                } else {
+                    addFragment(R.id.content_frame, new TicketSummaryFragment(),
+                            TicketSummaryFragment.TAG);
+                }
+                break;*/
             case IAction.TOUR:
                 if (isFragmentExistsInBackStack(TourRequestFragment.TAG)) {
                     if (getTopFragment() instanceof TourRequestFragment)
@@ -936,6 +991,16 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
                             TourRequestFragment.TAG);
                 }
                 break;
+            case IAction.RAISE_TICKET_ADV:
+                if (isFragmentExistsInBackStack(CreateTicketAdvanceFragment.TAG)) {
+                    if (getTopFragment() instanceof CreateTicketAdvanceFragment)
+                        return;
+                    popBackStack(CreateTicketAdvanceFragment.TAG, 0);
+                } else {
+                    addFragment(R.id.content_frame,pView,
+                            CreateTicketAdvanceFragment.TAG);
+                }
+                break;
             case IAction.ATTENDANCE:
                 if (isFragmentExistsInBackStack(AttendanceApprovalFragment.TAG)) {
                     if (getTopFragment() instanceof AttendanceApprovalFragment)
@@ -944,6 +1009,17 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
                 } else {
                     addFragment(R.id.content_frame, pView,
                             AttendanceApprovalFragment.TAG);
+                }
+                break;
+            case IAction.TICKET_APPROVAL:
+
+                if (isFragmentExistsInBackStack(TicketApprovalFragment.TAG)) {
+                    if (getTopFragment() instanceof TicketApprovalFragment)
+                        return;
+                    popBackStack(TicketApprovalFragment.TAG, 0);
+                } else {
+                    addFragment(R.id.content_frame, new TicketApprovalFragment(),
+                            TicketApprovalFragment.TAG);
                 }
                 break;
             case IAction.VIEW_LEAVE:
@@ -1006,6 +1082,16 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
                             ViewWFHSummaryFragment.TAG);
                 }
                 break;
+            case IAction.VIEW_TICKET:
+                if (isFragmentExistsInBackStack(ViewTicketFragment.TAG)) {
+                    if (getTopFragment() instanceof ViewTicketFragment)
+                        return;
+                    popBackStack(ViewTicketFragment.TAG, 0);
+                } else {
+                    addFragment(R.id.content_frame, pView,
+                            ViewTicketFragment.TAG);
+                }
+                break;
             case IAction.OUTDOOR_DUTY:
                 if (isFragmentExistsInBackStack(OutdoorDutyRequestFragment.TAG)) {
                     if (getTopFragment() instanceof OutdoorDutyRequestFragment)
@@ -1026,16 +1112,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
                             WorkFromHomeRequestFragment.TAG);
                 }
                 break;
-            case IAction.VIEW_TICKET:
-                if (isFragmentExistsInBackStack(ViewTicketFragment.TAG)) {
-                    if (getTopFragment() instanceof ViewTicketFragment)
-                        return;
-                    popBackStack(ViewTicketFragment.TAG, 0);
-                } else {
-                    addFragment(R.id.content_frame, pView,
-                            ViewTicketFragment.TAG);
-                }
-                break;
+
             case IAction.EDIT_EXPENSE_APPROVAL:
                 if (isFragmentExistsInBackStack(EditExpenseApprovalFragment.TAG)) {
                     if (getTopFragment() instanceof EditExpenseApprovalFragment)
@@ -1325,7 +1402,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 
     public void updateHeader(String title, String subTitle) {
         /*
-		 * TextView tvTitle =
+         * TextView tvTitle =
 		 * (TextView)findViewById(R.id.tv_actionbar_page_title); TextView
 		 * tvSubTitle =
 		 * (TextView)findViewById(R.id.tv_actionbar_page_sub_title);
@@ -1528,6 +1605,12 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
             return "Advance View";
         } else if (fragment instanceof TicketSummaryFragment) {
             return "Ticket Summary";
+        } else if (fragment instanceof ViewTicketFragment) {
+            return "Ticket View";
+        } else if (fragment instanceof CreateTicketAdvanceFragment) {
+            return "Ticket";
+        }else if (fragment instanceof TicketApprovalFragment) {
+            return "Ticket Approval";
         } else {
             return "";
         }
@@ -1700,7 +1783,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
                     || (fragment instanceof EditExpenseApprovalFragment) || (fragment instanceof TeamMemberProfile) ||
                     (fragment instanceof OutdoorDutyRequestFragment) || (fragment instanceof CreateNewLeaveFragment)
                     || (fragment instanceof PendingActivityFragment) || (fragment instanceof TourRequestFragment)
-                    || (fragment instanceof WorkFromHomeRequestFragment)) {
+                    || (fragment instanceof WorkFromHomeRequestFragment) || (fragment instanceof  CreateTicketAdvanceFragment)) {
                 fragment.onActivityResult(requestCode, resultCode, data);
             }
         }

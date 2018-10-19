@@ -56,7 +56,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/margin_13"
                     android:id="@+id/docLl"
-                    android:layout_marginRight="@dimen/margin_13">
+                    android:layout_marginRight="@dimen/margin_13"
+                    android:layout_marginBottom="@dimen/margin_13">
                     <include layout="@layout/upload_document_layout"></include>
                 </LinearLayout>
 
@@ -65,7 +66,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/margin_13"
                     android:id="@+id/feedbackLl"
-                    android:layout_marginRight="@dimen/margin_13">
+                    android:layout_marginRight="@dimen/margin_13"
+                    android:visibility="gone">
                     <include layout="@layout/view_feedback_layout"></include>
                 </LinearLayout>
                 <include layout="@layout/action_button_layout" android:id="@+id/buttonLinearLayout"></include>

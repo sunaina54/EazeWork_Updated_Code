@@ -13,6 +13,7 @@ public class TicketItem extends GenericResponse implements Serializable {
     private String Comment;
     private String CustomerCorpID;
     private String CustomerEmpID;
+    private String CustomerEmpName;
     private ArrayList<DocListModel> Files;
     private String FromButton;
     private String Remarks;
@@ -32,8 +33,20 @@ public class TicketItem extends GenericResponse implements Serializable {
     private String PendingWith;
     private String[] Buttons;
 
+    private String CategoryDesc="";
+    private String TicketPriorityDesc="";
+    private String TicketTypeDesc="";
+    private String SubCategoryDesc="";
 
-   /* {
+    public String getCustomerEmpName() {
+        return CustomerEmpName;
+    }
+
+    public void setCustomerEmpName(String customerEmpName) {
+        CustomerEmpName = customerEmpName;
+    }
+
+    /* {
         "ErrorCode": 0,
             "ErrorMessage": "",
             "MessageType": "N",
@@ -60,6 +73,38 @@ public class TicketItem extends GenericResponse implements Serializable {
             "TicketPriorityID": 0,
             "TicketTypeID": 0
     }*/
+
+    public String getCategoryDesc() {
+        return CategoryDesc;
+    }
+
+    public void setCategoryDesc(String categoryDesc) {
+        CategoryDesc = categoryDesc;
+    }
+
+    public String getTicketPriorityDesc() {
+        return TicketPriorityDesc;
+    }
+
+    public void setTicketPriorityDesc(String ticketPriorityDesc) {
+        TicketPriorityDesc = ticketPriorityDesc;
+    }
+
+    public String getTicketTypeDesc() {
+        return TicketTypeDesc;
+    }
+
+    public void setTicketTypeDesc(String ticketTypeDesc) {
+        TicketTypeDesc = ticketTypeDesc;
+    }
+
+    public String getSubCategoryDesc() {
+        return SubCategoryDesc;
+    }
+
+    public void setSubCategoryDesc(String subCategoryDesc) {
+        SubCategoryDesc = subCategoryDesc;
+    }
 
     public String[] getButtons() {
         return Buttons;
@@ -255,6 +300,34 @@ public class TicketItem extends GenericResponse implements Serializable {
                         "TicketID": "9W81sqY0hWh8WYxrzLG38A==",
                         "TicketPriorityID": 0,
                         "TicketTypeID": 0*/
+
+    /*          "Buttons": null,
+              "CategoryDesc": null,
+              "CategoryID": null,
+              "Comment": null,
+              "CustomerCorpID": null,
+              "CustomerEmpID": null,
+              "CustomerEmpName": null,
+              "Date": null,
+              "Description": null,
+              "DocList": null,
+              "FromButton": null,
+              "NewRemark": null,
+              "PendingWith": null,
+              "Remarks": null,
+              "Response": null,
+              "SimpleOrAdvance": "S",
+              "Status": 2,
+              "StatusDesc": null,
+              "SubCategoryDesc": null,
+              "SubCategoryID": null,
+              "Subject": "sub 101",
+              "TicketCode": "Q000009",
+              "TicketID": "KKFJNdx+yFa9+DCiqw8iVw==",
+              "TicketPriorityDesc": null,
+              "TicketPriorityID": 0,
+              "TicketTypeDesc": null,
+              "TicketTypeID": 0*/
 
 
 }

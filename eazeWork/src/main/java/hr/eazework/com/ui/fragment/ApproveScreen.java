@@ -157,6 +157,21 @@ public class ApproveScreen extends BaseFragment implements AdapterView.OnItemCli
                 }
                 itemList.add(new MainItemModel("Advance", "","Pending","" + count, R.drawable.advance_expense));
             }
+
+            itemModel = menuItemModel.getItemModel(MenuItemModel.TICKET_KEY);
+            if(itemModel!=null && !itemModel.getIsTicketAccess().equalsIgnoreCase("N")){
+                /*PendingCountModel model = modelManager.getPendingCountModel();
+                String count = "";
+                if (model.getPendingList() != null) {
+                    for (int i = 0; i < model.getPendingList().size(); i++) {
+                        PendingCountModel countModel = model.getPendingList().get(i);
+                        if (countModel.getmReqDesc().equalsIgnoreCase("Advance")) {
+                            count = countModel.getmCount();
+                        }
+                    }
+                }*/
+                itemList.add(new MainItemModel("Ticket", "","Pending","" + "1", R.drawable.advance_expense));
+            }
             if (adapter != null) {
                 adapter.updateData(itemList);
             }
@@ -175,6 +190,8 @@ public class ApproveScreen extends BaseFragment implements AdapterView.OnItemCli
             mUserActionListener.performUserAction(IAction.EXPENSE_APPROVAL, null, null);
         }else if (itemList.get(position).getmLeftTitle().equalsIgnoreCase("Advance")) {
             mUserActionListener.performUserAction(IAction.ADVANCE_APPROVAL, null, null);
+        }else if (itemList.get(position).getmLeftTitle().equalsIgnoreCase("Ticket")) {
+            mUserActionListener.performUserAction(IAction.TICKET_APPROVAL, null, null);
         }
 
     }

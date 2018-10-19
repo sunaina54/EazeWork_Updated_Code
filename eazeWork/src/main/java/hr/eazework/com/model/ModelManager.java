@@ -61,6 +61,8 @@ public class ModelManager {
     private PendingCountModel pendingCountModel;
     private TypeWiseListModel locationCountModel;
 	private ExpenseStatusModel expenseStatusModel;
+	private TicketResultModel TicketResult;
+
 
 
 
@@ -125,7 +127,15 @@ public class ModelManager {
         employeeDetailModel = new EmployeeDetailModel(response);
     }
 
-    public LoginUserModel getLoginUserModel() {
+	public TicketResultModel getTicketResult() {
+		return TicketResult;
+	}
+
+	public void setTicketResult(TicketResultModel ticketResult) {
+		TicketResult = ticketResult;
+	}
+
+	public LoginUserModel getLoginUserModel() {
 		return loginUserModel;
 	}
 
@@ -186,6 +196,11 @@ public class ModelManager {
 	expenseStatusModel=ExpenseStatusModel.create(jsonStrin);
 	}
 
+	public void setTicketResultModel(String jsonStrin) {
+		TicketResult=TicketResultModel.create(jsonStrin);
+	}
+
+
 	public  void setEmpLeaveModel(String jsonStrin) {
 		empLeaveModel = new EmpLeaveModel(jsonStrin);
 	}
@@ -244,6 +259,8 @@ public class ModelManager {
         pendingCountModel = null;
         locationCountModel = null;
 		expenseStatusModel=null;
+		TicketResult = null;
+
         obj = null;
 
     }

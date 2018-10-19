@@ -49,7 +49,7 @@
                         android:textColor="@color/black" />
 
                     <TextView
-                        android:id="@+id/tourRequestIdTV"
+                        android:id="@+id/ticketIdTV"
                         style="@style/textViewYellow"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -84,7 +84,7 @@
                         android:textColor="@color/black" />
 
                     <TextView
-                        android:id="@+id/tourStatusTV"
+                        android:id="@+id/ticketStatusTV"
                         style="@style/textViewYellow"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -119,7 +119,7 @@
                         android:textColor="@color/black" />
 
                     <TextView
-                        android:id="@+id/tourEmpNameTV"
+                        android:id="@+id/ticketEmpNameTV"
                         style="@style/textViewYellow"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -154,7 +154,7 @@
                         android:textColor="@color/black" />
 
                     <TextView
-                        android:id="@+id/tourSubmittedByTV"
+                        android:id="@+id/ticketSubmittedByTV"
                         style="@style/textViewYellow"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -189,7 +189,7 @@
                         android:textColor="@color/black" />
 
                     <TextView
-                        android:id="@+id/tourPendingWithTV"
+                        android:id="@+id/ticketPendingWithTV"
                         style="@style/textViewYellow"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -240,7 +240,8 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:weightSum="1">
+                    android:weightSum="1"
+                    android:id="@+id/subCategoryLl">
 
                     <TextView
                         android:layout_width="0dp"

@@ -70,7 +70,8 @@ public class DocumentUploadAdapter extends RecyclerView.Adapter<DocumentUploadAd
         final SupportDocsItemModel fileObject = mDataset.get(position);
         String fileType = "";
         holder.documentParentLayout.setVisibility(View.VISIBLE);
-        if(fileObject.getDocID()!=null && !fileObject.getDocID().equalsIgnoreCase("0") && fileObject.getFlag().equalsIgnoreCase(AppsConstant.DELETE_FLAG)){
+        if(fileObject.getDocID()!=null && !fileObject.getDocID().equalsIgnoreCase("0")
+                && fileObject.getFlag().equalsIgnoreCase(AppsConstant.DELETE_FLAG)){
             holder.documentParentLayout.setVisibility(View.GONE);
         }
         final String filename = fileObject.getDocFile();

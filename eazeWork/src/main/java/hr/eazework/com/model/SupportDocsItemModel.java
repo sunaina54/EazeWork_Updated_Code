@@ -21,7 +21,7 @@ public class SupportDocsItemModel implements Serializable {
     private String DocFile;
     private String DocID;
     private String DocPath;
-    private String Flag;
+    private String Flag="";
     private int SeqNo ;
     private Uri docPathUri;
 

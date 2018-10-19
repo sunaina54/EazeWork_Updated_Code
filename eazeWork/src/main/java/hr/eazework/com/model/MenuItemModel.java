@@ -13,6 +13,8 @@ public class MenuItemModel implements Serializable {
      */
     private static final long serialVersionUID = 1L;
     private boolean isAccess;
+    private String isTicketAccess;
+
     private String mObjectId;
     private String mObjectDesc;
     private ArrayList<MenuItemModel> itemList;
@@ -38,12 +40,17 @@ public class MenuItemModel implements Serializable {
     public static final String CREATE_EXPENSE_KEY="M0019";
     public static final String ADVANCE_KEY="M0020";
     public static final String EXPENSE_KEY="M0021";
-    public static final String SELF_TICKET_KEY="M0024";
-    public static final String OTHER_TICKET_KEY="M0025";
+    public static final String TICKET_KEY="M0024";
+    //public static final String OTHER_TICKET_KEY="M0025";
 
     public MenuItemModel(JSONObject jsonObject) {
         isAccess = jsonObject.optString("AccessYN", "N").equalsIgnoreCase("y");
+
+
         mObjectId = jsonObject.optString("ObjecID", "");
+        if(mObjectId!=null && mObjectId.equalsIgnoreCase(TICKET_KEY)) {
+            isTicketAccess = jsonObject.optString("AccessYN", "N");
+        }
         mObjectDesc = jsonObject.optString("ObjectDesc", "");
 
 
@@ -69,6 +76,14 @@ public class MenuItemModel implements Serializable {
 
     public boolean isAccess() {
         return isAccess;
+    }
+
+    public String getIsTicketAccess() {
+        return isTicketAccess;
+    }
+
+    public void setIsTicketAccess(String isTicketAccess) {
+        this.isTicketAccess = isTicketAccess;
     }
 
     public void setAccess(boolean isAccess) {

@@ -86,6 +86,8 @@ public class AppsConstant {
     public static String PENDING = "P";
     public static String APPROVED = "A";
 
+    public static String SELF = "S";
+    public static String OTHER = "O";
     public static String YES = "Y";
     public static String NO = "N";
 
@@ -123,11 +125,12 @@ public class AppsConstant {
     public static  String EDIT="EDIT",ADD="ADD",VIEW="VIEW";
     public static String TICKET_ACCESS_SIMPLE ="TICKET_SIMPLE";
     public static String TICKET_ACCESS_ADVANCE = "TICKET_ADVANCE";
-    public static String TICKET_ACCESS_BOTH = "TICKET_BOTH";
+    public static String TICKET_ACCESS_BOTH = "B";
     public static String TICKET_ACCESS_KEY = "TICKET_ACCESS_KEY";
     public static String TICKET_SELF= "Ticket (Self)";
     public static String TICKET_Other = "Ticket (Other)";
     public static String TICKET_KEY = "TICKET_KEY";
+    public static String TICKET_MENU_ACCESS = "TICKET_MENU_ACCESS";
 
 
 

@@ -8,10 +8,46 @@ import java.io.Serializable;
 
 public class RemarkListItem implements Serializable {
 
-    private String Date;
-    private String Name;
-    private String Remark;
-    private String Status;
+    private String Date="";
+    private String Name="";
+    private String Remark="";
+    private String Status="";
+    private String Activity="";
+    private String File="";
+    private String Flag="";
+    private String SeqNo="";
+
+    public String getActivity() {
+        return Activity;
+    }
+
+    public void setActivity(String activity) {
+        Activity = activity;
+    }
+
+    public String getFile() {
+        return File;
+    }
+
+    public void setFile(String file) {
+        File = file;
+    }
+
+    public String getFlag() {
+        return Flag;
+    }
+
+    public void setFlag(String flag) {
+        Flag = flag;
+    }
+
+    public String getSeqNo() {
+        return SeqNo;
+    }
+
+    public void setSeqNo(String seqNo) {
+        SeqNo = seqNo;
+    }
 
     public String getDate() {
         return Date;

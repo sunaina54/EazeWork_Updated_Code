@@ -10,28 +10,35 @@ import java.util.ArrayList;
 
 public class GetTicketDetailResultModel extends GenericResponse {
     private String[] Buttons;
-    private String CategoryID;
-    private String Comment;
-    private String CustomerCorpID;
-    private String CustomerEmpID;
-    private String Date ;
-    private String Description;
-    private ArrayList<DocListModel> DocList;
-    private String FromButton;
-    private String NewRemark;
-    private String PendingWith;
-    private String Priority;
-    private String Remarks;
-    private String Response;
-    private String SimpleOrAdvance;
-    private String Status;
-    private String StatusDesc;
-    private String SubCategoryID;
-    private String Subject;
-    private String TicketCode;
-    private String TicketID;
-    private String TicketPriorityID;
-    private String TicketTypeID;
+    private String CategoryID="";
+    private String Comment="";
+    private String CustomerCorpID="";
+    private String CustomerEmpID="";
+    private String Date="";
+    private String Description="";
+    private ArrayList<SupportDocsItemModel> DocList;
+    private String FromButton="";
+    private String NewRemark="";
+    private String PendingWith="";
+    private String Priority="";
+    private ArrayList<RemarkListItem> Remarks;
+    private String Response="";
+    private String SimpleOrAdvance="";
+    private String Status="";
+    private String StatusDesc="";
+    private String SubCategoryID="";
+    private String Subject="";
+    private String TicketCode="";
+    private String TicketID="";
+    private String TicketPriorityID="";
+    private String TicketTypeID="";
+    private String CategoryDesc="";
+    private String TicketPriorityDesc="";
+    private String TicketTypeDesc="";
+    private String SubCategoryDesc="";
+    private String CustomerEmpName="";
+
+
 
     static public GetTicketDetailResultModel create(String serializedData) {
         // Use GSON to instantiate this class using the JSON representation of the state
@@ -44,6 +51,47 @@ public class GetTicketDetailResultModel extends GenericResponse {
         Gson gson = new Gson();
         return gson.toJson(this);
     }
+
+    public String getCustomerEmpName() {
+        return CustomerEmpName;
+    }
+
+    public void setCustomerEmpName(String customerEmpName) {
+        CustomerEmpName = customerEmpName;
+    }
+
+    public String getSubCategoryDesc() {
+        return SubCategoryDesc;
+    }
+
+    public void setSubCategoryDesc(String subCategoryDesc) {
+        SubCategoryDesc = subCategoryDesc;
+    }
+
+    public String getCategoryDesc() {
+        return CategoryDesc;
+    }
+
+    public void setCategoryDesc(String categoryDesc) {
+        CategoryDesc = categoryDesc;
+    }
+
+    public String getTicketPriorityDesc() {
+        return TicketPriorityDesc;
+    }
+
+    public void setTicketPriorityDesc(String ticketPriorityDesc) {
+        TicketPriorityDesc = ticketPriorityDesc;
+    }
+
+    public String getTicketTypeDesc() {
+        return TicketTypeDesc;
+    }
+
+    public void setTicketTypeDesc(String ticketTypeDesc) {
+        TicketTypeDesc = ticketTypeDesc;
+    }
+
     public String[] getButtons() {
         return Buttons;
     }
@@ -100,11 +148,11 @@ public class GetTicketDetailResultModel extends GenericResponse {
         Description = description;
     }
 
-    public ArrayList<DocListModel> getDocList() {
+    public ArrayList<SupportDocsItemModel> getDocList() {
         return DocList;
     }
 
-    public void setDocList(ArrayList<DocListModel> docList) {
+    public void setDocList(ArrayList<SupportDocsItemModel> docList) {
         DocList = docList;
     }
 
@@ -140,11 +188,11 @@ public class GetTicketDetailResultModel extends GenericResponse {
         Priority = priority;
     }
 
-    public String getRemarks() {
+    public ArrayList<RemarkListItem> getRemarks() {
         return Remarks;
     }
 
-    public void setRemarks(String remarks) {
+    public void setRemarks(ArrayList<RemarkListItem> remarks) {
         Remarks = remarks;
     }
 

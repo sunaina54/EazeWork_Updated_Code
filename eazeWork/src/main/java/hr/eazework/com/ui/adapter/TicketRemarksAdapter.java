@@ -13,14 +13,13 @@ import java.util.List;
 
 import hr.eazework.com.R;
 import hr.eazework.com.model.RemarkListItem;
-import hr.eazework.com.model.RequestRemarksItem;
 
 /**
  * Created by Dell3 on 15-01-2018.
  */
 
-public class RemarksAdapter extends
-        RecyclerView.Adapter<RemarksAdapter.MyViewHolder> {
+public class TicketRemarksAdapter extends
+        RecyclerView.Adapter<TicketRemarksAdapter.MyViewHolder> {
     private ArrayList<RemarkListItem> dataSet;
     private Context context;
     private String screen;
@@ -29,7 +28,6 @@ public class RemarksAdapter extends
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         public TextView dateTV, nameTV, remarksReasonTV, remarksStatusTV;
-        private LinearLayout remarkStatusLL;
 
         public MyViewHolder(View v) {
             super(v);
@@ -37,7 +35,6 @@ public class RemarksAdapter extends
             nameTV = (TextView) v.findViewById(R.id.nameTV);
             remarksReasonTV = (TextView) v.findViewById(R.id.remarksReasonTV);
             remarksStatusTV = (TextView) v.findViewById(R.id.remarksStatusTV);
-            remarkStatusLL = (LinearLayout) v.findViewById(R.id.remarkStatusLL);
 
         }
     }
@@ -48,11 +45,11 @@ public class RemarksAdapter extends
         notifyDataSetChanged();
     }
 
-    public RemarksAdapter(List<RemarkListItem> data) {
+    public TicketRemarksAdapter(List<RemarkListItem> data) {
         this.dataSet = (ArrayList<RemarkListItem>) data;
 
     }
-    public RemarksAdapter(ArrayList<RemarkListItem> myDataset, Context context, String screen, LinearLayout errorLinearLayout) {
+    public TicketRemarksAdapter(ArrayList<RemarkListItem> myDataset, Context context, String screen, LinearLayout errorLinearLayout) {
         dataSet = myDataset;
         this.context=context;
         this.screen=screen;
@@ -61,28 +58,22 @@ public class RemarksAdapter extends
 
     }
     @Override
-    public RemarksAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public TicketRemarksAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.remarks_item_layout, parent, false);
-       RemarksAdapter.MyViewHolder myViewHolder = new RemarksAdapter.MyViewHolder(view);
+       TicketRemarksAdapter.MyViewHolder myViewHolder = new TicketRemarksAdapter.MyViewHolder(view);
         return myViewHolder;
     }
 
 
     @Override
-    public void onBindViewHolder(final RemarksAdapter.MyViewHolder holder, final int listPosition) {
+    public void onBindViewHolder(final TicketRemarksAdapter.MyViewHolder holder, final int listPosition) {
 
         final RemarkListItem item = dataSet.get(listPosition);
-        holder.remarkStatusLL.setVisibility(View.GONE);
         holder.dateTV.setText(item.getDate());
         holder.nameTV.setText(item.getName());
         holder.remarksReasonTV.setText(item.getRemark());
-        if(!item.getStatus().equalsIgnoreCase("")){
-            holder.remarkStatusLL.setVisibility(View.VISIBLE);
-            holder.remarksStatusTV.setText(item.getStatus());
-        }
-
-
+        holder.remarksStatusTV.setText(item.getStatus());
 
     }
 

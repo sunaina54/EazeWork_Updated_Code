@@ -3,6 +3,8 @@ package hr.eazework.com.ui.fragment.Ticket;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -30,6 +32,7 @@ import hr.eazework.com.model.TicketResponseModel;
 import hr.eazework.com.model.TicketSummaryRequestModel;
 import hr.eazework.com.ui.customview.CustomBuilder;
 import hr.eazework.com.ui.fragment.Attendance.ViewOdSummaryFragment;
+import hr.eazework.com.ui.fragment.Attendance.WorkFromHomeRequestFragment;
 import hr.eazework.com.ui.fragment.BaseFragment;
 import hr.eazework.com.ui.interfaces.IAction;
 import hr.eazework.com.ui.util.AppsConstant;
@@ -409,8 +412,8 @@ public class TicketSummaryFragment extends BaseFragment {
                 holder.descriptionTV.setText(item.getDescription());
             }
 
-            if(item.getPriority()!=null){
-                holder.priorityTV.setText(item.getPriority());
+            if(item.getTicketPriorityDesc()!=null){
+                holder.priorityTV.setText(item.getTicketPriorityDesc());
             }
 
             if(item.getPendingWith()!=null){
@@ -430,164 +433,30 @@ public class TicketSummaryFragment extends BaseFragment {
             holder.viewBTN.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                   /* if(item.getStatusDesc()!=null &&
-                            item.getStatusDesc().equalsIgnoreCase("Feedback Completed")
-                            ||   item.getStatusDesc().equalsIgnoreCase("Feedback Pending")){
-                        ViewTicketFragment viewTicketFragment = new ViewTicketFragment();
-                        viewTicketFragment.setGetEmpWFHResponseItem(dataSet.get(listPosition));
-                        Fragment fragment=viewTicketFragment;
-                        mUserActionListener.performUserActionFragment(IAction.VIEW_TICKET,fragment,null);
 
-                    }*/
 
-                   
-                   if (!holder.viewBTN.getText().toString().
-                           equalsIgnoreCase("View")){
-                       // Edit
+                    if(dataSet.get(listPosition).getButtons()[0].
+                            equalsIgnoreCase("Edit")){
+                        // Edit
                         CreateTicketAdvanceFragment ticketAdvanceFragment= new CreateTicketAdvanceFragment();
-                        Fragment fragment = ticketAdvanceFragment;
-                        mUserActionListener.performUserActionFragment(IAction.RAISE_TICKET_ADV, fragment,null);
-                   }else {
+                        ticketAdvanceFragment.setTicketItem(dataSet.get(listPosition));
+                        ticketAdvanceFragment.setScreenName(screenName);
+                        Fragment fragment1 = ticketAdvanceFragment;
+                        mUserActionListener.performUserActionFragment(IAction.RAISE_TICKET_ADV,fragment1, null);
+                    }
+
+                    if(dataSet.get(listPosition).getButtons()[0].equalsIgnoreCase("View")){
                         // View Particular ticket
-                       ViewTicketFragment viewTicketFragment = new ViewTicketFragment();
-                     //  viewTicketFragment.setGetEmpWFHResponseItem(dataSet.get(listPosition));
-                       Fragment fragment=viewTicketFragment;
-                       mUserActionListener.performUserActionFragment(IAction.VIEW_TICKET,fragment,null);
-                   }
+                        ViewTicketFragment viewTicketFragment = new ViewTicketFragment();
+                        viewTicketFragment.setTicketItem(dataSet.get(listPosition));
+                        Fragment fragment=viewTicketFragment;
+                        mUserActionListener.performUserActionFragment(IAction.VIEW_TICKET,
+                                fragment,null);
+                    }
+
+
                     }
                 });
-
-
-         /*   if(item.getRequestTypeDesc().equalsIgnoreCase("OD")){
-                holder.startDateLabelTV.setText(getResources().getString(R.string.date));
-                holder.startDateTV.setText(item.getStartDate());
-                holder.endDateLl.setVisibility(View.GONE);
-            }else{
-                holder.startDateLabelTV.setText(getResources().getString(R.string.start_date));
-                holder.endDateLl.setVisibility(View.VISIBLE);
-                holder.startDateTV.setText(item.getStartDate());
-                holder.endDateTV.setText(item.getEndDate());
-            }
-
-            if(item.getRequestTypeDesc().equalsIgnoreCase("Time Modification") || item.getRequestTypeDesc().equalsIgnoreCase("Attendance")){
-                holder.daysLl.setVisibility(View.GONE);
-            }
-
-            holder.daysTV.setText(item.getTotalDays());
-            holder.pendingWithTV.setText(item.getPendWithName());
-            holder.statusTV.setText(item.getStatus());
-
-
-            if(item.getButtons()!=null && item.getButtons().length>0) {
-                holder.viewBTN.setText(item.getButtons()[0]);
-            }
-
-            holder.viewBTN.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                if(item.getRequestTypeDesc()!=null && item.getRequestTypeDesc().equalsIgnoreCase(AppsConstant.WFH) &&
-                        item.getStatusDesc()!=null &&
-                        !item.getStatusDesc().equalsIgnoreCase(AppsConstant.DRAFT)  ) {
-                    ViewWFHSummaryFragment viewWFHSummaryFragment = new ViewWFHSummaryFragment();
-                    viewWFHSummaryFragment.setTicketItem(dataSet.get(listPosition));
-                    Fragment fragment=viewWFHSummaryFragment;
-                    mUserActionListener.performUserActionFragment(IAction.VIEW_WFH,fragment,null);
-                  *//*  FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.view_advance_expense, viewWFHSummaryFragment);
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();*//*
-                }
-
-                    if(item.getRequestTypeDesc()!=null && item.getRequestTypeDesc().equalsIgnoreCase(AppsConstant.WFH)
-                            && item.getStatusDesc()!=null &&
-                            item.getStatusDesc().equalsIgnoreCase(AppsConstant.DRAFT)) {
-                        WorkFromHomeRequestFragment requestFragment = new WorkFromHomeRequestFragment();
-                        requestFragment.setTicketItem(dataSet.get(listPosition));
-                        Fragment fragment=requestFragment;
-                        requestFragment.setScreenName(screenName);
-                        mUserActionListener.performUserActionFragment(IAction.WORK_FROM_HOME,fragment,null);
-
-                      *//*  FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                        fragmentTransaction.replace(R.id.view_advance_expense, requestFragment);
-                        fragmentTransaction.addToBackStack(null);
-                        fragmentTransaction.commit();*//*
-                    }
-
-                    if(item.getRequestTypeDesc()!=null && item.getRequestTypeDesc().equalsIgnoreCase(AppsConstant.OD) && item.getStatusDesc()!=null &&
-                            !item.getStatusDesc().equalsIgnoreCase(AppsConstant.DRAFT)){
-                        ViewOdSummaryFragment viewOdSummaryFragment = new ViewOdSummaryFragment();
-                        viewOdSummaryFragment.setTicketItem(dataSet.get(listPosition));
-                        Fragment fragment=viewOdSummaryFragment;
-                        mUserActionListener.performUserActionFragment(IAction.VIEW_OD,fragment,null);
-                       *//* FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                        fragmentTransaction.replace(R.id.view_advance_expense, viewOdSummaryFragment);
-                        fragmentTransaction.addToBackStack(null);
-                        fragmentTransaction.commit();*//*
-                    }
-
-                    if(item.getRequestTypeDesc()!=null &&
-                            item.getRequestTypeDesc().equalsIgnoreCase(AppsConstant.OD) && item.getStatusDesc()!=null &&
-                            item.getStatusDesc().equalsIgnoreCase(AppsConstant.DRAFT)){
-                        OutdoorDutyRequestFragment outdoorDutyRequestFragment = new OutdoorDutyRequestFragment();
-                        outdoorDutyRequestFragment.setTicketItem(dataSet.get(listPosition));
-                        outdoorDutyRequestFragment.setScreenName(screenName);
-
-                        Fragment fragment=outdoorDutyRequestFragment;
-                        mUserActionListener.performUserActionFragment(IAction.OUTDOOR_DUTY,fragment,null);
-                        *//*FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                        fragmentTransaction.replace(R.id.view_advance_expense, outdoorDutyRequestFragment);
-                        fragmentTransaction.addToBackStack(null);
-                        fragmentTransaction.commit();*//*
-                    }
-
-
-                    if(item.getRequestTypeDesc()!=null &&
-                            item.getRequestTypeDesc().equalsIgnoreCase(AppsConstant.TOUR)&&
-                            item.getStatusDesc()!=null &&
-                            !item.getStatusDesc().equalsIgnoreCase(AppsConstant.DRAFT)){
-                        ViewTourSummaryFragment viewTourSummaryFragment = new ViewTourSummaryFragment();
-                        viewTourSummaryFragment.setTicketItem(dataSet.get(listPosition));
-                        Fragment fragment=viewTourSummaryFragment;
-                        mUserActionListener.performUserActionFragment(IAction.VIEW_TOUR,fragment,null);
-                       *//* FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                        fragmentTransaction.replace(R.id.view_advance_expense, viewTourSummaryFragment);
-                        fragmentTransaction.commit();*//*
-                    }
-
-                    if(item.getRequestTypeDesc()!=null &&
-                            item.getRequestTypeDesc().equalsIgnoreCase(AppsConstant.TOUR)&&
-                            item.getStatusDesc()!=null &&
-                            item.getStatusDesc().equalsIgnoreCase(AppsConstant.DRAFT)){
-                        TourRequestFragment tourRequestFragment = new TourRequestFragment();
-                        tourRequestFragment.setTicketItem(dataSet.get(listPosition));
-                        tourRequestFragment.setScreenName(screenName);
-                        Fragment fragment=tourRequestFragment;
-                        mUserActionListener.performUserActionFragment(IAction.TOUR,fragment,null);
-                        *//*FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                        fragmentTransaction.replace(R.id.view_advance_expense, tourRequestFragment);
-                        fragmentTransaction.addToBackStack(null);
-                        fragmentTransaction.commit();*//*
-                    }
-
-                    if(item.getRequestTypeDesc()!=null &&
-                            item.getRequestTypeDesc().equalsIgnoreCase(AppsConstant.TIME_MODIFICATION)
-                            ||  item.getRequestTypeDesc().equalsIgnoreCase(AppsConstant.BACK_DATED_ATTENDANCE)){
-                        ViewTimeModificationSummary viewTimeModificationSummary = new ViewTimeModificationSummary();
-                        viewTimeModificationSummary.setTicketItem(dataSet.get(listPosition));
-                        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                        fragmentTransaction.replace(R.id.view_advance_expense, viewTimeModificationSummary);
-                        fragmentTransaction.addToBackStack(null);
-                        fragmentTransaction.commit();
-                    }
-                }
-            });*/
         }
 
         @Override

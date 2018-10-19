@@ -74,6 +74,7 @@ import hr.eazework.com.model.ModelManager;
 import hr.eazework.com.model.PendingCountModel;
 import hr.eazework.com.model.SalaryMonthModel;
 import hr.eazework.com.model.TeamMember;
+import hr.eazework.com.model.TicketResultModel;
 import hr.eazework.com.model.TypeWiseListModel;
 import hr.eazework.com.model.UploadProfilePicModel;
 import hr.eazework.com.model.UploadProfilePicResponseModel;
@@ -90,6 +91,7 @@ import hr.eazework.com.ui.util.GeoUtil;
 import hr.eazework.com.ui.util.ImageUtil;
 import hr.eazework.com.ui.util.PermissionUtil;
 import hr.eazework.com.ui.util.Preferences;
+import hr.eazework.com.ui.util.SharedPreference;
 import hr.eazework.com.ui.util.Utility;
 import hr.eazework.com.ui.util.custom.AlertCustomDialog;
 import hr.eazework.mframe.communication.ResponseData;
@@ -655,24 +657,13 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
                 }
             }
 
-            itemModel = menuItemModel.getItemModel(MenuItemModel.SELF_TICKET_KEY);
-            if (itemModel != null && itemModel.isAccess()) {
-               /* ExpenseStatusModel expenseStatusModel = ModelManager.getInstance().getExpenseStatusModel();
-                if (expenseStatusModel != null && expenseStatusModel.getExpenseStatusData() != null
-                        && expenseStatusModel.getExpenseStatusData().size() > 0) {
-                    if (expenseStatusModel.getExpenseStatusData().get(1) != null) {
-                        ExpenseStatusData expenseStatusData = expenseStatusModel.getExpenseStatusData().get(1);
-                        MainItemModel item = new MainItemModel("Expense",
-                                getString(R.string.msg_expense), getString(R.string.expense_balance),
-                                "" + (expenseStatusData == null ? "0" : expenseStatusData.getCurrencyCode() + " " + expenseStatusData.getAmount()), R.drawable.expense_claim, true);
-                        item.setObjectId(itemModel.getmObjectId());
-                        itemList.add(item);
-                    }
-                }*/
+            itemModel = menuItemModel.getItemModel(MenuItemModel.TICKET_KEY) ;
+            if (itemModel != null && !itemModel.getIsTicketAccess().equalsIgnoreCase("N")) {
+                TicketResultModel ticketResultModel= ModelManager.getInstance().getTicketResult();
 
                 MainItemModel item = new MainItemModel("Ticket",
                         getString(R.string.msg_tickets), getString(R.string.open_tickets),
-                        "" + (""), R.drawable.expense_claim, true);
+                        "" + (ticketResultModel == null ? "0" : ticketResultModel.getOpenCount()), R.drawable.expense_claim, true);
                 item.setObjectId(itemModel.getmObjectId());
                 itemList.add(item);
             }
@@ -713,22 +704,24 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
                 list.add("Work From Home");
             }
 
-            itemModel = menuItemModel.getItemModel(MenuItemModel.SELF_TICKET_KEY);
-            if (itemModel != null && itemModel.isAccess()) {
-                list.add(AppsConstant.TICKET_SELF);
+            itemModel = menuItemModel.getItemModel(MenuItemModel.TICKET_KEY);
+            if (itemModel != null && !itemModel.getIsTicketAccess().equalsIgnoreCase("N")) {
+                SharedPreference.saveSharedPreferenceData(AppsConstant.Project_NAME,
+                        AppsConstant.TICKET_MENU_ACCESS, itemModel.getIsTicketAccess(), context);
+                list.add("Ticket");
                // ticketAccess = AppsConstant.TICKET_ACCESS_SIMPLE;
               //  preferences.saveString(AppsConstant.TICKET_ACCESS_KEY,ticketAccess);
 
             }
 
-            itemModel = menuItemModel.getItemModel(MenuItemModel.OTHER_TICKET_KEY);
+          /*  itemModel = menuItemModel.getItemModel(MenuItemModel.OTHER_TICKET_KEY);
             if (itemModel != null && itemModel.isAccess()) {
                 list.add(AppsConstant.TICKET_Other);
-            }
+            }*/
 
     /*        preferences.remove(AppsConstant.TICKET_ACCESS_KEY);
 
-            itemModel = menuItemModel.getItemModel(MenuItemModel.SELF_TICKET_KEY);
+            itemModel = menuItemModel.getItemModel(MenuItemModel.TICKET_KEY);
             if (itemModel != null && itemModel.isAccess()) {
                 list.add("Ticket");
                 ticketAccess = AppsConstant.TICKET_ACCESS_SIMPLE;
@@ -899,8 +892,7 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
                 mUserActionListener.performUserAction(IAction.EXPENSE_CLAIM_SUMMARY, null, null);
             } else if (MenuItemModel.CREATE_ADVANCE_KEY.equalsIgnoreCase(itemModel.getmObjectId())) {
                 mUserActionListener.performUserAction(IAction.ADVANCE_EXPENSE_SUMMARY, null, null);
-            }else if(MenuItemModel.SELF_TICKET_KEY.equalsIgnoreCase(itemModel.getmObjectId())||
-                    MenuItemModel.OTHER_TICKET_KEY.equalsIgnoreCase(itemModel.getmObjectId())){
+            }else if(MenuItemModel.TICKET_KEY.equalsIgnoreCase(itemModel.getmObjectId())){
                 mUserActionListener.performUserAction(IAction.RAISE_TICKET_ADV_SUMMARY, null, null);
 
 
@@ -988,6 +980,15 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
         }
     }
 
+    private void updateTicketData(JSONObject ticketData){
+        if (ticketData != null) {
+            String ticketResult = ticketData.toString();
+            ModelManager.getInstance().setTicketResultModel(ticketResult);
+            populateHomeData();
+            updateHomeData();
+        }
+    }
+
     private void updateEmpLeaveBalanceMethods(JSONObject jsonObject) {
         String getEmpLeaveBalanceResult = jsonObject.toString();
         ModelManager.getInstance().setLeaveBalanceModel(getEmpLeaveBalanceResult);
@@ -1047,6 +1048,10 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
                         JSONObject expenseData = object.optJSONObject("ExpenseStatus");
                         Log.d("Expense Result", expenseData.toString());
                         updateExpenseMethods(expenseData);
+
+                        JSONObject ticketData = object.optJSONObject("TicketResult");
+                        Log.d("Ticket Result", ticketData.toString());
+                        updateTicketData(ticketData);
                     }
                 } catch (JSONException e) {
                     Crashlytics.logException(e);

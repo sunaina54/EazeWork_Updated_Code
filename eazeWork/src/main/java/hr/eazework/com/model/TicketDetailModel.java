@@ -22,8 +22,8 @@ public class TicketDetailModel implements Serializable {
   private String Subject;
   private String Comment;
   private String NewRemark;
-  private String feedback;
-  private String feedbackCode;
+/*  private String feedback;
+  private String feedbackCode;*/
   private ArrayList<SupportDocsItemModel> DocList;
 
     static public TicketDetailModel create(String serializedData) {
@@ -37,7 +37,7 @@ public class TicketDetailModel implements Serializable {
         return gson.toJson(this);
     }
 
-    public String getFeedback() {
+  /*  public String getFeedback() {
         return feedback;
     }
 
@@ -51,7 +51,7 @@ public class TicketDetailModel implements Serializable {
 
     public void setFeedbackCode(String feedbackCode) {
         this.feedbackCode = feedbackCode;
-    }
+    }*/
 
     public String getFromButton() {
         return FromButton;

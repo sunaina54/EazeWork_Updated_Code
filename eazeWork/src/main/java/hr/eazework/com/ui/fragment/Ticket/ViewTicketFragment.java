@@ -18,7 +18,9 @@ import java.util.ArrayList;
 import hr.eazework.com.MainActivity;
 import hr.eazework.com.R;
 import hr.eazework.com.model.EmployeeLeaveModel;
+import hr.eazework.com.model.GetTicketDetailRequestModel;
 import hr.eazework.com.model.GetTicketDetailResponseModel;
+import hr.eazework.com.model.GetTicketDetailResultModel;
 import hr.eazework.com.model.GetWFHRequestDetail;
 import hr.eazework.com.model.LeaveReqsItem;
 import hr.eazework.com.model.LeaveRequestDetailsModel;
@@ -26,6 +28,7 @@ import hr.eazework.com.model.MenuItemModel;
 import hr.eazework.com.model.ModelManager;
 import hr.eazework.com.model.RemarkListItem;
 import hr.eazework.com.model.SupportDocsItemModel;
+import hr.eazework.com.model.TicketItem;
 import hr.eazework.com.model.WFHRequestDetailItem;
 import hr.eazework.com.model.WFHSummaryResponse;
 import hr.eazework.com.model.WithdrawWFHResponse;
@@ -52,8 +55,8 @@ public class ViewTicketFragment extends BaseFragment {
     public static final String TAG = "ViewTicketFragment";
     private String screenName = "ViewTicketFragment";
     private Preferences preferences;
-    private TextView requestIdTV, empNameTV, statusTV, startDateTV, endDateTV, daysTV, dateWorkedTV;
-    private TextView submittedByTV, pendingWithTV;
+    private TextView ticketIdTV, ticketEmpNameTV, ticketStatusTV, subCategoryTV, createdOnTV,priorityTV, daysTV, dateWorkedTV;
+    private TextView ticketSubmittedByTV, ticketPendingWithTV,categoryTV,subjectTV,descriptionTV;
     private LinearLayout remarksLinearLayout, wfhSummaryLl, tourSummaryLl, odSummaryLl, docLl;
     private RecyclerView remarksRV;
     private Button withdrawBTN, clickBTN;
@@ -65,8 +68,19 @@ public class ViewTicketFragment extends BaseFragment {
     private LeaveReqsItem leaveReqsItem;
     private LinearLayout dateWorkedLl;
     private GetTicketDetailResponseModel getTicketDetailResponseModel;
+    private TicketItem ticketItem;
+    private GetTicketDetailRequestModel requestDetail;
+
+    public TicketItem getTicketItem() {
+        return ticketItem;
+    }
+
+    public void setTicketItem(TicketItem ticketItem) {
+        this.ticketItem = ticketItem;
+    }
 
     private View progressbar;
+    private LinearLayout subCategoryLl;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -99,11 +113,10 @@ public class ViewTicketFragment extends BaseFragment {
             public void onClick(View v) {
                 MenuItemModel menuItemModel = ModelManager.getInstance().getMenuItemModel();
                 if (menuItemModel != null) {
-                    MenuItemModel itemModel = menuItemModel.getItemModel(MenuItemModel.SELF_TICKET_KEY);
-                    MenuItemModel itemModel1 = menuItemModel.getItemModel(MenuItemModel.OTHER_TICKET_KEY);
+                    MenuItemModel itemModel = menuItemModel.getItemModel(MenuItemModel.TICKET_KEY);
+                   // MenuItemModel itemModel1 = menuItemModel.getItemModel(MenuItemModel.OTHER_TICKET_KEY);
 
-                    if (itemModel != null && itemModel.isAccess() ||
-                            ( itemModel1 !=null && itemModel1.isAccess()) ) {
+                    if (itemModel != null && !itemModel.getIsTicketAccess().equalsIgnoreCase("N")) {
                         mUserActionListener.performUserAction(IAction.RAISE_TICKET_ADV_SUMMARY, null, null);
                     } else {
                         mUserActionListener.performUserAction(IAction.RAISE_TICKET_ADV_SUMMARY, null, null);
@@ -117,6 +130,7 @@ public class ViewTicketFragment extends BaseFragment {
         progressbar = (LinearLayout) rootView.findViewById(R.id.ll_progress_container);
         progressbar.bringToFront();
         docLl = (LinearLayout) rootView.findViewById(R.id.docLl);
+        subCategoryLl = (LinearLayout) rootView.findViewById(R.id.subCategoryLl);
         plus_create_newIV = (ImageView) rootView.findViewById(R.id.plus_create_newIV);
         plus_create_newIV.setVisibility(View.GONE);
       /*  wfhSummaryLl = (LinearLayout) rootView.findViewById(R.id.wfhSummaryLl);
@@ -129,32 +143,40 @@ public class ViewTicketFragment extends BaseFragment {
         remarksLinearLayout = (LinearLayout) rootView.findViewById(R.id.remarksLinearLayout);
         remarksRV = (RecyclerView) rootView.findViewById(R.id.remarksRV);
 
-        //First
-        requestIdTV = (TextView) rootView.findViewById(R.id.requestIdTV);
-        empNameTV = (TextView) rootView.findViewById(R.id.empNameTV);
-        statusTV = (TextView) rootView.findViewById(R.id.statusTV);
+        //First layout
+        ticketIdTV = (TextView) rootView.findViewById(R.id.ticketIdTV);
+        ticketEmpNameTV = (TextView) rootView.findViewById(R.id.ticketEmpNameTV);
+        ticketStatusTV = (TextView) rootView.findViewById(R.id.ticketStatusTV);
         dateWorkedLl = (LinearLayout) rootView.findViewById(R.id.dateWorkedLl);
         dateWorkedTV = (TextView) rootView.findViewById(R.id.dateWorkedTV);
-        submittedByTV = (TextView) rootView.findViewById(R.id.submittedByTV);
-        pendingWithTV = (TextView) rootView.findViewById(R.id.pendingWithTV);
-        startDateTV = (TextView) rootView.findViewById(R.id.startDateTV);
-        endDateTV = (TextView) rootView.findViewById(R.id.endDateTV);
-        daysTV = (TextView) rootView.findViewById(R.id.daysTV);
+        ticketSubmittedByTV = (TextView) rootView.findViewById(R.id.ticketSubmittedByTV);
+        ticketPendingWithTV = (TextView) rootView.findViewById(R.id.ticketPendingWithTV);
+        categoryTV = (TextView) rootView.findViewById(R.id.categoryTV);
+        subCategoryTV = (TextView) rootView.findViewById(R.id.subCategoryTV);
+        priorityTV = (TextView) rootView.findViewById(R.id.priorityTV);
+        createdOnTV = (TextView) rootView.findViewById(R.id.createdOnTV);
+        descriptionTV = (TextView) rootView.findViewById(R.id.descriptionTV);
+        subjectTV = (TextView) rootView.findViewById(R.id.subjectTV);
+        createdOnTV = (TextView) rootView.findViewById(R.id.createdOnTV);
+
+        sendViewRequestSummaryData();
 
     }
-/*
 
     private void sendViewRequestSummaryData() {
-        requestDetail = new GetWFHRequestDetail();
-        requestDetail.setReqID(getEmpWFHResponseItem.getReqID());
-        requestDetail.setAction(AppsConstant.VIEW_ACTION);
+        requestDetail = new GetTicketDetailRequestModel();
+        if(ticketItem!=null && ticketItem.getTicketID()!=null && !ticketItem.getTicketID().equalsIgnoreCase("")) {
+            requestDetail.setTicketID(ticketItem.getTicketID());
+        }
+        requestDetail.setSimpleOrAdvance(ticketItem.getSimpleOrAdvance());
+
         Utility.showHidePregress(progressbar, true);
         CommunicationManager.getInstance().sendPostRequest(this,
-                AppRequestJSONString.WFHSummaryDetails(requestDetail),
-                CommunicationConstant.API_GET_WFH_REQUEST_DETAIL, true);
+                AppRequestJSONString.ticketSummaryDetails(requestDetail),
+                CommunicationConstant.API_GET_TICKETS_DETAIL, true);
     }
 
-    private void sendWithdrawRequestData() {
+  /*  private void sendWithdrawRequestData() {
         requestDetail = new GetWFHRequestDetail();
         requestDetail.setReqStatus(getEmpWFHResponseItem.getStatus());
         requestDetail.setReqID(getEmpWFHResponseItem.getReqID());
@@ -162,8 +184,7 @@ public class ViewTicketFragment extends BaseFragment {
         CommunicationManager.getInstance().sendPostRequest(this,
                 AppRequestJSONString.WFHSummaryDetails(requestDetail),
                 CommunicationConstant.API_WITHDRAW_WFH_REQUEST, true);
-    }
-*/
+    }*/
 
     @Override
     public void validateResponse(ResponseData response) {
@@ -173,16 +194,18 @@ public class ViewTicketFragment extends BaseFragment {
                 String str = response.getResponseData();
                 Log.d("TAG", "Ticket detail Response : " + str);
                 getTicketDetailResponseModel = GetTicketDetailResponseModel.create(str);
-              /*  if (getTicketDetailResponseModel != null && getTicketDetailResponseModel.getGetTicketDetailResult() != null
-                        && getTicketDetailResponseModel.getGetTicketDetailResult().getErrorCode().equalsIgnoreCase(AppsConstant.SUCCESS)
-                        && getTicketDetailResponseModel.getGetTicketDetailResult()!=null) {
-                    updateUI(getTicketDetailResponseModel.getGetWFHRequestDetailResult().getWFHRequestDetail());
-                    refreshRemarksList(getTicketDetailResponseModel.getGetWFHRequestDetailResult().getWFHRequestDetail().getRemarkList());
-                    refreshDocumentList(getTicketDetailResponseModel.getGetWFHRequestDetailResult().getWFHRequestDetail().getAttachments());
-                }*/
+
+                if (getTicketDetailResponseModel != null && getTicketDetailResponseModel.
+                        getGetTicketDetailResult() != null
+                        && getTicketDetailResponseModel.getGetTicketDetailResult().
+                        getErrorCode().equalsIgnoreCase(AppsConstant.SUCCESS)) {
+                    updateUI(getTicketDetailResponseModel.getGetTicketDetailResult());
+                    refreshRemarksList(getTicketDetailResponseModel.getGetTicketDetailResult().getRemarks());
+                    refreshDocumentList(getTicketDetailResponseModel.getGetTicketDetailResult().getDocList());
+                }
 
                 break;
-            case CommunicationConstant.API_WITHDRAW_WFH_REQUEST:
+           /* case CommunicationConstant.API_WITHDRAW_WFH_REQUEST:
                 String strResponse = response.getResponseData();
                 Log.d("TAG", "WFH Response : " + strResponse);
                 WithdrawWFHResponse withdrawWFHResponse = WithdrawWFHResponse.create(strResponse);
@@ -192,22 +215,29 @@ public class ViewTicketFragment extends BaseFragment {
                 }else {
                     new AlertCustomDialog(getActivity(), withdrawWFHResponse.getWithdrawWFHRequestResult().getErrorMessage());
                 }
-                break;
+                break;*/
             default:
                 break;
         }
         super.validateResponse(response);
     }
 
-    private void updateUI(WFHRequestDetailItem item){
-        submittedByTV.setText(item.getSubmittedBy());
-        pendingWithTV.setText(item.getPendWithName());
-        requestIdTV.setText(item.getReqCode());
-        empNameTV.setText(item.getForEmpName());
-        statusTV.setText(item.getStatusDesc());
-        startDateTV.setText(item.getStartDate());
-        endDateTV.setText(item.getEndDate());
-        daysTV.setText(item.getTotalDays()+" " + "day(s)");
+    private void updateUI(GetTicketDetailResultModel item){
+        subCategoryLl.setVisibility(View.VISIBLE);
+       // ticketSubmittedByTV.setText(item.getSubmittedBy());
+        ticketPendingWithTV.setText(item.getPendingWith());
+        ticketIdTV.setText(item.getTicketCode());
+        ticketEmpNameTV.setText(item.getCustomerEmpName());
+        ticketStatusTV.setText(item.getStatusDesc());
+        categoryTV.setText(item.getCategoryDesc());
+        if(item.getSimpleOrAdvance()!=null && item.getSimpleOrAdvance().equalsIgnoreCase("S")){
+            subCategoryLl.setVisibility(View.GONE);
+        }
+        subCategoryTV.setText(item.getSubCategoryDesc());
+        priorityTV.setText(item.getTicketPriorityDesc());
+        createdOnTV.setText(item.getDate());
+        subjectTV.setText(item.getSubject());
+        descriptionTV.setText(item.getComment());
         setupButtons(item);
     }
 
@@ -239,7 +269,7 @@ public class ViewTicketFragment extends BaseFragment {
         }
     }
 
-    private void setupButtons(WFHRequestDetailItem item){
+    private void setupButtons(GetTicketDetailResultModel item){
         if(item.getButtons()!=null){
             for(String button : item.getButtons() ){
                 if(button.equalsIgnoreCase(AppsConstant.WITHDRAW)){

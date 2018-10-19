@@ -389,7 +389,8 @@ public class WorkFromHomeRequestFragment extends BaseFragment {
             sendViewRequestSummaryData();
             getSearchEmployeeData();
         } else if (employeeLeaveModel != null && employeeLeaveModel.getReqID() != null
-                && !employeeLeaveModel.getReqID().equalsIgnoreCase("0")) {   //Approval edit
+                && !employeeLeaveModel.getReqID().equalsIgnoreCase("0")) {
+            //Approval edit
             if (employeeLeaveModel.getReqType() != null && employeeLeaveModel.getReqType().equalsIgnoreCase(AppsConstant.WFH_EDIT)) {
                 reqId = employeeLeaveModel.getReqID();
                 remarksDataLl.setVisibility(View.VISIBLE);
@@ -397,7 +398,8 @@ public class WorkFromHomeRequestFragment extends BaseFragment {
                 disabledFieldData();
             }
 
-            if (employeeLeaveModel.getReqType() != null && employeeLeaveModel.getReqType().equalsIgnoreCase(AppsConstant.WFH_WITHDRAWAL)) {
+            if (employeeLeaveModel.getReqType() != null &&
+                    employeeLeaveModel.getReqType().equalsIgnoreCase(AppsConstant.WFH_WITHDRAWAL)) {
                 reqId = employeeLeaveModel.getReqID();
                 remarksDataLl.setVisibility(View.VISIBLE);
                 sendViewWFHRequestSummaryData();

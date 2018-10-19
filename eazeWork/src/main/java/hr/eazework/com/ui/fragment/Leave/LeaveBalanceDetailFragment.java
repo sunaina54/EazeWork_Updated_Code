@@ -718,13 +718,8 @@ public class LeaveBalanceDetailFragment extends BaseFragment {
                         CreateNewLeaveFragment requestFragment = new CreateNewLeaveFragment();
                         requestFragment.setLeaveReqsItem(dataSet.get(listPosition));
                         Fragment fragment=requestFragment;
-
                         mUserActionListener.performUserActionFragment(IAction.CREATE_NEW_LEAVE,fragment,null);
-                        /*FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                        fragmentTransaction.replace(R.id.view_advance_expense, requestFragment);
-                        fragmentTransaction.addToBackStack(null);
-                        fragmentTransaction.commit();*/
+
                     }
 
                     if(item.getStatusDesc()!=null && !item.getStatusDesc().equalsIgnoreCase(AppsConstant.DRAFT)){
@@ -732,11 +727,7 @@ public class LeaveBalanceDetailFragment extends BaseFragment {
                         viewLeaveFragment.setLeaveReqsItem(dataSet.get(listPosition));
                         Fragment fragment=viewLeaveFragment;
                         mUserActionListener.performUserActionFragment(IAction.VIEW_LEAVE,fragment,null);
-                      /*  FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                        fragmentTransaction.replace(R.id.view_advance_expense, viewLeaveFragment);
-                        fragmentTransaction.addToBackStack(null);
-                        fragmentTransaction.commit();*/
+
                     }
                 }
             });

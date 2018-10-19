@@ -41,6 +41,7 @@ import hr.eazework.com.model.GetDetailsOnInputChangeRequestModel;
 import hr.eazework.com.model.GetEmpWFHRequestsModel;
 import hr.eazework.com.model.GetHeadDetailsWithPolicyRequestModel;
 import hr.eazework.com.model.GetODRequestDetail;
+import hr.eazework.com.model.GetTicketDetailRequestModel;
 import hr.eazework.com.model.GetTimeModificationRequestDetail;
 import hr.eazework.com.model.GetWFHRequestDetail;
 import hr.eazework.com.model.HolidayRequestModel;
@@ -520,15 +521,16 @@ public class AppRequestJSONString {
         loginData.setSessionID(SharedPreference.getSessionId());
         item.setLoginData(loginData);
         if(item.getTicketDetail()!=null &&
-                item.getTicketDetail().getDocList()!=null && item.getTicketDetail().getDocList().size()>0){
+                item.getTicketDetail().getDocList()!=null &&
+                item.getTicketDetail().getDocList().size()>0){
             item.getTicketDetail().setDocList(prepareDocList(item.getTicketDetail().getDocList()));
         }
 
-        if(item.getTicketDetail()!=null
+       /* if(item.getTicketDetail()!=null
                 && item.getTicketDetail().getDocList()!=null
                 && item.getTicketDetail().getDocList().size()>0){
             item.getTicketDetail().setDocList(prepareDocList(item.getTicketDetail().getDocList()));
-        }
+        }*/
 
         String request=item.serialize();
         Log.d("TAG","Ticket Submission Request : "+request);
@@ -594,6 +596,16 @@ public class AppRequestJSONString {
         item.setLoginData(loginData);
         String request=item.serialize();
         Log.d("TAG","WFH Summary Request: "+request);
+        return request;
+    }
+
+    public static String ticketSummaryDetails(GetTicketDetailRequestModel item){
+        AdvanceLoginDataRequestModel loginData = new AdvanceLoginDataRequestModel();
+        loginData.setDeviceID(MyApplication.getDeviceId());
+        loginData.setSessionID(SharedPreference.getSessionId());
+        item.setLoginData(loginData);
+        String request=item.serialize();
+        Log.d("TAG","Ticket Summary Request: "+request);
         return request;
     }
 

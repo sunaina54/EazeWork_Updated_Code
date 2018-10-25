@@ -161,7 +161,7 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
         showHideProgressView(true);
         MainActivity.isAnimationLoaded = false;
         getHomeData();
-       // getAnnouncementData();
+        // getAnnouncementData();
 
         MenuItemModel model = ModelManager.getInstance().getMenuItemModel();
         if (model == null) {
@@ -199,8 +199,8 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
         pager = (EnhancedWrapContentViewPager) rootView.findViewById(R.id.pager);
         btnViewPagerLayout = (LinearLayout) rootView.findViewById(R.id.btnViewPagerLayout);
         pagerlayout = (LinearLayout) rootView.findViewById(R.id.pagerlayout);
-       // viewAnnouncementData();
-         getAnnouncementData();
+        // viewAnnouncementData();
+        getAnnouncementData();
         pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -213,7 +213,7 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
             @Override
             public void onPageSelected(int position) {
                 currentPageNumber = position;
-                Log.d("current slide",currentPageNumber+"");
+                Log.d("current slide", currentPageNumber + "");
 
             }
 
@@ -657,13 +657,13 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
                 }
             }
 
-            itemModel = menuItemModel.getItemModel(MenuItemModel.TICKET_KEY) ;
+            itemModel = menuItemModel.getItemModel(MenuItemModel.TICKET_KEY);
             if (itemModel != null && !itemModel.getIsTicketAccess().equalsIgnoreCase("N")) {
-                TicketResultModel ticketResultModel= ModelManager.getInstance().getTicketResult();
+                TicketResultModel ticketResultModel = ModelManager.getInstance().getTicketResult();
 
                 MainItemModel item = new MainItemModel("Ticket",
                         getString(R.string.msg_tickets), getString(R.string.open_tickets),
-                        "" + (ticketResultModel == null ? "0" : ticketResultModel.getOpenCount()), R.drawable.expense_claim, true);
+                        "" + (ticketResultModel == null ? "0" : ticketResultModel.getOpenCount()), R.drawable.ticket, true);
                 item.setObjectId(itemModel.getmObjectId());
                 itemList.add(item);
             }
@@ -709,8 +709,8 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
                 SharedPreference.saveSharedPreferenceData(AppsConstant.Project_NAME,
                         AppsConstant.TICKET_MENU_ACCESS, itemModel.getIsTicketAccess(), context);
                 list.add("Ticket");
-               // ticketAccess = AppsConstant.TICKET_ACCESS_SIMPLE;
-              //  preferences.saveString(AppsConstant.TICKET_ACCESS_KEY,ticketAccess);
+                // ticketAccess = AppsConstant.TICKET_ACCESS_SIMPLE;
+                //  preferences.saveString(AppsConstant.TICKET_ACCESS_KEY,ticketAccess);
 
             }
 
@@ -892,10 +892,8 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
                 mUserActionListener.performUserAction(IAction.EXPENSE_CLAIM_SUMMARY, null, null);
             } else if (MenuItemModel.CREATE_ADVANCE_KEY.equalsIgnoreCase(itemModel.getmObjectId())) {
                 mUserActionListener.performUserAction(IAction.ADVANCE_EXPENSE_SUMMARY, null, null);
-            }else if(MenuItemModel.TICKET_KEY.equalsIgnoreCase(itemModel.getmObjectId())){
+            } else if (MenuItemModel.TICKET_KEY.equalsIgnoreCase(itemModel.getmObjectId())) {
                 mUserActionListener.performUserAction(IAction.RAISE_TICKET_ADV_SUMMARY, null, null);
-
-
             }
         }
     }
@@ -980,7 +978,7 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
         }
     }
 
-    private void updateTicketData(JSONObject ticketData){
+    private void updateTicketData(JSONObject ticketData) {
         if (ticketData != null) {
             String ticketResult = ticketData.toString();
             ModelManager.getInstance().setTicketResultModel(ticketResult);
@@ -1064,6 +1062,7 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
                     JSONObject getMenuDataResult = (new JSONObject(responseData)).optJSONObject("GetMenuDataResult");
                     JSONArray menuJsonArray = getMenuDataResult.optJSONArray("menuDataList");
                     ModelManager.getInstance().setMenuItemModel(menuJsonArray);
+                    Log.d("Menu response :", getMenuDataResult.optJSONArray("menuDataList").toString());
                     populateHomeData();
                     updateHomeData();
 
@@ -1125,14 +1124,14 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
             case CommunicationConstant.API_GET_ANNOUNCEMENT:
                 String response1 = response.getResponseData();
                 Log.d("TAG", "Announcement data : " + response1);
-                  homeCarasoleRL.setVisibility(View.GONE);
+                homeCarasoleRL.setVisibility(View.GONE);
                 announcementRes = GetAnnouncementResultResponseModel.create(response1);
                 if (announcementRes != null && announcementRes.getGetAnnouncementResult() != null
                         && announcementRes.getGetAnnouncementResult().getErrorCode().equalsIgnoreCase(AppsConstant.SUCCESS)) {
                     if (announcementRes.getGetAnnouncementResult().getAnnouncementItems() != null &&
                             announcementRes.getGetAnnouncementResult().getAnnouncementItems().size() > 0) {
                         homeCarasoleRL.setVisibility(View.VISIBLE);
-                        slideCount=announcementRes.getGetAnnouncementResult().getAnnouncementItems().size();
+                        slideCount = announcementRes.getGetAnnouncementResult().getAnnouncementItems().size();
                         refreshAnnouncementResult(announcementRes.getGetAnnouncementResult().getAnnouncementItems());
                     }
                 } else {
@@ -1452,7 +1451,6 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
         }
 
 
-
     }
 
 
@@ -1465,7 +1463,7 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
             pager.setAdapter(viewPagerAdapter);
             if (announcementRes.getGetAnnouncementResult().
                     getAnnouncementItems().size() > 1) {
-                Log.d("list animation:","true list size");
+                Log.d("list animation:", "true list size");
                 setupTimer();
 
             }
@@ -1474,21 +1472,21 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
 
     }
 
-    private void viewAnnouncementData(){
-       ArrayList <AnnouncementItemsModel> itemsModel=new ArrayList<>();
-        itemsModel.add(new AnnouncementItemsModel(0,"http://cssslider.com/sliders/demo-20/data1/images/picjumbo.com_img_4635.jpg",getResources().getDimensionPixelSize(R.dimen.slider_image_corner)));
-        itemsModel.add(new AnnouncementItemsModel(1,"http://cssslider.com/sliders/demo-12/data1/images/picjumbo.com_hnck1995.jpg",getResources().getDimensionPixelSize(R.dimen.slider_image_corner)));
-        itemsModel.add(new AnnouncementItemsModel(2,"http://cssslider.com/sliders/demo-19/data1/images/picjumbo.com_hnck1588.jpg",getResources().getDimensionPixelSize(R.dimen.slider_image_corner)));
-        GetAnnouncementResult announcementResult=new GetAnnouncementResult();
+    private void viewAnnouncementData() {
+        ArrayList<AnnouncementItemsModel> itemsModel = new ArrayList<>();
+        itemsModel.add(new AnnouncementItemsModel(0, "http://cssslider.com/sliders/demo-20/data1/images/picjumbo.com_img_4635.jpg", getResources().getDimensionPixelSize(R.dimen.slider_image_corner)));
+        itemsModel.add(new AnnouncementItemsModel(1, "http://cssslider.com/sliders/demo-12/data1/images/picjumbo.com_hnck1995.jpg", getResources().getDimensionPixelSize(R.dimen.slider_image_corner)));
+        itemsModel.add(new AnnouncementItemsModel(2, "http://cssslider.com/sliders/demo-19/data1/images/picjumbo.com_hnck1588.jpg", getResources().getDimensionPixelSize(R.dimen.slider_image_corner)));
+        GetAnnouncementResult announcementResult = new GetAnnouncementResult();
         announcementResult.setAnnouncementItems(itemsModel);
         announcementRes = new GetAnnouncementResultResponseModel();
         announcementRes.setGetAnnouncementResult(announcementResult);
-        slideCount=announcementRes.getGetAnnouncementResult().getAnnouncementItems().size();
+        slideCount = announcementRes.getGetAnnouncementResult().getAnnouncementItems().size();
         refreshAnnouncementResult(announcementRes.getGetAnnouncementResult().getAnnouncementItems());
     }
 
     private void setupTimer() {
-        mustLoopSlides=true;
+        mustLoopSlides = true;
         try {
             if (mustLoopSlides) {
                 handler.postDelayed(new Runnable() {
@@ -1516,7 +1514,6 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
             e.printStackTrace();
         }
     }
-
 
 
 }

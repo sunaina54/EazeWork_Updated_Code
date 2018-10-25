@@ -14,7 +14,7 @@ import java.util.List;
 public class AppsConstant {
 
 
-    public static String RESUBMIT="Resubmit",RETURN="Return",
+    public static String RESUBMIT="Resubmit",RETURN="Return",CLOSE="Close",REDIRECT="Redirect",
             DELETE="Delete",SAVE_DRAFT="Save",SUBMIT="Submit",
             APPROVE="Approve",REJECT="Reject",WITHDRAW="Withdraw",DRAFT="Draft",PRESENT="Present",ABSENT="Absent",LEAVE_EDIT="3",
             LEAVE_WITHDRAWAL="5",TOUR_EDIT="11",TOUR_WITHDRAWAL="12",VIEW_ACTION="V",EDIT_ACTION="E"

@@ -78,6 +78,32 @@
                 android:gravity="center"
                 android:textColor="@color/white"
                 android:textSize="@dimen/font_12" />
+         <Button
+             android:visibility="gone"
+             android:layout_margin="@dimen/margin_7"
+             android:id="@+id/closeBTN"
+             android:layout_width="@dimen/margin_70"
+             android:layout_height="@dimen/margin_30"
+             style="@style/button"
+             android:layout_marginRight="5dp"
+             android:background="@drawable/rounded_corner_light_blue"
+             android:text="@string/close"
+             android:gravity="center"
+             android:textColor="@color/white"
+             android:textSize="@dimen/font_12" />
+         <Button
+             android:visibility="gone"
+             android:layout_margin="@dimen/margin_7"
+             android:id="@+id/redirectBTN"
+             android:layout_width="@dimen/margin_70"
+             android:layout_height="@dimen/margin_30"
+             style="@style/button"
+             android:layout_marginRight="5dp"
+             android:background="@drawable/rounded_corner_light_blue"
+             android:text="@string/redirect"
+             android:gravity="center"
+             android:textColor="@color/white"
+             android:textSize="@dimen/font_12" />
             <Button
                 style="@style/button"
                 android:layout_margin="@dimen/margin_7"

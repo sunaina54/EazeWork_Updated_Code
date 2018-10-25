@@ -160,17 +160,17 @@ public class ApproveScreen extends BaseFragment implements AdapterView.OnItemCli
 
             itemModel = menuItemModel.getItemModel(MenuItemModel.TICKET_KEY);
             if(itemModel!=null && !itemModel.getIsTicketAccess().equalsIgnoreCase("N")){
-                /*PendingCountModel model = modelManager.getPendingCountModel();
+                PendingCountModel model = modelManager.getPendingCountModel();
                 String count = "";
                 if (model.getPendingList() != null) {
                     for (int i = 0; i < model.getPendingList().size(); i++) {
                         PendingCountModel countModel = model.getPendingList().get(i);
-                        if (countModel.getmReqDesc().equalsIgnoreCase("Advance")) {
+                        if (countModel.getmReqDesc().equalsIgnoreCase("Ticket")) {
                             count = countModel.getmCount();
                         }
                     }
-                }*/
-                itemList.add(new MainItemModel("Ticket", "","Pending","" + "1", R.drawable.advance_expense));
+                }
+                itemList.add(new MainItemModel("Ticket", "","Pending","" + count, R.drawable.ticket));
             }
             if (adapter != null) {
                 adapter.updateData(itemList);

@@ -104,7 +104,7 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
     private String fromButton;
     private String empId, customerCorpId;
     private boolean isSubmitClicked = true;
-    private Button saveDraftBTN, deleteBTN, submitBTN, rejectBTN, approvalBTN;
+    private Button saveDraftBTN, closeBTN, redirectBTN;
     private Preferences preferences;
     private TextView empNameTV, ticketTypeTV, empCodeTV, categoryTV, subCategoryTV, priorityTV, feedbackRatingTV;
     private View progressbar;
@@ -129,7 +129,7 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
     private String ticketId = "";
     private String ticketFor = "";
     private String categoryCode = "", categoryType = "", subCategoryCode = "";
-    private String feedbackCode = "";
+    private String feedbackCode = "", empCode = "";
     private String priorityCode = "", ticketTypeCode = "";
     private TourResponseModel tourResponseModel;
     private GetTicketDetailResponseModel getTicketDetailResponseModel;
@@ -155,16 +155,8 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
         this.screenName = screenName;
     }
 
-    private TicketItem ticketItem, pendingTicketItem;
+    private TicketItem ticketItem;
 
-    /* public TicketItem getPendingTicketItem() {
-         return pendingTicketItem;
-     }
-
-     public void setPendingTicketItem(TicketItem pendingTicketItem) {
-         this.pendingTicketItem = pendingTicketItem;
-     }
- */
     public TicketItem getTicketItem() {
         return ticketItem;
     }
@@ -250,6 +242,8 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
         priorityTV = (TextView) rootView.findViewById(R.id.priorityTV);
         feedbackRatingTV = (TextView) rootView.findViewById(R.id.ratingTV);
         saveDraftBTN = (Button) rootView.findViewById(R.id.saveDraftBTN);
+        closeBTN = (Button) rootView.findViewById(R.id.closeBTN);
+        redirectBTN = (Button) rootView.findViewById(R.id.redirectBTN);
         descriptionET = (EditText) rootView.findViewById(R.id.descriptionET);
         remarksET = (EditText) rootView.findViewById(R.id.remarksET);
         subjectET = (EditText) rootView.findViewById(R.id.subjectET);
@@ -325,9 +319,23 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
                             categoryTV.setText(categoryListItem.getValue());
                             //   categoryType = categoryListItem.getValue();
                             categoryCode = categoryListItem.getCode();
-                            if(ticketPageInitResponseModel!=null && ticketPageInitResponseModel.getGetTicketPageInitResult()!=null
-                                    && ticketPageInitResponseModel.getGetTicketPageInitResult().getSubCategoryYN()!=null &&
-                                    ticketPageInitResponseModel.getGetTicketPageInitResult().getSubCategoryYN().equalsIgnoreCase("Y")){
+
+                            if (screenName.equalsIgnoreCase(TicketApprovalFragment.screenName)) {
+                                redirectBTN.setVisibility(View.GONE);
+                                closeBTN.setVisibility(View.VISIBLE);
+                                if (categoryCode != null && !categoryCode.equalsIgnoreCase("")
+                                        && getTicketDetailResponseModel != null && getTicketDetailResponseModel.getGetTicketDetailResult() != null
+                                        && getTicketDetailResponseModel.getGetTicketDetailResult().getCategoryID() != null
+                                        && !getTicketDetailResponseModel.getGetTicketDetailResult().getCategoryID().equalsIgnoreCase("")) {
+                                    if (!categoryCode.equalsIgnoreCase(getTicketDetailResponseModel.getGetTicketDetailResult().getCategoryID())) {
+                                        redirectBTN.setVisibility(View.VISIBLE);
+                                        closeBTN.setVisibility(View.GONE);
+                                    }
+                                }
+                            }
+                            if (ticketPageInitResponseModel != null && ticketPageInitResponseModel.getGetTicketPageInitResult() != null
+                                    && ticketPageInitResponseModel.getGetTicketPageInitResult().getSubCategoryYN() != null &&
+                                    ticketPageInitResponseModel.getGetTicketPageInitResult().getSubCategoryYN().equalsIgnoreCase("Y")) {
                                 sendSubCategoryRequestData(categoryCode);
 
                             }
@@ -343,26 +351,31 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
         subCategoryTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (subCategoryList != null && subCategoryList.size() > 0
-                        && subCategoryYN.equalsIgnoreCase(AppsConstant.YES)) {
 
-                    CustomBuilder categoryDialog = new CustomBuilder(getContext(), "Select Sub-Category", true);
-                    categoryDialog.setSingleChoiceItems(subCategoryList, null, new CustomBuilder.OnClickListener() {
-                        @Override
-                        public void onClick(CustomBuilder builder, Object selectedObject) {
-                            subCategoryItem = (CategoryListItem) selectedObject;
-                            subCategoryTV.setText(subCategoryItem.getValue());
-                            //   categoryType = categoryListItem.getValue();
-                            subCategoryCode = subCategoryItem.getCode();
+                if (categoryCode != null && !categoryCode.equalsIgnoreCase("")) {
+                    if (subCategoryList != null && subCategoryList.size() > 0
+                            && subCategoryYN.equalsIgnoreCase(AppsConstant.YES)) {
 
-                            builder.dismiss();
-                        }
-                    });
-                    categoryDialog.show();
+                        CustomBuilder categoryDialog = new CustomBuilder(getContext(), "Select Sub-Category", true);
+                        categoryDialog.setSingleChoiceItems(subCategoryList, null, new CustomBuilder.OnClickListener() {
+                            @Override
+                            public void onClick(CustomBuilder builder, Object selectedObject) {
+                                subCategoryItem = (CategoryListItem) selectedObject;
+                                subCategoryTV.setText(subCategoryItem.getValue());
+                                //   categoryType = categoryListItem.getValue();
+                                subCategoryCode = subCategoryItem.getCode();
 
+                                builder.dismiss();
+                            }
+                        });
+                        categoryDialog.show();
+
+                    }
                 } else {
+
                     new AlertCustomDialog(context, "Please Select Category");
                     return;
+
                 }
             }
         });
@@ -441,11 +454,28 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
                 doSubmitOperation();
             }
         });
+        closeBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fromButton = "Close";
+                doSubmitOperation();
+            }
+        });
+        redirectBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fromButton = "Redirect";
+                doSubmitOperation();
+            }
+        });
+        sendAdvanceRequestData();
 
         if (ticketItem != null && ticketItem.getTicketID() != null
                 && !ticketItem.getTicketID().equalsIgnoreCase("0")) {
+
             if (screenName.equalsIgnoreCase(TicketApprovalFragment.screenName)) {
                 ticketId = ticketItem.getTicketID();
+                sendTicketInitRequestData();
                 remarksDataLl.setVisibility(View.VISIBLE);
                 remarksLinearLayout1.setVisibility(View.VISIBLE);
                 sendViewRequestSummaryData();
@@ -453,6 +483,7 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
 
             } else if (screenName.equalsIgnoreCase(TicketSummaryFragment.screenName)) {
                 ticketId = ticketItem.getTicketID();
+                sendTicketInitRequestData();
                 remarksDataLl.setVisibility(View.VISIBLE);
                 remarksLinearLayout1.setVisibility(View.VISIBLE);
                 sendViewRequestSummaryData();
@@ -470,7 +501,8 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
         else if (ticketId != null && ticketId.equalsIgnoreCase("0")) {
             uploadFileList = new ArrayList<SupportDocsItemModel>();
             remarksLinearLayout1.setVisibility(View.GONE);
-            sendAdvanceRequestData();
+            //sendAdvanceRequestData();
+            sendTicketInitRequestData();
 
         }
 
@@ -489,13 +521,18 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
 
     public void sendTicketInitRequestData() {
         initRequestModel = new TicketPageInitRequestModel();
-        if (ticketFor != null && !ticketFor.equalsIgnoreCase("")) {
-            initRequestModel.setSelfOrOther(ticketFor);
+        if(screenName.equalsIgnoreCase(TicketApprovalFragment.screenName)){
+            initRequestModel.setSelfOrOther("S");
+        }else {
+            if (ticketFor != null && !ticketFor.equalsIgnoreCase("")) {
+                initRequestModel.setSelfOrOther(ticketFor);
+            }
         }
+
         initRequestModel.setTicektID(ticketId);
         Utility.showHidePregress(progressbar, true);
-        MainActivity.isAnimationLoaded = false;
-        ((MainActivity) getActivity()).showHideProgress(true);
+        // MainActivity.isAnimationLoaded = false;
+        //((MainActivity) getActivity()).showHideProgress(true);
         CommunicationManager.getInstance().sendPostRequest(this,
                 AppRequestJSONString.getTicketPageInitRequestData(initRequestModel),
                 CommunicationConstant.API_GET_TICKET_PAGE_INIT, true);
@@ -505,7 +542,7 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
         categoryType = "SubCategory";
         subCategoryRequestModel = new SubCategoryRequestModel();
         if (ticketFor != null && !ticketFor.equalsIgnoreCase("")) {
-            initRequestModel.setSelfOrOther(ticketFor);
+            subCategoryRequestModel.setSelfOrOther(ticketFor);
         }
         PageInputModel pageInputModel = new PageInputModel();
         pageInputModel.setParamCode(categoryCode);
@@ -543,10 +580,10 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
                     //String[] empname = item.getName().split("\\(");
                     empNameTV.setText(item.getName());
                     empId = item.getCustomerEmpID();
+                    customerCorpId=item.getCustomerCorpID();
                     //  empCodeTV.setText(item.getCustomerCorpID());
                     employItem = item;
                 }
-
             }
         }
         final SupportDocsItemModel fileObj = new SupportDocsItemModel();
@@ -764,7 +801,6 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
                                     String seqNo = String.valueOf(i + 1);
                                     Log.d("seqNo", "seqNo");
                                     uploadFileList.add(fileObj);
-
                                     break;
                                 }
                             } else {
@@ -810,7 +846,9 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
         ticketDetailModel = new TicketDetailModel();
         Log.d("simpleOrAdvance value", simpleOrAdvance);
 
-        if (fromButton.equalsIgnoreCase(AppsConstant.SUBMIT)) {
+        if (fromButton.equalsIgnoreCase(AppsConstant.SUBMIT)
+                || fromButton.equalsIgnoreCase(AppsConstant.CLOSE)
+                || fromButton.equalsIgnoreCase(AppsConstant.REDIRECT)) {
 
             if (empNameTV.getText().toString().equalsIgnoreCase("")) {
                 isSubmitClicked = true;
@@ -856,11 +894,24 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
                 new AlertCustomDialog(context, "Please enter description");
                 return;
             }
-            if (screenName.equalsIgnoreCase(TicketSummaryFragment.screenName)) {
-                if (remarksET.getText().toString().equalsIgnoreCase("")) {
-                    isSubmitClicked = true;
-                    new AlertCustomDialog(context, "Please enter remarks");
-                    return;
+            if (screenName.equalsIgnoreCase(TicketSummaryFragment.screenName)
+                    || screenName.equalsIgnoreCase(TicketApprovalFragment.screenName)) {
+                String status = "";
+                if (getTicketDetailResponseModel != null && getTicketDetailResponseModel.getGetTicketDetailResult() != null
+                        && getTicketDetailResponseModel.getGetTicketDetailResult().getStatusDesc() != null
+                        && !getTicketDetailResponseModel.getGetTicketDetailResult().getStatusDesc().equalsIgnoreCase("")) {
+                    status = getTicketDetailResponseModel.getGetTicketDetailResult().getStatusDesc();
+
+                }
+                if (fromButton.equalsIgnoreCase(AppsConstant.SUBMIT) ||
+                        fromButton.equalsIgnoreCase(AppsConstant.REDIRECT)) {
+                    if (!status.equalsIgnoreCase(AppsConstant.DRAFT)) {
+                        if (remarksET.getText().toString().equalsIgnoreCase("")) {
+                            isSubmitClicked = true;
+                            new AlertCustomDialog(context, "Please enter remarks");
+                            return;
+                        }
+                    }
                 }
             }
 
@@ -899,8 +950,9 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
             ticketDetailModel.setSubCategoryID(subCategoryCode);
             ticketDetailModel.setSubject(subjectET.getText().toString());
             ticketDetailModel.setComment(descriptionET.getText().toString());
-            if (screenName.equalsIgnoreCase(TicketSummaryFragment.screenName)) {
-                ticketFor="S";
+            if (screenName.equalsIgnoreCase(TicketSummaryFragment.screenName)
+                    || screenName.equalsIgnoreCase(TicketApprovalFragment.screenName)) {
+                ticketFor = "S";
                 ticketDetailModel.setNewRemark(remarksET.getText().toString());
             }
             // ticketDetailModel.setFeedback(feedbackET.getText().toString());
@@ -929,67 +981,12 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
 
         }
 
-     /*   if (fromButton.equalsIgnoreCase(AppsConstant.APPROVE)) {
 
-            if (fromDate.equalsIgnoreCase("") || fromDate.equalsIgnoreCase("--/--/----")) {
-                new AlertCustomDialog(context, "Please Enter From Date");
-                return;
-            } else if (toDate.equalsIgnoreCase("") || toDate.equalsIgnoreCase("--/--/----")) {
-                new AlertCustomDialog(context, "Please Enter To Date");
-                return;
-            } else {
-                if (wfhSummaryResponse != null && wfhSummaryResponse.getGetWFHRequestDetailResult() != null
-                        && wfhSummaryResponse.getGetWFHRequestDetailResult().getWFHRequestDetail() != null
-                        && wfhSummaryResponse.getGetWFHRequestDetailResult().getWFHRequestDetail().getApprovalLevel() != null) {
-                    wfhRequestDetailModel.setApprovalLevel(Integer.parseInt(wfhSummaryResponse.getGetWFHRequestDetailResult().
-                            getWFHRequestDetail().getApprovalLevel()));
-                }
-
-                wfhRequestDetailModel.setStartDate(fromDate);
-                wfhRequestDetailModel.setEndDate(toDate);
-                wfhRequestDetailModel.setForEmpID(empId);
-                wfhRequestDetailModel.setReqID(reqId);
-                wfhRequestDetailModel.setStatus(status);
-                wfhRequestDetailModel.setRemarks(remarksET.getText().toString());
-                partialDayDataModel.setDayP50(dayP50);
-                partialDayDataModel.setDayFull(dayFull);
-                PartialDayModel partialDayModel = new PartialDayModel();
-                partialDayModel.setPartialDayData(partialDayDataModel);
-                wfhRequestDetailModel.setPartialDay(partialDayModel);
-                if (uploadFileList != null && uploadFileList.size() > 0) {
-                    for (int i = 0; i < uploadFileList.size(); i++) {
-                        SupportDocsItemModel model = uploadFileList.get(i);
-                        model.setSeqNo(i + 1);
-                        uploadFileList.set(i, model);
-                    }
-                }
-                wfhRequestDetailModel.setAttachments(uploadFileList);
-                WFHRequestModel wfhRequestModel = new WFHRequestModel();
-                wfhRequestModel.setWfhRequestDetail(wfhRequestDetailModel);
-                Utility.showHidePregress(progressbar,true);
-                MainActivity.isAnimationLoaded = false;
-                ((MainActivity) getActivity()).showHideProgress(true);
-                CommunicationManager.getInstance().sendPostRequest(this,
-                        AppRequestJSONString.WFHRequest(wfhRequestModel),
-                        CommunicationConstant.API_APPROVE_WFH_REQUEST, true);
-
-
-            }
-        }*/
-
-        if (fromButton.equalsIgnoreCase(AppsConstant.SAVE_AS_DRAFT)){
+        if (fromButton.equalsIgnoreCase(AppsConstant.SAVE_AS_DRAFT)) {
             if (empNameTV.getText().toString().equalsIgnoreCase("")) {
                 new AlertCustomDialog(context, getResources().getString(R.string.select_user));
                 return;
             }
-           /* if (getScreenName().equalsIgnoreCase(AppsConstant.PENDING_APPROVAL)) {
-             *//*   if (wfhSummaryResponse != null && wfhSummaryResponse.getGetWFHRequestDetailResult() != null
-                        && wfhSummaryResponse.getGetWFHRequestDetailResult().getWFHRequestDetail() != null
-                        && wfhSummaryResponse.getGetWFHRequestDetailResult().getWFHRequestDetail().getApprovalLevel() != null) {
-                    wfhRequestDetailModel.setApprovalLevel(Integer.parseInt(wfhSummaryResponse.getGetWFHRequestDetailResult().
-                            getWFHRequestDetail().getApprovalLevel()));
-                }*//*
-            }*/
             ticketDetailModel.setCustomerEmpID(empId);
             ticketDetailModel.setCustomerCorpID(customerCorpId);
 
@@ -1080,7 +1077,7 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
                         advanceRequestResponseModel.getGetAdvancePageInitResult().getErrorCode().
                                 equalsIgnoreCase(AppsConstant.SUCCESS)) {
                     extensionList = Arrays.asList(advanceRequestResponseModel.getGetAdvancePageInitResult().getDocValidation().getExtensions());
-                    sendTicketInitRequestData();
+                    //   sendTicketInitRequestData();
                 }
                 break;
 
@@ -1128,7 +1125,7 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
                         ticketTypeList = ticketPageInitResponseModel.getGetTicketPageInitResult().getTicketTypeList().getList();
                     }
                     // if(ticketPageInitResponseModel.getGetTicketPageInitResult().getSimpleOrAdvanceView()!=null) {
-                    if(ticketId.equalsIgnoreCase("0")) {
+                    if (ticketId.equalsIgnoreCase("0")) {
                         updateUI(ticketPageInitResponseModel.getGetTicketPageInitResult());
                     }
                     //}
@@ -1163,7 +1160,7 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
                     if (screenName != null && screenName.equalsIgnoreCase(TicketSummaryFragment.screenName)) {
                         isSubmitClicked = true;
                         CustomDialog.alertOkWithFinishFragment1(context, tourResponseModel.getSaveTicketResult().getErrorMessage(), mUserActionListener, IAction.RAISE_TICKET_ADV_SUMMARY, true);
-                    }else if (screenName != null && screenName.equalsIgnoreCase(TicketApprovalFragment.screenName)) {
+                    } else if (screenName != null && screenName.equalsIgnoreCase(TicketApprovalFragment.screenName)) {
                         isSubmitClicked = true;
                         CustomDialog.alertOkWithFinishFragment1(context, tourResponseModel.getSaveTicketResult().getErrorMessage(), mUserActionListener, IAction.TICKET_APPROVAL, true);
                     } else {
@@ -1185,7 +1182,7 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
                         getGetTicketDetailResult() != null
                         && getTicketDetailResponseModel.getGetTicketDetailResult().
                         getErrorCode().equalsIgnoreCase(AppsConstant.SUCCESS)) {
-                    sendTicketInitRequestData();
+
                     updateUIWithData(getTicketDetailResponseModel.getGetTicketDetailResult());
                     refreshRemarksList(getTicketDetailResponseModel.getGetTicketDetailResult().getRemarks());
                     uploadFileList = getTicketDetailResponseModel.getGetTicketDetailResult().getDocList();
@@ -1240,7 +1237,11 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
 
         if (contactList != null && ticketFor.equalsIgnoreCase("S")) {
             searchLayout.setVisibility(View.GONE);
-            empNameTV.setText(contactList.get(0).getName());
+            if (contactList.get(0).getEmpCode() != null
+                    && !contactList.get(0).getEmpCode().equalsIgnoreCase("")) {
+                empCode = contactList.get(0).getEmpCode();
+            }
+            empNameTV.setText(contactList.get(0).getName() + " " + "(" + empCode + ")");
             empId = contactList.get(0).getCustomerEmpID();
             customerCorpId = contactList.get(0).getCustomerCorpID();
 
@@ -1252,24 +1253,17 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
 
     }
 
-    private void setupButtons(GetTicketPageInitResultModel item) {
+    private void setupButtons(GetTicketDetailResultModel item) {
         if (item.getButtons() != null) {
             for (String button : item.getButtons()) {
-                if (button.equalsIgnoreCase(AppsConstant.DELETE)) {
-                    deleteBTN.setVisibility(View.VISIBLE);
+                if (button.equalsIgnoreCase(AppsConstant.CLOSE)) {
+                    closeBTN.setVisibility(View.VISIBLE);
                 }
-                if (button.equalsIgnoreCase(AppsConstant.SUBMIT)) {
-                    submitBTN.setVisibility(View.GONE);
-                }
-                if (button.equalsIgnoreCase(AppsConstant.DRAFT)) {
+
+                if (button.equalsIgnoreCase(AppsConstant.SAVE_AS_DRAFT)) {
                     saveDraftBTN.setVisibility(View.VISIBLE);
                 }
-                if (button.equalsIgnoreCase(AppsConstant.REJECT)) {
-                    rejectBTN.setVisibility(View.VISIBLE);
-                }
-                if (button.equalsIgnoreCase(AppsConstant.APPROVE)) {
-                    approvalBTN.setVisibility(View.VISIBLE);
-                }
+
             }
         }
     }
@@ -1281,17 +1275,17 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
     // Edit Mode (via Dashboard flow)
     private void updateUIWithData(GetTicketDetailResultModel item) {
         searchLayout.setVisibility(View.GONE);
-        // change ticketitem to item
-        if(ticketItem.getStatusDesc().equalsIgnoreCase(AppsConstant.DRAFT)){
+        if (item.getStatusDesc().equalsIgnoreCase(AppsConstant.DRAFT)) {
             plus_create_newIV.setVisibility(View.VISIBLE);
             ticketTypeLl.setVisibility(View.GONE);
+            remarksLinearLayout1.setVisibility(View.GONE);
 
 
-            if(ticketPageInitResponseModel!=null && ticketPageInitResponseModel.getGetTicketPageInitResult()!=null
-                    && ticketPageInitResponseModel.getGetTicketPageInitResult().getSubCategoryYN()!=null ){
-                if(ticketPageInitResponseModel.getGetTicketPageInitResult().
-                        getSubCategoryYN().equalsIgnoreCase("N")){
-                    subCategoryYN="N";
+            if (ticketPageInitResponseModel != null && ticketPageInitResponseModel.getGetTicketPageInitResult() != null
+                    && ticketPageInitResponseModel.getGetTicketPageInitResult().getSubCategoryYN() != null) {
+                if (ticketPageInitResponseModel.getGetTicketPageInitResult().
+                        getSubCategoryYN().equalsIgnoreCase("N")) {
+                    subCategoryYN = "N";
                     subCategoryLl.setVisibility(View.GONE);
 
                 }/*else if(ticketPageInitResponseModel.getGetTicketPageInitResult().
@@ -1302,53 +1296,88 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
 
             }
 
-            if(ticketPageInitResponseModel!=null && ticketPageInitResponseModel.getGetTicketPageInitResult()!=null
-                    && ticketPageInitResponseModel.getGetTicketPageInitResult().getCategoryYN()!=null){
-                   if(ticketPageInitResponseModel.getGetTicketPageInitResult().getCategoryYN()
-                            .equalsIgnoreCase("N")) {
-                       categoryYN="N";
-                       categoryLl.setVisibility(View.GONE);
-                   }else if(ticketPageInitResponseModel.getGetTicketPageInitResult().
-                           getCategoryYN().equalsIgnoreCase("Y")){
-                       categoryYN="Y";
-                       categoryLl.setVisibility(View.VISIBLE);
-                   }
+            if (ticketPageInitResponseModel != null && ticketPageInitResponseModel.getGetTicketPageInitResult() != null
+                    && ticketPageInitResponseModel.getGetTicketPageInitResult().getCategoryYN() != null) {
+                if (ticketPageInitResponseModel.getGetTicketPageInitResult().getCategoryYN()
+                        .equalsIgnoreCase("N")) {
+                    categoryYN = "N";
+                    categoryLl.setVisibility(View.GONE);
+                } else if (ticketPageInitResponseModel.getGetTicketPageInitResult().
+                        getCategoryYN().equalsIgnoreCase("Y")) {
+                    categoryYN = "Y";
+                    categoryLl.setVisibility(View.VISIBLE);
+                }
             }
 
             ticketTypeLl.setVisibility(View.GONE);
-        }else {
+        } else {
+            if (screenName.equalsIgnoreCase(TicketApprovalFragment.screenName)) {
+                if (ticketPageInitResponseModel != null && ticketPageInitResponseModel.getGetTicketPageInitResult() != null
+                        && ticketPageInitResponseModel.getGetTicketPageInitResult().getCategoryYN() != null) {
+                    if (ticketPageInitResponseModel.getGetTicketPageInitResult().getCategoryYN()
+                            .equalsIgnoreCase("N")) {
+                        categoryYN = "N";
+                        categoryLl.setVisibility(View.GONE);
+                    } else if (ticketPageInitResponseModel.getGetTicketPageInitResult().
+                            getCategoryYN().equalsIgnoreCase("Y")) {
+                        categoryYN = "Y";
+                        categoryTV.setEnabled(true);
+                        categoryLl.setVisibility(View.VISIBLE);
+                    }
+                }
+
+                if(ticketPageInitResponseModel!=null && ticketPageInitResponseModel.getGetTicketPageInitResult()!=null
+                        && ticketPageInitResponseModel.getGetTicketPageInitResult().getPriorityList()!=null
+                        && ticketPageInitResponseModel.getGetTicketPageInitResult().getPriorityList().getList()!=null
+                        && ticketPageInitResponseModel.getGetTicketPageInitResult().getPriorityList().getList().size()>0){
+                    priorityTV.setEnabled(true);
+                    priorityList = ticketPageInitResponseModel.getGetTicketPageInitResult().getPriorityList().getList();
+                }
+            } else {
+                categoryTV.setEnabled(false);
+                priorityTV.setEnabled(false);
+
+            }
+
+
             plus_create_newIV.setVisibility(View.GONE);
-            categoryTV.setEnabled(false);
             subCategoryTV.setEnabled(false);
             ticketTypeTV.setEnabled(false);
-            priorityTV.setEnabled(false);
             subjectET.setEnabled(false);
             descriptionET.setEnabled(false);
 
-            if(!item.getCategoryDesc().equalsIgnoreCase("")){
+            if (item.getCategoryDesc() != null && !item.getCategoryDesc().equalsIgnoreCase("")) {
                 categoryLl.setVisibility(View.VISIBLE);
+            } else {
+                categoryLl.setVisibility(View.GONE);
             }
 
-            if(!item.getSubCategoryDesc().equalsIgnoreCase("")){
+            if (item.getSubCategoryDesc() != null &&
+                    !item.getSubCategoryDesc().equalsIgnoreCase("")) {
                 subCategoryLl.setVisibility(View.VISIBLE);
+            } else {
+                subCategoryLl.setVisibility(View.GONE);
             }
 
-            if (!item.getTicketTypeDesc().equalsIgnoreCase("")) {
+            if (item.getTicketTypeDesc() != null
+                    && !item.getTicketTypeDesc().equalsIgnoreCase("")) {
                 ticketTypeLl.setVisibility(View.VISIBLE);
+            } else {
+                ticketTypeLl.setVisibility(View.GONE);
             }
 
         }
 
         if (item.getCategoryDesc() != null &&
                 !item.getCategoryDesc().equalsIgnoreCase("")) {
-          //  categoryLl.setVisibility(View.VISIBLE);
+            //  categoryLl.setVisibility(View.VISIBLE);
             categoryTV.setText(item.getCategoryDesc());
             categoryCode = item.getCategoryID();
 
         }
 
         if (item.getSubCategoryDesc() != null) {
-        //    subCategoryLl.setVisibility(View.VISIBLE);
+            //    subCategoryLl.setVisibility(View.VISIBLE);
             subCategoryTV.setText(item.getSubCategoryDesc());
             subCategoryCode = item.getSubCategoryID();
 
@@ -1356,9 +1385,9 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
         }
 
         if (item.getTicketTypeDesc() != null) {
-           // ticketTypeLl.setVisibility(View.VISIBLE);
+            // ticketTypeLl.setVisibility(View.VISIBLE);
             ticketTypeTV.setText(item.getTicketTypeDesc());
-            ticketTypeCode = item.getTicketCode();
+            ticketTypeCode = item.getTicketTypeID();
 
         }
 
@@ -1367,7 +1396,6 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
             empNameTV.setText(item.getCustomerEmpName());
             empId = item.getCustomerEmpID();
         }
-
 
 
         if (item.getTicketPriorityDesc() != null) {
@@ -1385,7 +1413,7 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
             descriptionET.setText(item.getComment());
 
         }
-
+        setupButtons(item);
     }
 
     private void disableField(GetTicketDetailResultModel item) {
@@ -1414,7 +1442,7 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
             expenseRecyclerView.setVisibility(View.VISIBLE);
             DocumentUploadAdapter adapter = null;
             if (screenName.equalsIgnoreCase(TicketSummaryFragment.screenName)) {
-                if(ticketItem!=null && ticketItem.getStatusDesc()!=null && !ticketItem.getStatusDesc().equalsIgnoreCase("")) {
+                if (ticketItem != null && ticketItem.getStatusDesc() != null && !ticketItem.getStatusDesc().equalsIgnoreCase("")) {
                     if (ticketItem.getStatusDesc().equalsIgnoreCase("Draft")) {
                         adapter = new DocumentUploadAdapter(uploadFileList, context, AppsConstant.EDIT, errorLinearLayout, getActivity());
                     } else {

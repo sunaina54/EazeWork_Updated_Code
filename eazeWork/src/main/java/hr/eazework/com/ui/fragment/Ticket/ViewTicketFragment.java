@@ -224,7 +224,7 @@ public class ViewTicketFragment extends BaseFragment {
 
     private void updateUI(GetTicketDetailResultModel item){
         subCategoryLl.setVisibility(View.VISIBLE);
-       // ticketSubmittedByTV.setText(item.getSubmittedBy());
+        ticketSubmittedByTV.setText(item.getSubmittedBy());
         ticketPendingWithTV.setText(item.getPendingWith());
         ticketIdTV.setText(item.getTicketCode());
         ticketEmpNameTV.setText(item.getCustomerEmpName());

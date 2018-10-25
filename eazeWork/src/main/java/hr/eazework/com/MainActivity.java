@@ -600,10 +600,20 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
                         return;
                     popBackStack(TimeAndAttendanceSummaryFragment.TAG, 0);
                 } else {
-                    addFragment(R.id.content_frame, new TimeAndAttendanceSummaryFragment(), TimeAndAttendanceSummaryFragment.TAG);
+                    addFragment(R.id.content_frame, new TimeAndAttendanceSummaryFragment(),
+                            TimeAndAttendanceSummaryFragment.TAG);
                 }
                 break;
-
+            case IAction.RAISE_TICKET_ADV_SUMMARY:
+                if (isFragmentExistsInBackStack(TicketSummaryFragment.TAG)) {
+                    if (getTopFragment() instanceof TicketSummaryFragment)
+                        return;
+                    popBackStack(TicketSummaryFragment.TAG, 0);
+                } else {
+                    addFragment(R.id.content_frame, new TicketSummaryFragment(),
+                            TicketSummaryFragment.TAG);
+                }
+                break;
             case IAction.LEAVE_BALANCE_DETAIL:
 
                 if (isFragmentExistsInBackStack(LeaveBalanceDetailFragment.TAG)) {
@@ -616,6 +626,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
                             LeaveBalanceDetailFragment.TAG);
                 }
                 break;
+
 
             case IAction.CREATE_NEW_LEAVE:
 
@@ -631,38 +642,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
                             CreateNewLeaveFragment.TAG);
                 }
                 break;
-           /* case IAction.WORK_FROM_HOME_SUMMARY:
-                if (isFragmentExistsInBackStack(TimeAndAttendanceSummaryFragment.TAG)) {
-                    if (getTopFragment() instanceof TimeAndAttendanceSummaryFragment)
-                        return;
-                    popBackStack(TimeAndAttendanceSummaryFragment.TAG, 0);
-                } else {
-                    addFragment(R.id.content_frame, new TimeAndAttendanceSummaryFragment(),
-                            TimeAndAttendanceSummaryFragment.TAG);
-                }
-                break;*/
-           /* case IAction.OUTDOOR_DUTY_SUMMARY:
-                if (isFragmentExistsInBackStack(ODSummaryFragment.TAG)) {
-                    if (getTopFragment() instanceof ODSummaryFragment)
-                        return;
-                    popBackStack(ODSummaryFragment.TAG, 0);
-                } else {
-                    addFragment(R.id.content_frame, new ODSummaryFragment(),
-                            ODSummaryFragment.TAG);
-                }
-                break;
-            case IAction.TOUR_SUMMARY:
-                if (isFragmentExistsInBackStack(TourSummaryFragment.TAG)) {
-                    if (getTopFragment() instanceof TourSummaryFragment)
-                        return;
-                    popBackStack(TourSummaryFragment.TAG, 0);
-                } else {
-                    addFragment(R.id.content_frame, new TourSummaryFragment(),
-                            TourSummaryFragment.TAG);
-                }
-                break;
-                */
-
             case IAction.EXPENSE_CLAIM_SUMMARY:
                 if (isFragmentExistsInBackStack(ExpenseClaimSummaryFragment.TAG)) {
                     if (getTopFragment() instanceof ExpenseClaimSummaryFragment)
@@ -683,16 +662,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
                             AdvanceRequestSummaryFragment.TAG);
                 }
                 break;
-            case IAction.RAISE_TICKET_ADV_SUMMARY:
-                if (isFragmentExistsInBackStack(TicketSummaryFragment.TAG)) {
-                    if (getTopFragment() instanceof TicketSummaryFragment)
-                        return;
-                    popBackStack(TicketSummaryFragment.TAG, 0);
-                } else {
-                    addFragment(R.id.content_frame, new TicketSummaryFragment(),
-                            TicketSummaryFragment.TAG);
-                }
-                break;
+
 
             case IAction.ADD_EXPENSE_CLAIM:
                 if (isFragmentExistsInBackStack(AddExpenseClaimFragment.TAG)) {
@@ -967,11 +937,12 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
                         return;
                     popBackStack(TimeAndAttendanceSummaryFragment.TAG, 0);
                 } else {
-                    addFragment(R.id.content_frame, new TimeAndAttendanceSummaryFragment(), TimeAndAttendanceSummaryFragment.TAG);
+                    addFragment(R.id.content_frame, new TimeAndAttendanceSummaryFragment(),
+                            TimeAndAttendanceSummaryFragment.TAG);
                 }
                 break;
 
-            /*case IAction.RAISE_TICKET_ADV_SUMMARY:
+            case IAction.RAISE_TICKET_ADV_SUMMARY:
                 if (isFragmentExistsInBackStack(TicketSummaryFragment.TAG)) {
                     if (getTopFragment() instanceof TicketSummaryFragment)
                         return;
@@ -980,7 +951,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
                     addFragment(R.id.content_frame, new TicketSummaryFragment(),
                             TicketSummaryFragment.TAG);
                 }
-                break;*/
+                break;
             case IAction.TOUR:
                 if (isFragmentExistsInBackStack(TourRequestFragment.TAG)) {
                     if (getTopFragment() instanceof TourRequestFragment)

@@ -13,7 +13,7 @@ public class TicketItem extends GenericResponse implements Serializable {
     private String Comment;
     private String CustomerCorpID;
     private String CustomerEmpID;
-    private String CustomerEmpName;
+    private String CustomerEmpName="";
     private ArrayList<DocListModel> Files;
     private String FromButton;
     private String Remarks;

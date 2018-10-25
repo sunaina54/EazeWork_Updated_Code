@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 public class TicketSubmitRequestModel implements Serializable {
     private AdvanceLoginDataRequestModel loginData;
-    private String selfOrOther;
+    private String SelfOrOther;
     private TicketDetailModel ticketDetail;
 
     public AdvanceLoginDataRequestModel getLoginData() {
@@ -22,11 +22,11 @@ public class TicketSubmitRequestModel implements Serializable {
     }
 
     public String getSelfOrOther() {
-        return selfOrOther;
+        return SelfOrOther;
     }
 
     public void setSelfOrOther(String selfOrOther) {
-        this.selfOrOther = selfOrOther;
+        this.SelfOrOther = selfOrOther;
     }
 
     public TicketDetailModel getTicketDetail() {

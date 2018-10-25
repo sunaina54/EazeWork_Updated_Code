@@ -37,6 +37,7 @@ public class GetTicketDetailResultModel extends GenericResponse {
     private String TicketTypeDesc="";
     private String SubCategoryDesc="";
     private String CustomerEmpName="";
+    private String SubmittedBy="";
 
 
 
@@ -50,6 +51,14 @@ public class GetTicketDetailResultModel extends GenericResponse {
         // Serialize this class into a JSON string using GSON
         Gson gson = new Gson();
         return gson.toJson(this);
+    }
+
+    public String getSubmittedBy() {
+        return SubmittedBy;
+    }
+
+    public void setSubmittedBy(String submittedBy) {
+        SubmittedBy = submittedBy;
     }
 
     public String getCustomerEmpName() {

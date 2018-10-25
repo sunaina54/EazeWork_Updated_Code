@@ -1,6 +1,7 @@
 package hr.eazework.com.ui.fragment.Ticket;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -37,6 +38,7 @@ import hr.eazework.com.ui.fragment.BaseFragment;
 import hr.eazework.com.ui.interfaces.IAction;
 import hr.eazework.com.ui.util.AppsConstant;
 import hr.eazework.com.ui.util.Utility;
+import hr.eazework.com.ui.util.custom.AlertCustomDialog;
 import hr.eazework.mframe.communication.ResponseData;
 import hr.eazework.selfcare.communication.AppRequestJSONString;
 import hr.eazework.selfcare.communication.CommunicationConstant;
@@ -471,5 +473,15 @@ public class TicketSummaryFragment extends BaseFragment {
     }
 
 
-
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (Utility.isNetworkAvailable(getContext())) {
+            // MainActivity.isAnimationLoaded = false;
+            sendRequestSummaryData();
+            // showHideProgressView(true);
+        } else {
+            new AlertCustomDialog(getActivity(), getString(R.string.msg_internet_connection));
+        }
+    }
 }

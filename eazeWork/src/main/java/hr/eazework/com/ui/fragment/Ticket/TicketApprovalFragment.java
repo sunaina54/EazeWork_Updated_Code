@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+import hr.eazework.com.MainActivity;
 import hr.eazework.com.R;
 
 import hr.eazework.com.model.AttendanceReqDetail;
@@ -313,39 +314,14 @@ public class TicketApprovalFragment extends BaseFragment {
 
     }
 
-    void alertOkWithFinishFragment(final Context mContext, String msg, boolean isMaterial) {
-        ContextThemeWrapper ctw = new ContextThemeWrapper(mContext,
-                isMaterial ? R.style.MyDialogTheme
-                        : R.style.MyDialogThemeTransparent);
-        final Dialog openDialog = new Dialog(ctw);
-        openDialog.setCancelable(false);
-        openDialog.setContentView(R.layout.material_dialog_layout);
-        TextView tv_message = (TextView)openDialog.findViewById(R.id.tv_message);
-        TextView tv_title = (TextView) openDialog.findViewById(R.id.tv_title);
-        tv_title.setText("Confirmation");
-        tv_message.setText(msg);
-        TextView tv_cancel = (TextView) openDialog.findViewById(R.id.tv_cancel);
-        tv_cancel.setVisibility(View.GONE);
-        TextView tv_ok = (TextView) openDialog.findViewById(R.id.tv_ok);
-        tv_ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // mUserActionListener.performUserActionFragment(action, null, null);
-                sendRequestSummaryData();
 
-                openDialog.dismiss();
-            }
-        });
-        openDialog.show();
-    }
-   
     private class AttendanceApprovalAdapter extends
             RecyclerView.Adapter<AttendanceApprovalAdapter.MyViewHolder> {
         private ArrayList<TicketItem> dataSet;
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             TextView ticketIdTV, createdOnTV, empNameTV, subjectTV, remarksTV;
-            Button closeBTN;
+            Button editBTN;
             ImageView menuIV;
 
 
@@ -358,8 +334,8 @@ public class TicketApprovalFragment extends BaseFragment {
                 subjectTV = (TextView) v.findViewById(R.id.subjectTV);
                 remarksTV = (TextView) v.findViewById(R.id.remarksTV);
                 menuIV = (ImageView) v.findViewById(R.id.menuIV);
-                menuIV.setVisibility(View.VISIBLE);
-                closeBTN = (Button) v.findViewById(R.id.closeBTN);
+                menuIV.setVisibility(View.GONE);
+                editBTN = (Button) v.findViewById(R.id.editBTN);
 
 
             }
@@ -389,38 +365,60 @@ public class TicketApprovalFragment extends BaseFragment {
 
             final TicketItem item = dataSet.get(listPosition);
 
-            holder.ticketIdTV.setText(item.getTicketCode());
-            holder.empNameTV.setText(item.getCustomerEmpName());
-            holder.subjectTV.setText(item.getSubject());
-            holder.remarksTV.setText(item.getRemarks());
-            holder.closeBTN.setOnClickListener(new View.OnClickListener() {
+            if(item.getTicketCode()!=null) {
+                holder.ticketIdTV.setText(item.getTicketCode());
+            }
+            if(item.getDate()!=null) {
+                holder.createdOnTV.setText(item.getDate());
+            }
+            if(item.getCustomerEmpName()!=null) {
+                holder.empNameTV.setText(item.getCustomerEmpName());
+            }
+            if(item.getSubject()!=null) {
+                holder.subjectTV.setText(item.getSubject());
+            }
+            if(item.getDescription()!=null) {
+                holder.remarksTV.setText(item.getDescription());
+            }
+            holder.editBTN.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                    /* if (item.getReqCode() != null && item.getReqCode().startsWith("HR") || item.getReqCode().startsWith("HW")) {
                         status=item.getStatus();
                         sendViewRequestSummaryData(item);
                     }*/
-
+                    CreateTicketAdvanceFragment requestFragment = new CreateTicketAdvanceFragment();
+                    requestFragment.setTicketItem(item);
+                    requestFragment.setScreenName(screenName);
+                    Fragment fragment=requestFragment;
+                    mUserActionListener.performUserActionFragment(IAction.RAISE_TICKET_ADV,fragment,null);
 
                 }
             });
+/*
 
             final ArrayList<String> menuList = new ArrayList<>();
             menuList.add("Edit");
-          /*  if (item.getButtons() != null) {
+          */
+/*  if (item.getButtons() != null) {
                 for (String str : item.getButtons()) {
                     if (str.equalsIgnoreCase("Edit")) {
                         menuList.add(str);
                     }
-                   *//* if (str.equalsIgnoreCase("View")) {
+                   *//*
+*/
+/* if (str.equalsIgnoreCase("View")) {
                         menuList.add(str);
                     }
                     if (str.equalsIgnoreCase("Reject")) {
                         menuList.add(str);
                     }*//*
+*/
+/*
 
                 }
-            }*/
+            }*//*
+
 
             if (menuList.size() > 0) {
                 // menu list visible
@@ -445,8 +443,9 @@ public class TicketApprovalFragment extends BaseFragment {
                         builder.show();
                     }
                 });
+*/
 
-            }
+          //  }
         }
 
         @Override
@@ -460,5 +459,15 @@ public class TicketApprovalFragment extends BaseFragment {
         }
     }
 
-
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (Utility.isNetworkAvailable(getContext())) {
+           // MainActivity.isAnimationLoaded = false;
+            sendRequestSummaryData();
+           // showHideProgressView(true);
+        } else {
+            new AlertCustomDialog(getActivity(), getString(R.string.msg_internet_connection));
+        }
+    }
 }

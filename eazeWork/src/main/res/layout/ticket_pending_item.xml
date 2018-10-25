@@ -166,7 +166,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.35"
-                        android:text="@string/remarks"
+                        android:text="@string/description"
                         android:textSize="@dimen/font_12" />
 
                     <TextView
@@ -190,7 +190,7 @@
                 <Button
                     android:layout_gravity="right"
                     android:layout_marginTop="@dimen/margin_10"
-                    android:id="@+id/closeBTN"
+                    android:id="@+id/editBTN"
                     style="@style/button"
                     android:layout_alignParentBottom="true"
                     android:layout_width="@dimen/margin_70"
@@ -198,7 +198,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="@dimen/margin_5"
                     android:background="@drawable/rounded_corner_light_blue"
-                    android:text="@string/close"
+                    android:text="Edit"
                     android:textColor="@color/white"
                     android:textSize="@dimen/font_12" />
             </LinearLayout>

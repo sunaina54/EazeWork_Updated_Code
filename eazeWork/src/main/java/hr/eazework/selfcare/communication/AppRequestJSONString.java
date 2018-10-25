@@ -419,7 +419,7 @@ public class AppRequestJSONString {
         loginData.setDeviceID(MyApplication.getDeviceId());
         loginData.setSessionID(SharedPreference.getSessionId());
         subCategoryRequestModel.setLoginData(loginData);
-        Log.d("Ticket Init Request",subCategoryRequestModel.serialize());
+        Log.d("Sub Category Request",subCategoryRequestModel.serialize());
         return subCategoryRequestModel.serialize();
     }
 

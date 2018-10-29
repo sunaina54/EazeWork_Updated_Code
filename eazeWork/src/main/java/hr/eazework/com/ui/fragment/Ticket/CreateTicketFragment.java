@@ -138,6 +138,7 @@ public class CreateTicketFragment extends BaseFragment {
         ((TextView) getActivity().findViewById(R.id.tv_header_text)).setTextColor(textColor);
 
         ((TextView) ((MainActivity) getActivity()).findViewById(R.id.tv_header_text)).setText(R.string.ticket);
+
         ((MainActivity) getActivity()).findViewById(R.id.ibRight).setVisibility(View.VISIBLE);
         ((MainActivity) getActivity()).findViewById(R.id.ibRight).setOnClickListener(new View.OnClickListener() {
             @Override

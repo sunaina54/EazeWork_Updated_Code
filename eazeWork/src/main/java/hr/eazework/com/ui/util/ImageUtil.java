@@ -38,7 +38,9 @@ public class ImageUtil {
 
     public static Bitmap decodeBitmapToImage(String base64Str){
         byte[] decodedString = Base64.decode(base64Str, Base64.DEFAULT);
-        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 8;
+        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length,options);
         return decodedByte;
     }
 

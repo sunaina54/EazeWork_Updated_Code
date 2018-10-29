@@ -593,7 +593,8 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
                 item.setObjectId(itemModel.getmObjectId());
                 itemList.add(item);
             } else {
-                if (menuItemModel.getItemModel(MenuItemModel.EXPENSE_KEY) != null && menuItemModel.getItemModel(MenuItemModel.ADVANCE_KEY) != null
+                if (menuItemModel.getItemModel(MenuItemModel.EXPENSE_KEY) != null &&
+                        menuItemModel.getItemModel(MenuItemModel.ADVANCE_KEY) != null
                         && menuItemModel.getItemModel(MenuItemModel.EMPLOYEE_APPROVAL_KEY) != null) {
                     if (menuItemModel.getItemModel(MenuItemModel.EXPENSE_KEY).isAccess() ||
                             menuItemModel.getItemModel(MenuItemModel.ADVANCE_KEY).isAccess() ||

@@ -472,6 +472,8 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
 
         if (ticketItem != null && ticketItem.getTicketID() != null
                 && !ticketItem.getTicketID().equalsIgnoreCase("0")) {
+            ((TextView) getActivity().findViewById(R.id.tv_header_text)).setText("Ticket");
+
 
             if (screenName.equalsIgnoreCase(TicketApprovalFragment.screenName)) {
                 ticketId = ticketItem.getTicketID();
@@ -499,6 +501,8 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
             sendViewRequestSummaryData();
         }*/
         else if (ticketId != null && ticketId.equalsIgnoreCase("0")) {
+            ((TextView) getActivity().findViewById(R.id.tv_header_text)).setText("Raise Ticket");
+
             uploadFileList = new ArrayList<SupportDocsItemModel>();
             remarksLinearLayout1.setVisibility(View.GONE);
             //sendAdvanceRequestData();

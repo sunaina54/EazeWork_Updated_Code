@@ -187,6 +187,7 @@
     <string name="expense_summary_error_msg">There is no in process expense request</string>
     <string name="expense_error_msg">There is no expense request pending for your approval.</string>
     <string name="attendance_error_msg">There is no attendance request pending for your approval.</string>
+    <string name="ticket_error_msg">There is no ticket request pending for your approval.</string>
     <string name="delete_btn">Delete</string>
     <string name="units">Units</string>
     <string name="limit">Limit</string>
@@ -229,7 +230,7 @@
     <string name="religious_travel">Religious Travel</string>
     <string name="photography">Photography</string>
     <string name="tour">Tour Request</string>
-    <string name="ticket">Raise Ticket</string>
+    <string name="ticket">Ticket</string>
     <string name="edit_expense_claim">Edit Expense</string>
     <string name="work_from_home">Work From Home</string>
     <string name="outdoor_duty">Outdoor Duty</string>

@@ -42,6 +42,7 @@
                     android:text="@string/attendance_error_msg"
                     android:textColor="@color/black"
                     android:textSize="@dimen/font_14"
+                    android:id="@+id/noTicketTV"
                     android:visibility="visible" />
             </LinearLayout>
 

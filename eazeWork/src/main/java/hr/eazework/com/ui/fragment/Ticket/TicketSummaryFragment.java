@@ -373,8 +373,6 @@ public class TicketSummaryFragment extends BaseFragment {
                 statusTV = (TextView) v.findViewById(R.id.statusTV);
                 viewBTN = (Button) v.findViewById(R.id.viewBTN);
 
-
-
             }
 
         }
@@ -410,8 +408,8 @@ public class TicketSummaryFragment extends BaseFragment {
                 holder.dateTV.setText(item.getDate());
             }
 
-            if(item.getDescription()!=null) {
-                holder.descriptionTV.setText(item.getDescription());
+            if(item.getSubject()!=null) {
+                holder.descriptionTV.setText(item.getSubject());
             }
 
             if(item.getTicketPriorityDesc()!=null){

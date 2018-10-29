@@ -90,6 +90,7 @@ public class TicketApprovalFragment extends BaseFragment {
     private View progressbar;
     private TicketSummaryRequestModel ticketSummaryRequestModel;
     private TicketResponseModel ticketResponseModel;
+    private TextView noTicketTV;
 
 
     @Override
@@ -111,6 +112,9 @@ public class TicketApprovalFragment extends BaseFragment {
         searchExpenseList = new ArrayList<>();
         search_layout = (RelativeLayout) view.findViewById(R.id.search_layout);
         search_layout.setVisibility(View.INVISIBLE);
+
+        noTicketTV = (TextView) view.findViewById(R.id.noTicketTV);
+        noTicketTV.setText(getResources().getString(R.string.ticket_error_msg));
         searchET = (EditText) view.findViewById(R.id.searchET);
         searchParentLayout = (LinearLayout) view.findViewById(R.id.searchParentLayout);
         searchParentLayout.setVisibility(View.GONE);

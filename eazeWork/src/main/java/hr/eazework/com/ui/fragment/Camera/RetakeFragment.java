@@ -15,6 +15,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -195,12 +196,27 @@ public class RetakeFragment extends Fragment {
         Matrix m = new Matrix();
         m.postRotate(90);
         if (screenName != null && !screenName.equalsIgnoreCase("")) {
-            Bitmap bitmap = BitmapFactory.decodeFile(path.getAbsolutePath());
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG,15,out);
-            byte[] byteArray = out.toByteArray();
-            Bitmap compressedBitmap = BitmapFactory.decodeByteArray(byteArray,0,byteArray.length);
-            bmp = Bitmap.createBitmap(compressedBitmap, 0, 0, compressedBitmap.getWidth(), compressedBitmap.getHeight(), m, true);
+            try {
+
+                Bitmap bitmap = BitmapFactory.decodeFile(path.getAbsolutePath());
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG,15,out);
+                byte[] byteArray = out.toByteArray();
+                Bitmap compressedBitmap = BitmapFactory.decodeByteArray(byteArray,0,byteArray.length);
+                bmp = Bitmap.createBitmap(compressedBitmap, 0, 0, compressedBitmap.getWidth(), compressedBitmap.getHeight(), m, true);
+
+            }catch (Exception e){
+                Log.d("Camera Error",e.toString());
+                System.gc();
+                Bitmap bitmap = BitmapFactory.decodeFile(path.getAbsolutePath());
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG,15,out);
+                byte[] byteArray = out.toByteArray();
+                Bitmap compressedBitmap = BitmapFactory.decodeByteArray(byteArray,0,byteArray.length);
+                bmp = Bitmap.createBitmap(compressedBitmap, 0, 0, compressedBitmap.getWidth(), compressedBitmap.getHeight(), m, true);
+
+            }
+
         } else {
             Bitmap bitmap = new Compressor.Builder(getContext()).setQuality(50)
                     .setCompressFormat(Bitmap.CompressFormat.JPEG).setMaxWidth(240)

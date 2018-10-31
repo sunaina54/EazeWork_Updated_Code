@@ -80,7 +80,133 @@ public class ApproveScreen extends BaseFragment implements AdapterView.OnItemCli
             itemList.clear();
         }
 
+       /* ModelManager modelManager = ModelManager.getInstance();
+        MenuItemModel menuItemModel = modelManager.getMenuItemModel();
+        if (menuItemModel != null) {
+            MenuItemModel itemModel = menuItemModel.getItemModel(MenuItemModel.APPROVAL_KEY);
+            if (itemModel != null && itemModel.isAccess()) {
+                PendingCountModel model = modelManager.getPendingCountModel();
+                String count = "";
+                if (model.getPendingList() != null) {
+                    for (int i = 0; i < model.getPendingList().size(); i++) {
+                        PendingCountModel countModel = model.getPendingList().get(i);
+
+                    }
+                }
+            }
+
+            itemModel = menuItemModel.getItemModel(MenuItemModel.APPROVAL_KEY);
+            if (itemModel != null && itemModel.isAccess()) {
+                PendingCountModel model = modelManager.getPendingCountModel();
+                String count = "";
+                if (model.getPendingList() != null) {
+                    for (int i = 0; i < model.getPendingList().size(); i++) {
+                        PendingCountModel countModel = model.getPendingList().get(i);
+
+                    }
+                }
+            }
+
+            itemModel = menuItemModel.getItemModel(MenuItemModel.EMPLOYEE_APPROVAL_KEY);
+            if (itemModel != null && itemModel.isAccess()) {
+                PendingCountModel model = modelManager.getPendingCountModel();
+                String count = "";
+                if (model.getPendingList() != null) {
+                    for (int i = 0; i < model.getPendingList().size(); i++) {
+                        PendingCountModel countModel = model.getPendingList().get(i);
+
+                    }
+                }
+            }
+
+            itemModel = menuItemModel.getItemModel(MenuItemModel.EXPENSE_KEY);
+            if(itemModel!=null && itemModel.isAccess()){
+                PendingCountModel model = modelManager.getPendingCountModel();
+                String count = "";
+                if (model.getPendingList() != null) {
+                    for (int i = 0; i < model.getPendingList().size(); i++) {
+                        PendingCountModel countModel = model.getPendingList().get(i);
+
+                    }
+                }
+            }
+
+            itemModel = menuItemModel.getItemModel(MenuItemModel.ADVANCE_KEY);
+            if(itemModel!=null && itemModel.isAccess()){
+                PendingCountModel model = modelManager.getPendingCountModel();
+                String count = "";
+                if (model.getPendingList() != null) {
+                    for (int i = 0; i < model.getPendingList().size(); i++) {
+                        PendingCountModel countModel = model.getPendingList().get(i);
+
+                    }
+                }
+            }
+
+            *//*itemModel = menuItemModel.getItemModel(MenuItemModel.TICKET_KEY);
+            if(itemModel!=null && !itemModel.getIsTicketAccess().equalsIgnoreCase("N")){
+
+            }*/
         ModelManager modelManager = ModelManager.getInstance();
+     //   MenuItemModel menuItemModel = modelManager.getMenuItemModel();
+            PendingCountModel model = modelManager.getPendingCountModel();
+            String count = "0";
+            if (model.getPendingList() != null) {
+                for (int i = 0; i < model.getPendingList().size(); i++) {
+
+                    PendingCountModel countModel = model.getPendingList().get(i);
+
+                    if (countModel.getmReqDesc().equalsIgnoreCase("Leave")) {
+                        count = countModel.getmCount();
+                        itemList.add(new MainItemModel(getString(R.string.msg_leaves), "", getString(R.string.msg_pending), "" + count, R.drawable.manager_approval));
+
+                    }
+
+                    if (countModel.getmReqDesc().equalsIgnoreCase("Attendance")) {
+                        count = countModel.getmCount();
+                        itemList.add(new MainItemModel("Attendance", "", "Pending", "" + count, R.drawable.manager_approval));
+
+                    }
+
+                    if (countModel.getmReqDesc().equalsIgnoreCase("Employee")) {
+                        count = countModel.getmCount();
+                        itemList.add(new MainItemModel("Employee", "", "Pending", "" + count, R.drawable.team_blue));
+
+                    }
+
+                    if (countModel.getmReqDesc().equalsIgnoreCase("Expense")) {
+                        count = countModel.getmCount();
+                        itemList.add(new MainItemModel("Expense", "","Pending","" + count, R.drawable.expense_claim));
+
+                    }
+
+                    if (countModel.getmReqDesc().equalsIgnoreCase("Advance")) {
+                        count = countModel.getmCount();
+                        itemList.add(new MainItemModel("Advance", "","Pending","" + count, R.drawable.advance_expense));
+
+                    }
+                    if (countModel.getmReqDesc().equalsIgnoreCase("Ticket")) {
+                        count = countModel.getmCount();
+                        itemList.add(new MainItemModel("Ticket", "","Pending","" + count, R.drawable.ticket));
+
+                    }
+
+                }
+            }
+
+            if (adapter != null) {
+                adapter.updateData(itemList);
+            }
+         }
+
+/*    private void populateHomeData() {
+        if (itemList == null) {
+            itemList = new ArrayList<MainItemModel>();
+        } else {
+            itemList.clear();
+        }
+
+      *//*  ModelManager modelManager = ModelManager.getInstance();
         MenuItemModel menuItemModel = modelManager.getMenuItemModel();
         if (menuItemModel != null) {
             MenuItemModel itemModel = menuItemModel.getItemModel(MenuItemModel.APPROVAL_KEY);
@@ -174,9 +300,9 @@ public class ApproveScreen extends BaseFragment implements AdapterView.OnItemCli
             }
             if (adapter != null) {
                 adapter.updateData(itemList);
-            }
-        }
-    }
+            }*//*
+       // }
+    }*/
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

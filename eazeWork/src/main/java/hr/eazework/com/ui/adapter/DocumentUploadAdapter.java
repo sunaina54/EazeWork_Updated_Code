@@ -74,6 +74,7 @@ public class DocumentUploadAdapter extends RecyclerView.Adapter<DocumentUploadAd
                 && fileObject.getFlag()!=null && fileObject.getFlag().equalsIgnoreCase(AppsConstant.DELETE_FLAG)){
             holder.documentParentLayout.setVisibility(View.GONE);
         }
+
         final String filename = fileObject.getDocFile();
         final String name = fileObject.getName();
         if (filename.toString().contains(".pdf")) {

@@ -40,6 +40,8 @@ public class AppsConstant {
     public static boolean isDebug=false;
     public static final int FRONT_CAMREA_OPEN = 1;
     public static final int BACK_CAMREA_OPEN = 2;
+/*public static final int FRONT_CAMREA_OPEN = 0;
+    public static final int BACK_CAMREA_OPEN = 1;*/
     public static String POSITION_KEY = "positionKey";
     public static String HISTORY_KEY = "historyKey";
     public static String EMP_ID = "EmpID";
@@ -53,6 +55,7 @@ public class AppsConstant {
     public static int DEVICE_DISPLAY_WIDTH_DEFAULT = 400;
     public static String DEFAULTRADIUS = "0";
     public static String DELETE_FLAG="D";
+    public static String UPDATE_FLAG="U";
     public static String OLD_FLAG="O";
     public static String NEW_FLAG="N";
     public static Typeface RobotoSlabRegular;

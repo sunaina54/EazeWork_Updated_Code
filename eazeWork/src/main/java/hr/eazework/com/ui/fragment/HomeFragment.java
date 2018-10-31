@@ -673,47 +673,48 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
             String ticketAccess = "";
             itemModel = menuItemModel.getItemModel(MenuItemModel.CREATE_ADVANCE_KEY);
             if (itemModel != null && itemModel.isAccess()) {
-                list.add("Advance");
+                list.add(itemModel.getmObjectDisplay());
             }
             itemModel = menuItemModel.getItemModel(MenuItemModel.CREATE_EMPLOYEE);
             if (itemModel != null && itemModel.isAccess()) {
-                list.add("Employee");
+                list.add(itemModel.getmObjectDisplay());
             }
             itemModel = menuItemModel.getItemModel(MenuItemModel.CREATE_EXPENSE_KEY);
             if (itemModel != null && itemModel.isAccess()) {
-                list.add("Expense");
+                list.add(itemModel.getmObjectDisplay());
             }
             itemModel = menuItemModel.getItemModel(MenuItemModel.CREATE_LEAVE);
             if (itemModel != null && itemModel.isAccess()) {
-                list.add("Leave");
+                list.add(itemModel.getmObjectDisplay());
             }
             itemModel = menuItemModel.getItemModel(MenuItemModel.CREATE_LOCATION);
             if (itemModel != null && itemModel.isAccess()) {
-                list.add("Location");
+                list.add(itemModel.getmObjectDisplay());
             }
 
             itemModel = menuItemModel.getItemModel(MenuItemModel.OD_REQUEST);
             if (itemModel != null && itemModel.isAccess()) {
-                list.add("Outdoor Duty");
+                list.add(itemModel.getmObjectDisplay());
             }
-            itemModel = menuItemModel.getItemModel(MenuItemModel.TOUR_REQUEST);
-            if (itemModel != null && itemModel.isAccess()) {
-                list.add("Tour");
-            }
-            itemModel = menuItemModel.getItemModel(MenuItemModel.WORK_FROM_HOME);
-            if (itemModel != null && itemModel.isAccess()) {
-                list.add("Work From Home");
-            }
-
             itemModel = menuItemModel.getItemModel(MenuItemModel.TICKET_KEY);
             if (itemModel != null && !itemModel.getIsTicketAccess().equalsIgnoreCase("N")) {
                 SharedPreference.saveSharedPreferenceData(AppsConstant.Project_NAME,
                         AppsConstant.TICKET_MENU_ACCESS, itemModel.getIsTicketAccess(), context);
-                list.add("Ticket");
+                list.add(itemModel.getmObjectDisplay());
                 // ticketAccess = AppsConstant.TICKET_ACCESS_SIMPLE;
                 //  preferences.saveString(AppsConstant.TICKET_ACCESS_KEY,ticketAccess);
 
             }
+            itemModel = menuItemModel.getItemModel(MenuItemModel.TOUR_REQUEST);
+            if (itemModel != null && itemModel.isAccess()) {
+                list.add(itemModel.getmObjectDisplay());
+            }
+            itemModel = menuItemModel.getItemModel(MenuItemModel.WORK_FROM_HOME);
+            if (itemModel != null && itemModel.isAccess()) {
+                list.add(itemModel.getmObjectDisplay());
+            }
+
+
 
           /*  itemModel = menuItemModel.getItemModel(MenuItemModel.OTHER_TICKET_KEY);
             if (itemModel != null && itemModel.isAccess()) {

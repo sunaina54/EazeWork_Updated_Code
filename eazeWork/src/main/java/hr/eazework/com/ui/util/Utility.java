@@ -803,7 +803,17 @@ public class Utility {
                                     @Override
                                     public void onClick(View v) {
                                         model.setName(editFilenameET.getText().toString());
+
                                         if (adapter.mDataset != null && adapter.mDataset.size() > 0) {
+                                            if (model.getDocID()!=null && !model.getDocID().equalsIgnoreCase("0")
+                                                    && model.getFlag()!=null && model.getFlag().equalsIgnoreCase(AppsConstant.OLD_FLAG)) {
+                                                model.setFlag(AppsConstant.UPDATE_FLAG);
+                                                //adapter.mDataset.set(adapter.mDataset.indexOf(model), model);
+                                            } else if (model.getDocID()==null || model.getDocID().equalsIgnoreCase("0")
+                                                    && model.getFlag()!=null  && model.getFlag().equalsIgnoreCase(AppsConstant.NEW_FLAG)) {
+                                                model.setFlag(AppsConstant.NEW_FLAG);
+                                               // adapter.mDataset.set(adapter.mDataset.indexOf(model), model);
+                                            }
                                             adapter.mDataset.set(adapter.mDataset.indexOf(model), model);
 
                                         }
@@ -821,10 +831,12 @@ public class Utility {
 
                                 dialog.show();
                             } else if (selectedObject.toString().equalsIgnoreCase("Delete")) {
-                                if (model.getDocID()!=null && !model.getDocID().equalsIgnoreCase("0")  && model.getFlag().equalsIgnoreCase(AppsConstant.OLD_FLAG)) {
+                                if (model.getDocID()!=null && !model.getDocID().equalsIgnoreCase("0")
+                                        && model.getFlag()!=null && model.getFlag().equalsIgnoreCase(AppsConstant.OLD_FLAG)) {
                                     model.setFlag(AppsConstant.DELETE_FLAG);
                                     adapter.mDataset.set(adapter.mDataset.indexOf(model), model);
-                                } else if (model.getDocID()==null || model.getDocID().equalsIgnoreCase("0")  && model.getFlag().equalsIgnoreCase(AppsConstant.NEW_FLAG)) {
+                                } else if (model.getDocID()==null || model.getDocID().equalsIgnoreCase("0")
+                                        && model.getFlag()!=null  && model.getFlag().equalsIgnoreCase(AppsConstant.NEW_FLAG)) {
                                     adapter.mDataset.remove(adapter.mDataset.indexOf(model));
                                 }
                                 adapter.notifyDataSetChanged();

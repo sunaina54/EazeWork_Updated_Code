@@ -187,7 +187,7 @@
     <string name="expense_summary_error_msg">There is no in process expense request</string>
     <string name="expense_error_msg">There is no expense request pending for your approval.</string>
     <string name="attendance_error_msg">There is no attendance request pending for your approval.</string>
-    <string name="ticket_error_msg">There is no ticket request pending for your approval.</string>
+    <string name="ticket_error_msg">There are no open tickets for processing.</string>
     <string name="delete_btn">Delete</string>
     <string name="units">Units</string>
     <string name="limit">Limit</string>

@@ -484,9 +484,13 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
 
 
             } else if (screenName.equalsIgnoreCase(TicketSummaryFragment.screenName)) {
+                remarksDataLl.setVisibility(View.VISIBLE);
+                if(ticketItem.getStatusDesc().equalsIgnoreCase(AppsConstant.DRAFT)){
+                    remarksDataLl.setVisibility(View.GONE);
+                }
                 ticketId = ticketItem.getTicketID();
                 sendTicketInitRequestData();
-                remarksDataLl.setVisibility(View.VISIBLE);
+
                 remarksLinearLayout1.setVisibility(View.VISIBLE);
                 sendViewRequestSummaryData();
 
@@ -1279,8 +1283,9 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
     // Edit Mode (via Dashboard flow)
     private void updateUIWithData(GetTicketDetailResultModel item) {
         searchLayout.setVisibility(View.GONE);
+        plus_create_newIV.setVisibility(View.VISIBLE);
         if (item.getStatusDesc().equalsIgnoreCase(AppsConstant.DRAFT)) {
-            plus_create_newIV.setVisibility(View.VISIBLE);
+            //plus_create_newIV.setVisibility(View.VISIBLE);
             ticketTypeLl.setVisibility(View.GONE);
             remarksLinearLayout1.setVisibility(View.GONE);
 
@@ -1344,7 +1349,7 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
             }
 
 
-            plus_create_newIV.setVisibility(View.GONE);
+          //  plus_create_newIV.setVisibility(View.GONE);
             subCategoryTV.setEnabled(false);
             ticketTypeTV.setEnabled(false);
             subjectET.setEnabled(false);
@@ -1444,8 +1449,8 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
         if (uploadFileList != null && uploadFileList.size() > 0) {
             errorLinearLayout.setVisibility(View.GONE);
             expenseRecyclerView.setVisibility(View.VISIBLE);
-            DocumentUploadAdapter adapter = null;
-            if (screenName.equalsIgnoreCase(TicketSummaryFragment.screenName)) {
+          //  DocumentUploadAdapter adapter = null;
+        /*    if (screenName.equalsIgnoreCase(TicketSummaryFragment.screenName)) {
                 if (ticketItem != null && ticketItem.getStatusDesc() != null && !ticketItem.getStatusDesc().equalsIgnoreCase("")) {
                     if (ticketItem.getStatusDesc().equalsIgnoreCase("Draft")) {
                         adapter = new DocumentUploadAdapter(uploadFileList, context, AppsConstant.EDIT, errorLinearLayout, getActivity());
@@ -1456,7 +1461,8 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
                 }
             } else {
                 adapter = new DocumentUploadAdapter(uploadFileList, context, AppsConstant.VIEW, errorLinearLayout, getActivity());
-            }
+            }*/
+            DocumentUploadAdapter adapter = new DocumentUploadAdapter(uploadFileList, context, AppsConstant.EDIT, errorLinearLayout, getActivity());
             expenseRecyclerView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
         } else {

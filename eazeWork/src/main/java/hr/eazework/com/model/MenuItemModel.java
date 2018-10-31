@@ -17,6 +17,9 @@ public class MenuItemModel implements Serializable {
 
     private String mObjectId;
     private String mObjectDesc;
+    private String mObjectDisplay;
+    private String mSeqNo;
+    private String mTypeID;
     private ArrayList<MenuItemModel> itemList;
 
     public static final String ATTANDANCE_KEY = "M0001";
@@ -52,6 +55,9 @@ public class MenuItemModel implements Serializable {
             isTicketAccess = jsonObject.optString("AccessYN", "N");
         }
         mObjectDesc = jsonObject.optString("ObjectDesc", "");
+        mObjectDisplay = jsonObject.optString("ObjectDisplay", "");
+        mSeqNo = jsonObject.optString("SeqNo", "");
+        mTypeID = jsonObject.optString("TypeID", "");
 
 
 
@@ -72,6 +78,31 @@ public class MenuItemModel implements Serializable {
             }
 
         }
+    }
+
+
+    public String getmObjectDisplay() {
+        return mObjectDisplay;
+    }
+
+    public void setmObjectDisplay(String mObjectDisplay) {
+        this.mObjectDisplay = mObjectDisplay;
+    }
+
+    public String getmSeqNo() {
+        return mSeqNo;
+    }
+
+    public void setmSeqNo(String mSeqNo) {
+        this.mSeqNo = mSeqNo;
+    }
+
+    public String getmTypeID() {
+        return mTypeID;
+    }
+
+    public void setmTypeID(String mTypeID) {
+        this.mTypeID = mTypeID;
     }
 
     public boolean isAccess() {
@@ -137,5 +168,27 @@ public class MenuItemModel implements Serializable {
         }
         return null;
     }
+    public MenuItemModel getItemModelByDisplayObject(String objectDisplay) {
+        if (itemList == null) {
+            itemList = new ArrayList<>();
+        }
+        for (MenuItemModel model : itemList) {
+            if (objectDisplay.equalsIgnoreCase(model.getmObjectDisplay())) {
+                return model;
+            }
+        }
+        return null;
+    }
 
+    public MenuItemModel getItemModelByTypeId(String getItemModelByTypeId) {
+        if (itemList == null) {
+            itemList = new ArrayList<>();
+        }
+        for (MenuItemModel model : itemList) {
+            if (getItemModelByTypeId.equalsIgnoreCase(model.getmTypeID())) {
+                return model;
+            }
+        }
+        return null;
+    }
 }

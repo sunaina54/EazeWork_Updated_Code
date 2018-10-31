@@ -219,11 +219,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
                             performUserAction(IAction.CREATE_LOCATION_VIEW, null, null);
                         } else if (selectedObject.toString().equalsIgnoreCase("Outdoor Duty")) {
                             performUserAction(IAction.OUTDOOR_DUTY, null, null);
-                        } else if (selectedObject.toString().equalsIgnoreCase("Tour")) {
-                            performUserAction(IAction.TOUR, null, null);
-                        } else if (selectedObject.toString().equalsIgnoreCase("Work From Home")) {
-                            performUserAction(IAction.WORK_FROM_HOME, null, null);
-                        } else if (selectedObject.toString().equalsIgnoreCase("Ticket")) {
+                        }else if (selectedObject.toString().equalsIgnoreCase("Ticket")) {
                             String ticketAceessValue = SharedPreference.getSharedPreferenceData(AppsConstant.Project_NAME,
                                     AppsConstant.TICKET_MENU_ACCESS, contextActivity);
                             if (ticketAceessValue.equalsIgnoreCase(AppsConstant.SELF)) {
@@ -249,13 +245,13 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
                                                 if (selectedObject.toString().equalsIgnoreCase(AppsConstant.TICKET_SELF)) {
                                                     SharedPreference.saveSharedPreferenceData(AppsConstant.Project_NAME,
                                                             AppsConstant.TICKET_KEY, "S", contextActivity);
-                                                customTicketBuilder.dismiss();
+                                                    customTicketBuilder.dismiss();
                                                     performUserAction(IAction.RAISE_TICKET_ADV, null, null);
 
                                                 } else if (selectedObject.toString().equalsIgnoreCase(AppsConstant.TICKET_Other)) {
                                                     SharedPreference.saveSharedPreferenceData(AppsConstant.Project_NAME,
                                                             AppsConstant.TICKET_KEY, "O", contextActivity);
-                                              customTicketBuilder.dismiss();
+                                                    customTicketBuilder.dismiss();
                                                     performUserAction(IAction.RAISE_TICKET_ADV, null, null);
 
                                                 }
@@ -265,6 +261,10 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
                                 customTicketBuilder.show();
                             }
 
+                        } else if (selectedObject.toString().equalsIgnoreCase("Tour")) {
+                            performUserAction(IAction.TOUR, null, null);
+                        } else if (selectedObject.toString().equalsIgnoreCase("Work From Home")) {
+                            performUserAction(IAction.WORK_FROM_HOME, null, null);
                         }
                         builder.dismiss();
                     }
@@ -1581,7 +1581,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
         } else if (fragment instanceof CreateTicketAdvanceFragment) {
             return "Ticket";
         }else if (fragment instanceof TicketApprovalFragment) {
-            return "Ticket Approval";
+            return "Open Tickets";
         } else {
             return "";
         }

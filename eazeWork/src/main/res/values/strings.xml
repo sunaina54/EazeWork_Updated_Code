@@ -161,7 +161,7 @@
     <string name="dateWorked">Date Worked</string>
     <string name="status">Status</string>
     <string name="viewBTN">View</string>
-    <string name="close">Close</string>
+    <string name="close">Close Ticket</string>
     <string name="redirect">Redirect</string>
     <string name="actionBTN">Action</string>
     <string name="internal_storage">Internal storage</string>

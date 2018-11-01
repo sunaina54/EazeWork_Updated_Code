@@ -82,7 +82,7 @@
              android:visibility="gone"
              android:layout_margin="@dimen/margin_7"
              android:id="@+id/closeBTN"
-             android:layout_width="@dimen/margin_70"
+             android:layout_width="@dimen/margin_82"
              android:layout_height="@dimen/margin_30"
              style="@style/button"
              android:layout_marginRight="5dp"

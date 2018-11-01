@@ -187,8 +187,38 @@ public class RetakeFragment extends Fragment {
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.remove(currentFragment);
+            /*try {
+                fragmentTransaction.remove(currentFragment).commitNow();
+            } catch( IllegalStateException e ) {
+                fragmentTransaction.remove(currentFragment).commitAllowingStateLoss();
+            }*/
+//            fragmentManager.executePendingTransactions();
+        //   fragmentTransaction.commitNow();
+           /* try {
+                //fragmentTransaction.commitAllowingStateLoss();
+                fragmentTransaction.commitAllowingStateLoss();
+
+            }catch (IllegalStateException e){
+                Log.d("Exception Camera Selfie",e.toString());
+            }*/
+          /*  fragmentManager.executePendingTransactions();
+            fragmentTransaction.remove(currentFragment).commitNow();
             fragmentTransaction.commitAllowingStateLoss();
+            fragmentManager.popBackStack();*/
+
+         //Old code
+          fragmentTransaction.commitAllowingStateLoss();
             fragmentManager.popBackStackImmediate();
+
+      /* fragmentManager.addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+           @Override
+           public void onBackStackChanged() {
+               fragmentManager.beginTransaction()
+                       .replace(R.id.container, new RetakeFragment()).commitNow();
+           }
+       });*/
+
+
         }
     }
 

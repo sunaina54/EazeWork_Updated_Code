@@ -12,6 +12,15 @@ public class GetTicketDetailRequestModel implements Serializable {
     private AdvanceLoginDataRequestModel loginData;
     private String TicketID;
     private String SimpleOrAdvance;
+    private String OpenBy;
+
+    public String getOpenBy() {
+        return OpenBy;
+    }
+
+    public void setOpenBy(String openBy) {
+        OpenBy = openBy;
+    }
 
     public String getSimpleOrAdvance() {
         return SimpleOrAdvance;

@@ -38,6 +38,7 @@ public class GetTicketDetailResultModel extends GenericResponse {
     private String SubCategoryDesc="";
     private String CustomerEmpName="";
     private String SubmittedBy="";
+    private String OldCategoryID="";
 
 
 
@@ -51,6 +52,14 @@ public class GetTicketDetailResultModel extends GenericResponse {
         // Serialize this class into a JSON string using GSON
         Gson gson = new Gson();
         return gson.toJson(this);
+    }
+
+    public String getOldCategoryID() {
+        return OldCategoryID;
+    }
+
+    public void setOldCategoryID(String oldCategoryID) {
+        OldCategoryID = oldCategoryID;
     }
 
     public String getSubmittedBy() {

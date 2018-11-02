@@ -391,7 +391,8 @@ public class WorkFromHomeRequestFragment extends BaseFragment {
         } else if (employeeLeaveModel != null && employeeLeaveModel.getReqID() != null
                 && !employeeLeaveModel.getReqID().equalsIgnoreCase("0")) {
             //Approval edit
-            if (employeeLeaveModel.getReqType() != null && employeeLeaveModel.getReqType().equalsIgnoreCase(AppsConstant.WFH_EDIT)) {
+            if (employeeLeaveModel.getReqType() != null &&
+                    employeeLeaveModel.getReqType().equalsIgnoreCase(AppsConstant.WFH_EDIT)) {
                 reqId = employeeLeaveModel.getReqID();
                 remarksDataLl.setVisibility(View.VISIBLE);
                 sendViewWFHRequestSummaryData();

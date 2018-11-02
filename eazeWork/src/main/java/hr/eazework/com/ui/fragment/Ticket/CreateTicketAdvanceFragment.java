@@ -146,6 +146,7 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
     private String simpleOrAdvance = "", categoryYN = "", subCategoryYN = "";
     private GetTicketDetailRequestModel requestDetail;
     private RecyclerView remarksRV;
+    private String openBy="";
 
     public String getScreenName() {
         return screenName;
@@ -476,10 +477,12 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
 
 
             if (screenName.equalsIgnoreCase(TicketApprovalFragment.screenName)) {
+
                 ticketId = ticketItem.getTicketID();
                 sendTicketInitRequestData();
                 remarksDataLl.setVisibility(View.VISIBLE);
                 remarksLinearLayout1.setVisibility(View.VISIBLE);
+                openBy="A"; //Approver
                 sendViewRequestSummaryData();
 
 
@@ -487,11 +490,13 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
                 remarksDataLl.setVisibility(View.VISIBLE);
                 if(ticketItem.getStatusDesc().equalsIgnoreCase(AppsConstant.DRAFT)){
                     remarksDataLl.setVisibility(View.GONE);
+                    remarksLinearLayout1.setVisibility(View.GONE);
                 }
                 ticketId = ticketItem.getTicketID();
                 sendTicketInitRequestData();
 
-                remarksLinearLayout1.setVisibility(View.VISIBLE);
+                //remarksLinearLayout1.setVisibility(View.VISIBLE);
+                openBy="I"; //Initiator
                 sendViewRequestSummaryData();
 
             }
@@ -1049,7 +1054,7 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
             requestDetail.setTicketID(ticketItem.getTicketID());
         }
         requestDetail.setSimpleOrAdvance(ticketItem.getSimpleOrAdvance());
-
+        requestDetail.setOpenBy(openBy);
         Utility.showHidePregress(progressbar, true);
         CommunicationManager.getInstance().sendPostRequest(this,
                 AppRequestJSONString.ticketSummaryDetails(requestDetail),

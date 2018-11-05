@@ -328,7 +328,8 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
                                         && getTicketDetailResponseModel != null && getTicketDetailResponseModel.getGetTicketDetailResult() != null
                                         && getTicketDetailResponseModel.getGetTicketDetailResult().getCategoryID() != null
                                         && !getTicketDetailResponseModel.getGetTicketDetailResult().getCategoryID().equalsIgnoreCase("")) {
-                                    if (!categoryCode.equalsIgnoreCase(getTicketDetailResponseModel.getGetTicketDetailResult().getCategoryID())) {
+                                    if (!categoryCode.equalsIgnoreCase(getTicketDetailResponseModel.getGetTicketDetailResult().getCategoryID())
+                                            || !categoryCode.equalsIgnoreCase(getTicketDetailResponseModel.getGetTicketDetailResult().getOldCategoryID()) ) {
                                         redirectBTN.setVisibility(View.VISIBLE);
                                         closeBTN.setVisibility(View.GONE);
                                     }
@@ -1011,9 +1012,9 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
             ticketDetailModel.setSubject(subjectET.getText().toString());
             ticketDetailModel.setComment(descriptionET.getText().toString());
             ticketDetailModel.setFromButton(fromButton);
-            if (screenName.equalsIgnoreCase(TicketSummaryFragment.screenName)) {
+          //  if (screenName.equalsIgnoreCase(TicketSummaryFragment.screenName)) {
                 ticketDetailModel.setNewRemark(remarksET.getText().toString());
-            }
+           // }
             //  ticketDetailModel.setFeedback(feedbackET.getText().toString());
             //   ticketDetailModel.setFeedbackCode(feedbackCode);
 
@@ -1279,6 +1280,15 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
 
             }
         }
+
+        if(item.getCategoryID()!=null && item.getOldCategoryID()!=null){
+            redirectBTN.setVisibility(View.GONE);
+            closeBTN.setVisibility(View.VISIBLE);
+            if(!item.getCategoryID().equalsIgnoreCase(item.getOldCategoryID())) {
+                redirectBTN.setVisibility(View.VISIBLE);
+                closeBTN.setVisibility(View.GONE);
+            }
+        }
     }
 
     public void askLocationPermision() {
@@ -1426,6 +1436,10 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
         if (item.getComment() != null) {
             descriptionET.setText(item.getComment());
 
+        }
+
+        if(item.getNewRemark()!=null){
+            remarksET.setText(item.getNewRemark());
         }
         setupButtons(item);
     }

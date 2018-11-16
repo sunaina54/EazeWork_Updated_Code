@@ -8,8 +8,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -71,6 +73,7 @@ public class RetakeFragment extends Fragment {
         cancel = (TextView) view.findViewById(R.id.btRetake);
         imageView = (ImageView) view.findViewById(R.id.ivRetake);
         context = getContext();
+        Log.d("TAG","Image Absolute path 1 : "+imagePath);
         final File path = new File(imagePath);
 
 
@@ -81,6 +84,7 @@ public class RetakeFragment extends Fragment {
             } catch (IllegalArgumentException e) {
                 Crashlytics.logException(e);
                 waitingForActivity = true;
+                Log.d("Front-Image 1","after bitmap issue"+waitingForActivity+"");
             }
         } else if (path != null && path.exists()) {
             try {
@@ -88,9 +92,11 @@ public class RetakeFragment extends Fragment {
             } catch (IllegalArgumentException e) {
                 Crashlytics.logException(e);
                 waitingForActivity = true;
+                Log.d("Front-Image 2","after bitmap issue"+waitingForActivity+"");
             }
-        } else if (path == null || (path != null && !path.exists())) {
+        } else if (path == null|| (path != null && !path.exists())) {
             waitingForActivity = true;
+            Log.d("Front-Image 3","after bitmap issue "+waitingForActivity+"");
         }
 
         confirm.setOnClickListener(new View.OnClickListener() {
@@ -107,6 +113,11 @@ public class RetakeFragment extends Fragment {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+              File  mFile = new File(getActivity().getExternalFilesDir(Environment.DIRECTORY_DCIM), "pic.jpg");
+              if(mFile.exists()){
+                  mFile.delete();
+              }
+
                 goBackAction();
             }
         });
@@ -176,6 +187,7 @@ public class RetakeFragment extends Fragment {
 
     public void goBackAction() {
         if (CameraActivity.forBelowLollipop) {
+            //|| (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O)
 
             CameraActivity activity = (CameraActivity) getActivity();
             if (activity != null) {
@@ -183,10 +195,21 @@ public class RetakeFragment extends Fragment {
             }
 
         } else {
-            Fragment currentFragment = getFragmentManager().findFragmentById(R.id.flCapture);
-            FragmentManager fragmentManager = getFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.remove(currentFragment);
+           /* Handler uiHandler = new Handler();
+            uiHandler.post(new Runnable()
+            {
+                @Override
+                public void run()
+                {*/
+                    FragmentManager fragmentManager = getFragmentManager();
+                    Fragment currentFragment = fragmentManager.findFragmentById(R.id.flCapture);
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.remove(currentFragment);
+                    fragmentTransaction.commitAllowingStateLoss();
+                    fragmentManager.popBackStack();
+             /*   }
+            });*/
+            //fragmentManager.popBackStackImmediate();
             /*try {
                 fragmentTransaction.remove(currentFragment).commitNow();
             } catch( IllegalStateException e ) {
@@ -207,8 +230,12 @@ public class RetakeFragment extends Fragment {
             fragmentManager.popBackStack();*/
 
          //Old code
-          fragmentTransaction.commitAllowingStateLoss();
-            fragmentManager.popBackStackImmediate();
+            //fragmentTransaction.commitNow();
+//            fragmentManager.executePendingTransactions();
+           // fragmentTransaction.commitNow();
+
+        //  fragmentManager.popBackStack();
+
 
       /* fragmentManager.addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
            @Override
@@ -284,11 +311,14 @@ public class RetakeFragment extends Fragment {
                     .setCompressFormat(Bitmap.CompressFormat.JPEG).setMaxWidth(480)
                     .setMaxHeight(640).build().compressToBitmap(path);
             bmp = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+            //waitingForActivity=true;
+            Log.d("Front-Image 4","after bitmap issue"+waitingForActivity+"");
         } else {
             Bitmap bitmap = new Compressor.Builder(getContext()).setQuality(60)
                     .setCompressFormat(Bitmap.CompressFormat.JPEG).setMaxWidth(480)
                     .setMaxHeight(640).build().compressToBitmap(path);
             bmp = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(),matrix, true);
+            Log.d("Front-Image 5","after bitmap issue"+waitingForActivity+"");
         }
         return bmp;
     }

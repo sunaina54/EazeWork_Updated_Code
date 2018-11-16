@@ -39,9 +39,15 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/margin_13"
-                    android:orientation="vertical">
 
+                    android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_13"
+                    android:layout_marginLeft="@dimen/margin_13"
+                    android:layout_marginRight="@dimen/margin_13"
+                    android:orientation="vertical">
                     <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
                         android:id="@+id/cardViewExpense"
                         android:layout_width="match_parent"
@@ -403,19 +409,33 @@
 
                         </LinearLayout>
                     </android.support.v7.widget.CardView>
-
+                </LinearLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_13"
+                        android:layout_marginRight="@dimen/margin_13"
+                        >
                         <include layout="@layout/expense_line_item_layout"></include>
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/advance_adjustment_Ll">
+                        android:id="@+id/advance_adjustment_Ll"
+                        android:layout_marginLeft="@dimen/margin_13"
+                        android:layout_marginRight="@dimen/margin_13">
                         <include layout="@layout/advance_adjustment_layout"></include>
                     </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginLeft="@dimen/margin_13"
+                        android:layout_marginRight="@dimen/margin_13">
+
+
                     <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -427,7 +447,6 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/margin_5"
                             android:orientation="vertical">
 
                             <LinearLayout
@@ -506,7 +525,7 @@
 
                         </LinearLayout>
                     </android.support.v7.widget.CardView>
-
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -517,7 +536,9 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:visibility="visible">
+                        android:visibility="visible"
+                        android:layout_marginLeft="@dimen/margin_13"
+                        android:layout_marginRight="@dimen/margin_13">
                         <include layout="@layout/payment_layout"></include>
                     </LinearLayout>
 
@@ -525,7 +546,9 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_13"
+                        android:layout_marginRight="@dimen/margin_13">
                         <include layout="@layout/upload_document_layout"></include>
                     </LinearLayout>
 

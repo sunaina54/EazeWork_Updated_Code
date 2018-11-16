@@ -215,7 +215,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
                             performUserAction(IAction.ADD_EXPENSE_CLAIM, null, null);
                         } else if (selectedObject.toString().equalsIgnoreCase("Leave")) {
                             performUserAction(IAction.CREATE_NEW_LEAVE, null, null);
-                        } else if (selectedObject.toString().equalsIgnoreCase("Location")) {
+                        } else if (selectedObject.toString().equalsIgnoreCase("Locations")) {
                             performUserAction(IAction.CREATE_LOCATION_VIEW, null, null);
                         } else if (selectedObject.toString().equalsIgnoreCase("Outdoor Duty")) {
                             performUserAction(IAction.OUTDOOR_DUTY, null, null);

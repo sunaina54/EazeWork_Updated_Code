@@ -13,6 +13,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
+import com.google.android.gms.ads.internal.gmsg.HttpClient;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
@@ -37,11 +38,18 @@ import java.util.Map;
 
 import hr.eazework.com.MainActivity;
 import hr.eazework.com.R;
+import hr.eazework.com.application.MyApplication;
 import hr.eazework.com.geofence.GeolocationService;
+import hr.eazework.com.model.AdvanceLoginDataRequestModel;
 import hr.eazework.com.model.GeoCoderModel;
+import hr.eazework.com.model.GetAdvanceDetailRequestModel;
+import hr.eazework.com.model.GetLocationRequestModel;
 import hr.eazework.com.model.SimpleGeofence;
 import hr.eazework.com.model.SimpleGeofenceStore;
 import hr.eazework.com.ui.util.custom.AlertCustomDialog;
+import hr.eazework.selfcare.communication.AppRequestJSONString;
+import hr.eazework.selfcare.communication.CommunicationConstant;
+import hr.eazework.selfcare.communication.CommunicationManager;
 
 /**
  * Created by Manjunath on 27-04-2017.
@@ -49,7 +57,8 @@ import hr.eazework.com.ui.util.custom.AlertCustomDialog;
 
 public class GeoUtil {
 
-    private static final String GEO_CODER_API_URL = "https://maps.googleapis.com/maps/api/geocode/json?language=en-IN";
+    //private static final String GEO_CODER_API_URL = "https://maps.googleapis.com/maps/api/geocode/json?language=en-IN";
+    private static final String GEO_CODER_API_URL ="http://www.eazework.net/test/EWApi/AttendanceService.svc/GetEWGeoCode/";
     private static final String TAG = GeoUtil.class.getName();
 
     public static int userLocationStatus(Location location, Preferences preferences) {
@@ -169,9 +178,38 @@ public class GeoUtil {
         MainActivity.geofencesAlreadyRegistered = true;
     }
 
+
+
     public static String getGeoCoderUrl(double latitude, double longitude) {
-        return GEO_CODER_API_URL + "&latlng=" + latitude + "," + longitude + AppsConstant.KEY;
+
+    /*    AdvanceLoginDataRequestModel loginData = new AdvanceLoginDataRequestModel();
+        loginData.setDeviceID(MyApplication.getDeviceId());
+        loginData.setSessionID(SharedPreference.getSessionId());
+        GetLocationRequestModel getLocationRequestModel= new GetLocationRequestModel();
+        getLocationRequestModel.setLoginData(loginData);
+        getLocationRequestModel.setLatlng(latitude+","+longitude);
+        Log.d("SummaryRequest",getLocationRequestModel.serialize());
+        return getLocationRequestModel.serialize();*/
+      // return GEO_CODER_API_URL + "&latlng=" + latitude + "," + longitude + AppsConstant.KEY;
+       return GEO_CODER_API_URL + latitude + ","+longitude;
+
+
+
+     //   return "https://maps.googleapis.com/maps/api/geocode/json?language=en-IN&latlng=28.5355,77.3910&key=AIzaSyDS2Z6-lVqQXcly5xxBXJx3Kft5U_ecsPo";
+ //   return "http://www.eazework.net/test/EWApi/AttendanceService.svc/GetEWGeoCode/28.5355,77.3910";
     }
+
+
+
+    /*public static String getGeoCoderUrlData(double latitude, double longitude) {
+        AdvanceLoginDataRequestModel loginData = new AdvanceLoginDataRequestModel();
+        loginData.setDeviceID(MyApplication.getDeviceId());
+        loginData.setSessionID(SharedPreference.getSessionId());
+        GetAdvanceDetailRequestModel advanceDetailRequestModel= new GetAdvanceDetailRequestModel();
+        advanceDetailRequestModel.setLoginData(loginData);
+        Log.d("SummaryRequest",advanceDetailRequestModel.serialize());
+        return advanceDetailRequestModel.serialize();
+    }*/
 
     public static final String convert(double latitude) {
         StringBuilder sb = new StringBuilder(20);
@@ -277,6 +315,64 @@ public class GeoUtil {
         return getLocationForMarshmallow(context, googleApiClient, fragment);
     }
 
+
+   /* public static String fetchAddressFromGeoCoder(String[] params) {
+        String response = "";
+        URL url = null;
+        HttpURLConnection connection = null;
+        BufferedReader reader = null;
+        try {
+            url = new URL(params[0]);
+            connection = (HttpURLConnection) url.openConnection();
+             connection.setRequestMethod("POST");
+            connection.setRequestProperty("User-Agent", "mozilla");//
+            connection.setDoOutput(true);
+            connection.connect();
+
+            if (connection.getResponseCode() == 200) {
+                InputStream stream = connection.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(stream));
+                StringBuilder buffer = new StringBuilder();
+                String line = "";
+                while ((line = reader.readLine()) != null) {
+                    buffer.append(line);
+                }
+                response = buffer.toString();
+            } else {
+                InputStream stream = connection.getErrorStream();
+                reader = new BufferedReader(new InputStreamReader(stream));
+                StringBuilder buffer = new StringBuilder();
+                String line = "";
+                while ((line = reader.readLine()) != null) {
+                    buffer.append(line);
+                }
+                response = buffer.toString();
+            }
+        } catch (MalformedURLException e) {
+            Log.e(TAG, e.getMessage(), e);
+            Crashlytics.logException(e);
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage(), e);
+            Crashlytics.logException(e);
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
+            Crashlytics.logException(e);
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
+            try {
+                if (reader != null) {
+                    reader.close();
+                }
+            } catch (IOException e) {
+                Log.e(TAG, e.getMessage(), e);
+                Crashlytics.logException(e);
+            }
+        }
+        return response;
+    }*/
+
     public static String fetchAddressFromGeoCoder(String[] params) {
         String response = "";
         URL url = null;
@@ -285,9 +381,10 @@ public class GeoUtil {
         try {
             url = new URL(params[0]);
             connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
+          connection.setRequestMethod("GET");
+           // connection.setRequestMethod("POST");
             connection.setRequestProperty("User-Agent", "mozilla");//
-            connection.setDoOutput(true);
+          //  connection.setDoOutput(true);
             connection.connect();
 
             if (connection.getResponseCode() == 200) {
@@ -336,9 +433,11 @@ public class GeoUtil {
 
     public static GeoCoderModel getGeoCoderModel(String geoCoderResponse) {
         String result = geoCoderResponse;
+       // result=result.replaceAll("\\\\","");
         GeoCoderModel address = null;
         JSONObject parentObj = null;
         try {
+
             parentObj = new JSONObject(result);
         } catch (JSONException e) {
             Log.e(TAG, e.getMessage(), e);

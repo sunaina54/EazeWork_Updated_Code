@@ -108,6 +108,16 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="sliderTextView">
+        <item name="android:padding">2dip</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/red</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:background">@color/white</item>
+
+
+    </style>
+
     <style name="textViewYellow">
         <item name="android:padding">2dip</item>
         <item name="android:textSize">@dimen/font_14</item>

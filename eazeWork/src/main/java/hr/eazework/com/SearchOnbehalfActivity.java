@@ -39,6 +39,8 @@ import hr.eazework.selfcare.communication.AppRequestJSONString;
 import hr.eazework.selfcare.communication.CommunicationConstant;
 import hr.eazework.selfcare.communication.CommunicationManager;
 
+import static hr.eazework.com.ui.fragment.Ticket.CreateTicketAdvanceFragment.TICKET_EMP_ADV;
+
 public class SearchOnbehalfActivity extends BaseActivity {
     private RelativeLayout searchLayout;
     private EditText searchET;
@@ -47,7 +49,7 @@ public class SearchOnbehalfActivity extends BaseActivity {
     private Context context;
     private RelativeLayout mainLayout;
     private RelativeLayout backLayout;
-    private TextView tv_header_text;
+    private TextView tv_header_text,noContactTV;
     private RecyclerView recyclerView;
     private EmployResponse empResponse;
     private GetContactListResponseModel contactListResponseModel;
@@ -89,11 +91,15 @@ public class SearchOnbehalfActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 searchET.setText("");
-                searchET.setHint("Enter User name");
+                searchET.setHint("Enter name");
             }
         });
+        noContactTV=(TextView)findViewById(R.id.noContactTV);
         tv_header_text=(TextView)findViewById(R.id.tv_header_text);
         tv_header_text.setText("Search Employee");
+        if(SELECTED_TYPE == TICKET_EMP_ADV){
+            tv_header_text.setText("Search Contact");
+        }
         tv_header_text.setTextColor(textColor);
         rl_edit_team_member=(LinearLayout) findViewById(R.id.rl_edit_team_member);
         rl_edit_team_member.setBackgroundColor(bgColor);
@@ -146,6 +152,10 @@ public class SearchOnbehalfActivity extends BaseActivity {
             adapter.notifyDataSetChanged();
         }else{
             noRecordLayout.setVisibility(View.VISIBLE);
+            noContactTV.setText("No Employee Found");
+            if(SELECTED_TYPE == TICKET_EMP_ADV){
+                noContactTV.setText("No Contact Found");
+            }
         }
 
     }
@@ -262,7 +272,7 @@ public class SearchOnbehalfActivity extends BaseActivity {
 
 
 
-        if(CreateTicketAdvanceFragment.TICKET_EMP_ADV == SELECTED_TYPE){
+        if(TICKET_EMP_ADV == SELECTED_TYPE){
             request=new SearchOnBehalfItem();
             request.setSelfOrOther("O");
             request.setMatchStr(str);
@@ -292,7 +302,7 @@ public class SearchOnbehalfActivity extends BaseActivity {
             CommunicationManager.getInstance().sendPostRequest(this,
                     AppRequestJSONString.searchOnBehalfRequest(request),
                     CommunicationConstant.API_GET_TOUR_EMP_LIST, true);
-        }*/else if(CreateTicketAdvanceFragment.TICKET_EMP_ADV == SELECTED_TYPE) {
+        }*/else if(TICKET_EMP_ADV == SELECTED_TYPE) {
 
              CommunicationManager.getInstance().sendPostRequest(this,
                     AppRequestJSONString.searchOnBehalfRequest(request),
@@ -316,6 +326,7 @@ public class SearchOnbehalfActivity extends BaseActivity {
 
             private TextView empNameTV,empIdTV,empCodeTV;
             private Button selectBT;
+            private RelativeLayout employeeRL;
             public MyViewHolder(View v) {
                 super(v);
 
@@ -323,6 +334,7 @@ public class SearchOnbehalfActivity extends BaseActivity {
                 empIdTV=(TextView)v.findViewById(R.id.empIdTV);
                 empNameTV=(TextView)v.findViewById(R.id.empNameTV);
                 selectBT=(Button)v.findViewById(R.id.selectBT);
+                employeeRL= (RelativeLayout) v.findViewById(R.id.employeeRL);
 
 
             }
@@ -361,7 +373,26 @@ public class SearchOnbehalfActivity extends BaseActivity {
             if(item.getName()!=null)
                 holder.empNameTV.setText(item.getName());
             holder.empIdTV.setText(item.getEmpID()+"");
-            holder.selectBT.setOnClickListener(new View.OnClickListener() {
+            holder.employeeRL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent theIntent=new Intent();
+                    theIntent.putExtra(SELECTED_EMP,item);
+                    theIntent.putExtra(SELECTED_WFH_EMP,item);
+                    theIntent.putExtra(SELECTED_OD_EMP,item);
+                    theIntent.putExtra(SELECTED_TOUR_EMP,item);
+                    theIntent.putExtra(SELECTED_TICKET_EMP,item);
+                    theIntent.putExtra(SELECTED_TICKET_EMP_ADV,item);
+                    setResult(OutdoorDutyRequestFragment.OD_EMP,theIntent);
+                    setResult(WorkFromHomeRequestFragment.WFH_EMP,theIntent);
+                    setResult(CreateNewLeaveFragment.LEAVE_EMP,theIntent);
+                    setResult(TourRequestFragment.TOUR_EMP,theIntent);
+                    setResult(CreateTicketFragment.TICKET_EMP,theIntent);
+                    setResult(TICKET_EMP_ADV,theIntent);
+                    finish();
+                }
+            });
+           /* holder.selectBT.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent theIntent=new Intent();
@@ -379,7 +410,7 @@ public class SearchOnbehalfActivity extends BaseActivity {
                     setResult(CreateTicketAdvanceFragment.TICKET_EMP_ADV,theIntent);
                     finish();
                 }
-            });
+            });*/
         }
 
         @Override
@@ -403,6 +434,7 @@ public class SearchOnbehalfActivity extends BaseActivity {
 
             private TextView empNameTV,empIdTV,empCodeTV;
             private Button selectBT;
+            private RelativeLayout employeeRL;
             public MyViewHolder(View v) {
                 super(v);
 
@@ -410,7 +442,7 @@ public class SearchOnbehalfActivity extends BaseActivity {
                 empIdTV=(TextView)v.findViewById(R.id.empIdTV);
                 empNameTV=(TextView)v.findViewById(R.id.empNameTV);
                 selectBT=(Button)v.findViewById(R.id.selectBT);
-
+                employeeRL= (RelativeLayout) v.findViewById(R.id.employeeRL);
 
             }
         }
@@ -448,6 +480,16 @@ public class SearchOnbehalfActivity extends BaseActivity {
             if(item.getName()!=null)
                 holder.empNameTV.setText(item.getName());
           //  holder.empIdTV.setText(item.ge()+"");
+
+            holder.employeeRL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent theIntent=new Intent();
+                    theIntent.putExtra(SELECTED_TICKET_EMP_ADV,item);
+                    setResult(TICKET_EMP_ADV,theIntent);
+                    finish();
+                }
+            });
             holder.selectBT.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -463,7 +505,7 @@ public class SearchOnbehalfActivity extends BaseActivity {
                     setResult(CreateNewLeaveFragment.LEAVE_EMP,theIntent);
                     setResult(TourRequestFragment.TOUR_EMP,theIntent);
                     setResult(CreateTicketFragment.TICKET_EMP,theIntent);*/
-                    setResult(CreateTicketAdvanceFragment.TICKET_EMP_ADV,theIntent);
+                    setResult(TICKET_EMP_ADV,theIntent);
                     finish();
                 }
             });

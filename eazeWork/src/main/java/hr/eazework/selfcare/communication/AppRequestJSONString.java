@@ -404,6 +404,7 @@ public class AppRequestJSONString {
         return advanceDetailRequestModel.serialize();
     }
 
+
     // Ticket Init Request
     public static String getTicketPageInitRequestData(TicketPageInitRequestModel ticketPageInitRequestModel) {
         AdvanceLoginDataRequestModel loginData = new AdvanceLoginDataRequestModel();

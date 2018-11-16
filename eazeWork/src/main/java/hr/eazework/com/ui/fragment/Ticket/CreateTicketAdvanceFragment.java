@@ -400,6 +400,9 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
                     });
                     ticketTypeDialog.show();
 
+                }else {
+                    new AlertCustomDialog(context,"List is empty.");
+                    return;
                 }
             }
         });
@@ -1281,12 +1284,14 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
             }
         }
 
-        if(item.getCategoryID()!=null && item.getOldCategoryID()!=null){
-            redirectBTN.setVisibility(View.GONE);
-            closeBTN.setVisibility(View.VISIBLE);
-            if(!item.getCategoryID().equalsIgnoreCase(item.getOldCategoryID())) {
-                redirectBTN.setVisibility(View.VISIBLE);
-                closeBTN.setVisibility(View.GONE);
+        if(screenName.equalsIgnoreCase(TicketApprovalFragment.screenName)) {
+            if (item.getCategoryID() != null && item.getOldCategoryID() != null) {
+                redirectBTN.setVisibility(View.GONE);
+                closeBTN.setVisibility(View.VISIBLE);
+                if (!item.getCategoryID().equalsIgnoreCase(item.getOldCategoryID())) {
+                    redirectBTN.setVisibility(View.VISIBLE);
+                    closeBTN.setVisibility(View.GONE);
+                }
             }
         }
     }
@@ -1297,6 +1302,7 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
 
     // Edit Mode (via Dashboard flow)
     private void updateUIWithData(GetTicketDetailResultModel item) {
+        closeBTN.setVisibility(View.GONE);
         searchLayout.setVisibility(View.GONE);
         plus_create_newIV.setVisibility(View.VISIBLE);
         if (item.getStatusDesc().equalsIgnoreCase(AppsConstant.DRAFT)) {
@@ -1376,6 +1382,10 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
                 categoryLl.setVisibility(View.GONE);
             }
 
+            if(item.getCustomerCorpID()!=null &&
+                    !item.getCustomerCorpID().equalsIgnoreCase("")){
+                customerCorpId = item.getCustomerCorpID();
+            }
             if (item.getSubCategoryDesc() != null &&
                     !item.getSubCategoryDesc().equalsIgnoreCase("")) {
                 subCategoryLl.setVisibility(View.VISIBLE);
@@ -1441,6 +1451,7 @@ public class CreateTicketAdvanceFragment extends BaseFragment {
         if(item.getNewRemark()!=null){
             remarksET.setText(item.getNewRemark());
         }
+
         setupButtons(item);
     }
 

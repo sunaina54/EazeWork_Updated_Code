@@ -202,7 +202,7 @@
     <string name="emp_id">Emp Id</string>
     <string name="emp_code">Emp Code</string>
     <string name="emp_name">Emp Name</string>
-    <string name="search_hint">Enter user name</string>
+    <string name="search_hint">Enter name</string>
     <string name="no_record">No Data Found</string>
     <string name="network_error">No internet connection. Please try again later</string>
     <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>

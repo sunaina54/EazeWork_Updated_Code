@@ -20,6 +20,7 @@ public class AppsConstant {
             LEAVE_WITHDRAWAL="5",TOUR_EDIT="11",TOUR_WITHDRAWAL="12",VIEW_ACTION="V",EDIT_ACTION="E"
             ,OD_EDIT="32",OD_WITHDRAWAL="33",WFH_EDIT="13",WFH_WITHDRAWAL="14";
     public  static  final String SUCCESS="0";
+    public  static  final String TEXT_ANNOUNCEMENT="11";
     public  static  final String SIMPLE_VIEW="S";
     public  static  final String ADVANCE_VIEW="A";
     public  static  final String Project_NAME="EazeWork";

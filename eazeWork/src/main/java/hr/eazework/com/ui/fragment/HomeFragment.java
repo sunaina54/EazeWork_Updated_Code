@@ -1155,10 +1155,12 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
             onCreate(null);
         }
 
-        if (announcementRes != null && announcementRes.getGetAnnouncementResult() != null
-                && announcementRes.getGetAnnouncementResult().getAnnouncementItems() != null
-                && announcementRes.getGetAnnouncementResult().getAnnouncementItems().size() > 0) {
-            refreshAnnouncementResult(announcementRes.getGetAnnouncementResult().getAnnouncementItems());
+        if (isFromLogin) {
+            if (announcementRes != null && announcementRes.getGetAnnouncementResult() != null
+                    && announcementRes.getGetAnnouncementResult().getAnnouncementItems() != null
+                    && announcementRes.getGetAnnouncementResult().getAnnouncementItems().size() > 0) {
+                refreshAnnouncementResult(announcementRes.getGetAnnouncementResult().getAnnouncementItems());
+            }
         }
         //viewAnnouncementData();
     }
@@ -1460,7 +1462,8 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
         if (announcementRes != null && announcementRes.getGetAnnouncementResult() != null
                 && announcementRes.getGetAnnouncementResult().getAnnouncementItems() != null
                 && announcementRes.getGetAnnouncementResult().getAnnouncementItems().size() > 0) {
-            viewPagerAdapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager(), announcementRes.getGetAnnouncementResult().getAnnouncementItems());
+            viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager(),
+                    announcementRes.getGetAnnouncementResult().getAnnouncementItems());
 
             pager.setAdapter(viewPagerAdapter);
             if (announcementRes.getGetAnnouncementResult().

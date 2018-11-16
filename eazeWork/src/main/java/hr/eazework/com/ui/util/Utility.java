@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -84,6 +85,8 @@ import hr.eazework.com.ui.interfaces.IAction;
 import hr.eazework.com.ui.interfaces.UserActionListner;
 import hr.eazework.com.ui.util.custom.AlertCustomDialog;
 import hr.eazework.selfcare.communication.CommunicationConstant;
+
+import static java.net.Proxy.Type.HTTP;
 
 public class Utility {
     static ArrayList<Long> list = new ArrayList<>();
@@ -937,6 +940,41 @@ public class Utility {
        }
 
     }
+/*
+    public static HashMap<String, String> httpPost(String url, String requestBody, String[] header) throws Exception {
+        DefaultHttpClient mHttpClient = new DefaultHttpClient();
+        String inputStream = null;
+        String[] str = new String[2];
+        HashMap<String, String> responseMap = new HashMap<>();
+        // try {
+        HttpPost mHttpPost = new HttpPost(url);
+      */
+/*  if (header != null) {
+            for (int i = 0; i < header.length; i++) {
+                String strHeader = header[i];
+                //  String arr[] = strHeader.split("/");
+                mHttpPost.addHeader(header[0], header[1]);
+            }
+        }*//*
+
+        StringEntity se = new StringEntity(requestBody, HTTP.UTF_8);
+        se.setContentType("application/json");
+        mHttpPost.setEntity(se);
+        HttpResponse response = mHttpClient.execute(mHttpPost);
+        HttpEntity resEntity = response.getEntity();
+        inputStream = EntityUtils.toString(response.getEntity());
+
+        responseMap.put("response", inputStream);
+       */
+/* } catch (Exception e) {
+            e.printStackTrace();
+            responseMap.put("exception",e.toString());
+           // Log.i(TAG, "ffffffffffffffffffffffffff" + e.toString());
+        }*//*
+
+        return responseMap;
+    }
+*/
 
 
 }

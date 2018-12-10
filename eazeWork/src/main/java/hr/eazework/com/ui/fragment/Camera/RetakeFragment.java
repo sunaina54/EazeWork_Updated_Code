@@ -29,6 +29,7 @@ import com.crashlytics.android.Crashlytics;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 
 import hr.eazework.com.R;
@@ -72,12 +73,19 @@ public class RetakeFragment extends Fragment {
         confirm = (TextView) view.findViewById(R.id.btConfirm);
         cancel = (TextView) view.findViewById(R.id.btRetake);
         imageView = (ImageView) view.findViewById(R.id.ivRetake);
+        imageView.setImageBitmap(null);
         context = getContext();
-        Log.d("TAG","Image Absolute path 1 : "+imagePath);
+        Log.d("TAG", "Image Absolute path 1 : " + imagePath);
+
+
         final File path = new File(imagePath);
-
-
-        if (!imagePurpose.equals(null) && imagePurpose.equals("ForPhoto") &&
+        /*try {
+            path.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/
+        Log.d("File Path", path + "");
+        /*if (!imagePurpose.equals(null) && imagePurpose.equals("ForPhoto") &&
                 path != null && path.exists()) {
             try {
                 bmp = rotateBmpFront(path);
@@ -94,41 +102,78 @@ public class RetakeFragment extends Fragment {
                 waitingForActivity = true;
                 Log.d("Front-Image 2","after bitmap issue"+waitingForActivity+"");
             }
-        } else if (path == null|| (path != null && !path.exists())) {
+        } else if (path == null   || (path != null && !path.exists())) {
             waitingForActivity = true;
             Log.d("Front-Image 3","after bitmap issue "+waitingForActivity+"");
         }
+*/
+        try {
 
-        confirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(screenName!=null && !screenName.equalsIgnoreCase("")){
-                    confirmActionCamera();
-                }else {
-                    confirmAction();
+
+            if (!imagePurpose.equals(null) && imagePurpose.equals("ForPhoto") &&
+                    path != null && path.canRead()) {
+                try {
+                    bmp = rotateBmpFront(path);
+                } catch (IllegalArgumentException e) {
+                    Crashlytics.logException(e);
+                    waitingForActivity = true;
+                    Log.d("Front-Image 1", "after bitmap issue" + waitingForActivity + "");
+                }
+            } else if (path != null && path.canRead()) {
+                try {
+                    bmp = rotateBmpBack(path);
+                } catch (IllegalArgumentException e) {
+                    Crashlytics.logException(e);
+                    waitingForActivity = true;
+                    Log.d("Front-Image 2", "after bitmap issue" + waitingForActivity + "");
+                }
+            } else if (path == null || (path != null && !path.canRead())) {
+                try {
+                    waitingForActivity = true;
+                    Log.d("Front-Image 3", "after bitmap issue " + waitingForActivity + "");
+                } catch (Exception e) {
+
+                    Log.d("Pic issue:", e.toString());
                 }
 
             }
-        });
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-              File  mFile = new File(getActivity().getExternalFilesDir(Environment.DIRECTORY_DCIM), "pic.jpg");
-              if(mFile.exists()){
-                  mFile.delete();
-              }
+        }catch(Exception e){
 
-                goBackAction();
-            }
-        });
-
-        if (bmp != null) {
-            imageView.setImageBitmap(bmp);
-            imageView.invalidate();
+                Log.d("Pic issue:", e.toString());
         }
 
-        return view;
-    }
+
+            confirm.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (screenName != null && !screenName.equalsIgnoreCase("")) {
+                        confirmActionCamera();
+                    } else {
+                        confirmAction();
+                    }
+
+                }
+            });
+            cancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+             /* File  mFile = new File(getActivity().getExternalFilesDir(Environment.DIRECTORY_DCIM), "pic.jpg");
+              if(mFile.exists()){
+                  mFile.delete();
+              }*/
+                    imageView.setImageBitmap(null);
+                    imageView.invalidate();
+                    goBackAction();
+                }
+            });
+
+            if (bmp != null) {
+                imageView.setImageBitmap(bmp);
+                imageView.invalidate();
+            }
+
+            return view;
+        }
 
     public void confirmActionCamera() {
         if (bmp != null && imagePurpose != null) {
@@ -201,12 +246,12 @@ public class RetakeFragment extends Fragment {
                 @Override
                 public void run()
                 {*/
-                    FragmentManager fragmentManager = getFragmentManager();
-                    Fragment currentFragment = fragmentManager.findFragmentById(R.id.flCapture);
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.remove(currentFragment);
-                    fragmentTransaction.commitAllowingStateLoss();
-                    fragmentManager.popBackStack();
+            FragmentManager fragmentManager = getFragmentManager();
+            Fragment currentFragment = fragmentManager.findFragmentById(R.id.flCapture);
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.remove(currentFragment);
+            fragmentTransaction.commitAllowingStateLoss();
+            fragmentManager.popBackStack();
              /*   }
             });*/
             //fragmentManager.popBackStackImmediate();
@@ -216,7 +261,7 @@ public class RetakeFragment extends Fragment {
                 fragmentTransaction.remove(currentFragment).commitAllowingStateLoss();
             }*/
 //            fragmentManager.executePendingTransactions();
-        //   fragmentTransaction.commitNow();
+            //   fragmentTransaction.commitNow();
            /* try {
                 //fragmentTransaction.commitAllowingStateLoss();
                 fragmentTransaction.commitAllowingStateLoss();
@@ -229,12 +274,12 @@ public class RetakeFragment extends Fragment {
             fragmentTransaction.commitAllowingStateLoss();
             fragmentManager.popBackStack();*/
 
-         //Old code
+            //Old code
             //fragmentTransaction.commitNow();
 //            fragmentManager.executePendingTransactions();
-           // fragmentTransaction.commitNow();
+            // fragmentTransaction.commitNow();
 
-        //  fragmentManager.popBackStack();
+            //  fragmentManager.popBackStack();
 
 
       /* fragmentManager.addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
@@ -257,19 +302,19 @@ public class RetakeFragment extends Fragment {
 
                 Bitmap bitmap = BitmapFactory.decodeFile(path.getAbsolutePath());
                 ByteArrayOutputStream out = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG,15,out);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 15, out);
                 byte[] byteArray = out.toByteArray();
-                Bitmap compressedBitmap = BitmapFactory.decodeByteArray(byteArray,0,byteArray.length);
+                Bitmap compressedBitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
                 bmp = Bitmap.createBitmap(compressedBitmap, 0, 0, compressedBitmap.getWidth(), compressedBitmap.getHeight(), m, true);
 
-            }catch (Exception e){
-                Log.d("Camera Error",e.toString());
+            } catch (Exception e) {
+                Log.d("Camera Error", e.toString());
                 System.gc();
                 Bitmap bitmap = BitmapFactory.decodeFile(path.getAbsolutePath());
                 ByteArrayOutputStream out = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG,15,out);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 15, out);
                 byte[] byteArray = out.toByteArray();
-                Bitmap compressedBitmap = BitmapFactory.decodeByteArray(byteArray,0,byteArray.length);
+                Bitmap compressedBitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
                 bmp = Bitmap.createBitmap(compressedBitmap, 0, 0, compressedBitmap.getWidth(), compressedBitmap.getHeight(), m, true);
 
             }
@@ -289,10 +334,11 @@ public class RetakeFragment extends Fragment {
         OutputStream os = null;
         try {
             os = new FileOutputStream(mediaStorageDir);
-            if(screenName!=null && !screenName.equalsIgnoreCase("")){
+            if (screenName != null && !screenName.equalsIgnoreCase("")) {
                 bitmap.compress(Bitmap.CompressFormat.JPEG, AppsConstant.IMAGE_QUALITY, os);
-            }else {
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 60, os);}
+            } else {
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 60, os);
+            }
             os.flush();
             os.close();
         } catch (Exception e) {
@@ -312,13 +358,13 @@ public class RetakeFragment extends Fragment {
                     .setMaxHeight(640).build().compressToBitmap(path);
             bmp = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
             //waitingForActivity=true;
-            Log.d("Front-Image 4","after bitmap issue"+waitingForActivity+"");
+            Log.d("Front-Image 4", "after bitmap issue" + waitingForActivity + "");
         } else {
             Bitmap bitmap = new Compressor.Builder(getContext()).setQuality(60)
                     .setCompressFormat(Bitmap.CompressFormat.JPEG).setMaxWidth(480)
                     .setMaxHeight(640).build().compressToBitmap(path);
-            bmp = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(),matrix, true);
-            Log.d("Front-Image 5","after bitmap issue"+waitingForActivity+"");
+            bmp = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+            Log.d("Front-Image 5", "after bitmap issue" + waitingForActivity + "");
         }
         return bmp;
     }

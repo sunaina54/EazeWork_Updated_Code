@@ -49,6 +49,7 @@ import hr.eazework.com.model.SalaryMonthModel;
 import hr.eazework.com.model.StoreLocationModel;
 import hr.eazework.com.model.TeamMember;
 import hr.eazework.com.ui.customview.CustomBuilder;
+import hr.eazework.com.ui.fragment.Attendance.ViewTimeModificationSummary;
 import hr.eazework.com.ui.fragment.Expense.AddExpenseClaimFragment;
 import hr.eazework.com.ui.fragment.Expense.AddExpenseFragment;
 import hr.eazework.com.ui.fragment.Advance.AdvanceApprovalFragment;
@@ -90,7 +91,6 @@ import hr.eazework.com.ui.fragment.Attendance.TourRequestFragment;
 import hr.eazework.com.ui.fragment.Team.UserProfile;
 import hr.eazework.com.ui.fragment.Advance.ViewAdvanceRequestSummaryFragment;
 import hr.eazework.com.ui.fragment.Ticket.CreateTicketAdvanceFragment;
-import hr.eazework.com.ui.fragment.Ticket.CreateTicketFragment;
 import hr.eazework.com.ui.fragment.Ticket.TicketApprovalFragment;
 import hr.eazework.com.ui.fragment.Ticket.TicketSummaryFragment;
 import hr.eazework.com.ui.fragment.Ticket.ViewTicketFragment;
@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
      * navigation drawer.
      */
     public NavigationDrawerFragment mNavigationDrawerFragment;
-    public ImageView menuPlus;
+    public ImageView menuPlus,helpIV,quickHelpIV;
     public ArrayList<String> menuList = new ArrayList<>();
     private String paySlipHeader = "";
 
@@ -150,6 +150,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
     private ImageView headerImage;
     public static long LIST_ANIM_OUT_TIME = 300;
     private Context contextActivity;
+    private String currentScreen="";
 
 
     public static boolean isAnimationLoaded = false;
@@ -184,6 +185,9 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
         setSupportActionBar(toolbar);
 
         menuPlus = (ImageView) findViewById(R.id.plus_create_new);
+        helpIV = (ImageView) findViewById(R.id.helpIV);
+        quickHelpIV = (ImageView) findViewById(R.id.quickHelpIV);
+
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, mDrawerLayout, toolbar);
@@ -198,6 +202,26 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
             }
         });
 
+        helpIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("CurrentScreen",currentScreen);
+                Intent intent =new Intent(contextActivity,GetQuickHelpActivity.class);
+                intent.putExtra("CurrentScreen",currentScreen);
+                startActivity(intent);
+            }
+
+        });
+        quickHelpIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("CurrentScreen",currentScreen);
+                Intent intent =new Intent(contextActivity,GetQuickHelpActivity.class);
+                intent.putExtra("CurrentScreen",currentScreen);
+                startActivity(intent);
+            }
+
+        });
         SharedPreference.saveSharedPreferenceData(AppsConstant.Project_NAME,
                 AppsConstant.TICKET_KEY, "S", contextActivity);
         menuPlus.setOnClickListener(new View.OnClickListener() {
@@ -1190,6 +1214,8 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(mTitle);
+
+
     }
 
     @Override
@@ -1434,9 +1460,11 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
 
         if (((BaseFragment) getTopFragment()).isShowEditTeamButtons()) {
             getSupportActionBar().setTitle("");
+            findViewById(R.id.fl_header_logo).setVisibility(View.GONE);
             findViewById(R.id.rl_edit_team_member).setVisibility(View.VISIBLE);
         } else {
             findViewById(R.id.rl_edit_team_member).setVisibility(View.GONE);
+            findViewById(R.id.fl_header_logo).setVisibility(View.VISIBLE);
         }
 
         if (((BaseFragment) getTopFragment()).isShowEditTeam()) {
@@ -1505,83 +1533,138 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
     private String getHeaderTitle() {
         Fragment fragment = getTopFragment();
         if (fragment instanceof HomeFragment) {
+             currentScreen=AppsConstant.Home;
             return "";
         } else if (fragment instanceof TeamMemberProfile) {
+            currentScreen=AppsConstant.Profile;
             return "Profile";
         } else if (fragment instanceof UserProfile) {
+            currentScreen=AppsConstant.Profile;
             return "Profile";
         } else if (fragment instanceof AttandanceFragment) {
+            currentScreen=AppsConstant.Calendar_Screen;
             return "Calendar";
         } else if (fragment instanceof StoreListFragment) {
+            currentScreen=AppsConstant.Location_Home;
             return "Location";
         } else if (fragment instanceof HistoryTrackFragment) {
+            currentScreen=AppsConstant.Attendance_Track;
             return "History Track";
         } else if (fragment instanceof AttendanceHistory) {
+            currentScreen=AppsConstant.Attendance_History;
             return getString(R.string.msg_history);
         } else if (fragment instanceof ApproveScreen) {
+            currentScreen=AppsConstant.Approvals_Home;
             return "Approvals";
         } else if (fragment instanceof TeamMemberHistory) {
+            currentScreen=AppsConstant.Member_Attendance_History;
             return "Member History";
         } else if (fragment instanceof MarkAttendance) {
+            currentScreen=AppsConstant.Attendance_Map;
             return getString(R.string.msg_map_screen);
         } else if (fragment instanceof LeaveBalanceDetailFragment) {
+            currentScreen=AppsConstant.Leave_Home;
             return getString(R.string.msg_leaves);
         } else if (fragment instanceof TeamMemberList) {
+            currentScreen=AppsConstant.Team_Members;
             return getString(R.string.msg_team_members);
         } else if (fragment instanceof PaySlipDownloadFragment) {
+            currentScreen=AppsConstant.Payslip_selection;
             return "View Payslip";
         } else if (fragment instanceof ChangePasswordFragment) {
+            currentScreen=AppsConstant.Change_password;
             return getString(R.string.msg_change_password);
         } else if (fragment instanceof PendingActivityFragment) {
+            currentScreen=AppsConstant.Leave_Approval;
             return "Leave Approval";
         } else if (fragment instanceof PendingEmployeeApprovalFragment) {
+            currentScreen=AppsConstant.Employee_Approval;
             return "Pending Employees";
         } else if (fragment instanceof ExpenseClaimSummaryFragment) {
-            return "Expense Claim Summary";
+            currentScreen=AppsConstant.Expense_Home;
+          //  return "Expense Claim Summary";
+            return "Expense Summary";
         } else if (fragment instanceof AdvanceRequestSummaryFragment) {
+            currentScreen=AppsConstant.Advance_Home;
             return "Advance Summary";
         } else if (fragment instanceof ExpenseApprovalFragment) {
+            currentScreen=AppsConstant.Expense_Approval;
             return "Expense Approval";
         } else if (fragment instanceof AdvanceApprovalFragment) {
+            currentScreen=AppsConstant.Advance_Approval;
             return "Advance Approval";
         } else if (fragment instanceof TimeAndAttendanceSummaryFragment) {
+            currentScreen=AppsConstant.Time_and_Attendance_Home;
             return "Time & Attendance";
         } else if (fragment instanceof AttendanceApprovalFragment) {
+            currentScreen=AppsConstant.Attendance_Approval;
             return "Attendance Approval";
         } else if (fragment instanceof OutdoorDutyRequestFragment) {
+            currentScreen=AppsConstant.OD_Request;
             return "Outdoor Duty";
         } else if (fragment instanceof WorkFromHomeRequestFragment) {
+            currentScreen=AppsConstant.WFH_Request;
             return "Work From Home";
         } else if (fragment instanceof TourRequestFragment) {
+            currentScreen=AppsConstant.Tour_Request;
             return "Tour";
         } else if (fragment instanceof CreateNewLeaveFragment) {
+            currentScreen=AppsConstant.Leave_Request;
             return "Leave";
         } else if (fragment instanceof EditAdvanceApprovalFragment) {
+            currentScreen=AppsConstant.Advance_Request;
             return "Advance Approval";
         } else if (fragment instanceof EditExpenseApprovalFragment) {
+            currentScreen=AppsConstant.Expense_Request;
             return "Expense Approval";
         } else if (fragment instanceof EditViewExpenseClaimFragment) {
+            currentScreen=AppsConstant.Expense_Request;
             return "Edit Expense";
         } else if (fragment instanceof ViewLeaveFragment) {
+            currentScreen=AppsConstant.Leave_View;
             return "Leave View";
         } else if (fragment instanceof ViewWFHSummaryFragment) {
+            currentScreen=AppsConstant.WFH_View;
             return "WFH View";
         } else if (fragment instanceof ViewOdSummaryFragment) {
+            currentScreen=AppsConstant.OD_View;
             return "OD View";
         } else if (fragment instanceof ViewTourSummaryFragment) {
+            currentScreen=AppsConstant.Tour_View;
             return "Tour View";
         } else if (fragment instanceof ViewExpenseClaimSummaryFragment) {
+            currentScreen=AppsConstant.Expense_View;
             return "Expense View";
         } else if (fragment instanceof ViewAdvanceRequestSummaryFragment) {
+            currentScreen=AppsConstant.Advance_View;
             return "Advance View";
         } else if (fragment instanceof TicketSummaryFragment) {
+            currentScreen=AppsConstant.Ticket_Home;
             return "Ticket Summary";
         } else if (fragment instanceof ViewTicketFragment) {
+            currentScreen=AppsConstant.Ticket_View;
             return "Ticket View";
         } else if (fragment instanceof CreateTicketAdvanceFragment) {
+            currentScreen=AppsConstant.Ticket_Creation;
             return "Ticket";
         }else if (fragment instanceof TicketApprovalFragment) {
+            currentScreen=AppsConstant.Open_Tickets;
             return "Open Tickets";
+        }else if (fragment instanceof ViewPaySlipFragment) {
+            currentScreen=AppsConstant.Payslip_View;
+            return "Payslip";
+        }else if (fragment instanceof ViewTimeModificationSummary) {
+            currentScreen=AppsConstant.Time_Modification_View;
+            return "Payslip";
+        }else if (fragment instanceof CreateEmployeeFragment) {
+            currentScreen=AppsConstant.Create_Employee;
+            return "Create Employee";
+        }else if (fragment instanceof AddExpenseClaimFragment) {
+            currentScreen=AppsConstant.Expense_Request;
+            return "Expense Approval";
+        } else if (fragment instanceof AdvanceRequestFragment) {
+            currentScreen=AppsConstant.Advance_Request;
+            return "Advance Approval";
         } else {
             return "";
         }
@@ -1716,6 +1799,9 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
                         preferences.commit();
                         EventDataSource dataSource = new EventDataSource(getApplicationContext());
                         dataSource.clearDatabase();
+                        Intent intent=new Intent(contextActivity,MainActivity.class);
+                        startActivity(intent);
+                        finish();
                     }
                 } catch (JSONException e) {
                     Log.e(TAG, e.getMessage(), e);
@@ -1759,4 +1845,10 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
             }
         }
     }
+
+    /*private void getHelp(String currentScreen){
+
+
+    }*/
+
 }

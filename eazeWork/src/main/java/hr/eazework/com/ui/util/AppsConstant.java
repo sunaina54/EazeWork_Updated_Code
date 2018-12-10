@@ -19,6 +19,7 @@ public class AppsConstant {
             APPROVE="Approve",REJECT="Reject",WITHDRAW="Withdraw",DRAFT="Draft",PRESENT="Present",ABSENT="Absent",LEAVE_EDIT="3",
             LEAVE_WITHDRAWAL="5",TOUR_EDIT="11",TOUR_WITHDRAWAL="12",VIEW_ACTION="V",EDIT_ACTION="E"
             ,OD_EDIT="32",OD_WITHDRAWAL="33",WFH_EDIT="13",WFH_WITHDRAWAL="14";
+
     public  static  final String SUCCESS="0";
     public  static  final String TEXT_ANNOUNCEMENT="11";
     public  static  final String SIMPLE_VIEW="S";
@@ -135,6 +136,67 @@ public class AppsConstant {
     public static String TICKET_Other = "Ticket (Other)";
     public static String TICKET_KEY = "TICKET_KEY";
     public static String TICKET_MENU_ACCESS = "TICKET_MENU_ACCESS";
+
+    //Screen Number
+
+    public static final String Login="MBL1.0";
+    public static final String Application_Menu="MBL1.1";  // Not a page
+    public static final String Home ="MBL1.2";
+    public static final String Change_password="MBL1.3";
+    public static final String Profile="MBL1.4";
+    public static final String Leave_On_HomePage="MBL2.1"; // Not a page
+    public static final String Leave_Request="MBL2.2";
+    public static final String Leave_Home="MBL2.3";
+    public static final String Leave_View="MBL2.4";
+    public static final String Payslip_selection="MBL3.1";
+    public static final String Payslip_View="MBL3.2";
+    public static final String Download_Screen="MBL3.3"; // Not a page
+    public static final String Attendance_On_HomePage="MBL4.1"; // Not a page
+    public static final String Attendance_Map="MBL4.1.1";
+    public static final String Attendance_Photo="MBL4.1.2";
+    public static final String Attendance_History="MBL4.2";
+    public static final String Attendance_Track="MBL4.3";
+    public static final String Calendar_Screen="MBL4.4";
+    public static final String Time_and_Attendance_Home="MBL4.7";
+    public static final String Backdated_Attendance_Request="MBL4.5";
+    public static final String Backdated_Attendance_View="MBL4.8";
+    public static final String Time_Modification_Request="MBL4.6";
+    public static final String Time_Modification_View="MBL4.9";
+    public static final String Location_On_Homepage="MBL5.1"; //Not a page
+    public static final String Location_Home="MBL5.2";
+    public static final String Add_Edit_Location="MBL5.3";
+    public static final String Location_Picture="MBL5.4";
+    public static final String Teams_On_Homepage="MBL6.1"; // Not a page
+    public static final String Team_Members="MBL6.2";
+    public static final String Profile_Edit="MBL6.3";
+    public static final String Member_Attendance_History="MBL6.4";
+    public static final String Member_Reportee_Team="MBL6.5";
+    public static final String Create_Employee="MBL7.1";
+    public static final String Employee_Picture="MBL7.1.1";
+    public static final String New_Employee_Approval="MBL7.2";
+    public static final String Approvals_On_Homepage="MBL8.1"; // not a page
+    public static final String Approvals_Home="MBL8.2";
+    public static final String Leave_Approval="MBL8.2.1";
+    public static final String Employee_Approval="MBL8.2.2";
+    public static final String Advance_Approval="MBL8.2.3";
+    public static final String Expense_Approval="MBL8.2.4";
+    public static final String Attendance_Approval="MBL8.2.5";
+    public static final String Open_Tickets="MBL8.2.6";
+    public static final String Advance_Home="MBL9.1";
+    public static final String Advance_Request="MBL9.2";
+    public static final String Advance_View="MBL9.3";
+    public static final String Expense_Home="MBL10.1";
+    public static final String Expense_Request="MBL10.2";
+    public static final String Expense_View="MBL10.3";
+    public static final String Tour_Request="MBL11.1";
+    public static final String Tour_View="MBL11.2";
+    public static final String WFH_Request="MBL11.3";
+    public static final String WFH_View="MBL11.4";
+    public static final String OD_Request="MBL11.5";
+    public static final String OD_View="MBL11.6";
+    public static final String Ticket_Home="MBL12.1";
+    public static final String Ticket_Creation="MBL12.2";
+    public static final String Ticket_View="MBL12.3";
 
 
 

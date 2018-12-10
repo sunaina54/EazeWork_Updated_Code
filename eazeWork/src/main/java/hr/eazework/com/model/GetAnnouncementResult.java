@@ -12,7 +12,7 @@ import java.util.ArrayList;
  */
 
 public class GetAnnouncementResult extends GenericResponse implements Serializable {
-private ArrayList<AnnouncementItemsModel> AnnouncementItems;
+private ArrayList<AnnouncementItemsModel> AnnouncementItems=null;
 
     public ArrayList<AnnouncementItemsModel> getAnnouncementItems() {
         return AnnouncementItems;

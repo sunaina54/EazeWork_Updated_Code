@@ -43,6 +43,7 @@ import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
+import android.nfc.NfcEvent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -62,6 +63,8 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
@@ -83,7 +86,8 @@ import hr.eazework.com.ui.customview.AutoFitTextureView;
 import hr.eazework.com.ui.util.AppsConstant;
 
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-public class Camera2BasicFragment extends Fragment implements View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
+//public class Camera2BasicFragment extends Fragment implements View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
+public class Camera2BasicFragment extends Fragment implements  ActivityCompat.OnRequestPermissionsResultCallback {
 
     /**
      * Conversion from screen rotation to JPEG orientation.
@@ -93,6 +97,7 @@ public class Camera2BasicFragment extends Fragment implements View.OnClickListen
 
     private int cameraForB;
     private String purpose = "",screenName="";
+    private ImageButton ibPhotoCapture2;
 
 
     /*static {
@@ -441,13 +446,28 @@ public class Camera2BasicFragment extends Fragment implements View.OnClickListen
 
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
-        view.findViewById(R.id.ibPhotoCapture2).setOnClickListener(this);
+       // view.findViewById(R.id.ibPhotoCapture2).setOnClickListener(this);
+        ibPhotoCapture2 = view.findViewById(R.id.ibPhotoCapture2);
+        ibPhotoCapture2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                takePicture();
+
+            }
+        });
+
+       /* if(ibPhotoCapture2.callOnClick()==true){
+            Log.d("camera click",ibPhotoCapture2.callOnClick()+"");
+        }*/
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.aftvLivePreview);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+       /* String mediaStorageDir = Environment.getExternalStorageDirectory().toString();
+        File folder = new File(mediaStorageDir .toString(), "EazeWorkPics");
+        mFile = new File(folder + File.separator + "pic" + ".jpg");*/
         mFile = new File(getActivity().getExternalFilesDir(Environment.DIRECTORY_DCIM), "pic.jpg");
         cameraForB = getActivity().getIntent().getIntExtra("camera_key", AppsConstant.FRONT_CAMREA_OPEN);
         purpose = getActivity().getIntent().getStringExtra("purpose");
@@ -811,6 +831,10 @@ public class Camera2BasicFragment extends Fragment implements View.OnClickListen
      */
     private void takePicture() {
         if (cameraForB == AppsConstant.FRONT_CAMREA_OPEN) {
+             File  mFile = new File(getActivity().getExternalFilesDir(Environment.DIRECTORY_DCIM), "pic.jpg");
+              if(mFile.exists()){
+                  mFile.delete();
+              }
             captureStillPicture();
         } else {
             //  lockFocus();
@@ -888,16 +912,26 @@ public class Camera2BasicFragment extends Fragment implements View.OnClickListen
                     //       showToast("Saved: " + mFile);
                     if (purpose.equalsIgnoreCase("ForStore")
                             || purpose.equalsIgnoreCase("ForPhoto")) {
-                        FragmentManager fm = getFragmentManager();
-                        Fragment f = new RetakeFragment();
-                        Bundle bundle = new Bundle();
-                        bundle.putString("screen",screenName);
-                        bundle.putString("image_taken", mFile.getAbsolutePath());
-                        bundle.putString("image_purpose", purpose);
-                        f.setArguments(bundle);
-                        fm.beginTransaction().replace(R.id.flCapture, f).addToBackStack(null).commit();
 
-                        Log.d(TAG, mFile.toString());
+                        Handler handler = new Handler();
+                        handler.postDelayed(
+                                new Runnable() {
+                                    public void run() {
+                                        FragmentManager fm = getFragmentManager();
+                                        Fragment f = new RetakeFragment();
+                                        Bundle bundle = new Bundle();
+                                        bundle.putString("screen",screenName);
+                                        bundle.putString("image_taken", mFile.getAbsolutePath());
+                                        bundle.putString("image_purpose", purpose);
+                                        f.setArguments(bundle);
+                                        fm.beginTransaction().replace(R.id.flCapture, f).addToBackStack(null).commit();
+
+                                        Log.d(TAG, mFile.toString());
+                                    }
+                                }, 1000);
+
+
+
 //                    unlockFocus();
                     }else{
                         Intent i = new Intent();
@@ -951,15 +985,16 @@ public class Camera2BasicFragment extends Fragment implements View.OnClickListen
         }
     }
 
-    @Override
+   /* @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ibPhotoCapture2: {
+
                 takePicture();
                 break;
             }
         }
-    }
+    }*/
 
     private void setAutoFlash(CaptureRequest.Builder requestBuilder) {
         /*if (mFlashSupported) {

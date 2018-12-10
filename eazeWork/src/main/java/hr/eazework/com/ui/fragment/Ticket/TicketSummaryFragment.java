@@ -1,5 +1,6 @@
 package hr.eazework.com.ui.fragment.Ticket;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import hr.eazework.com.MainActivity;
 import hr.eazework.com.R;
 import hr.eazework.com.model.TicketItem;
 
@@ -75,6 +77,7 @@ public class TicketSummaryFragment extends BaseFragment {
     private View progressbar;
     private LinearLayout searchTempLayout;
     private TicketResponseModel ticketResponseModel;
+    private MainActivity activity;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,9 +89,9 @@ public class TicketSummaryFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view=inflater.inflate(R.layout.fragment_ticket_summary, container, false);
+
         setupScreen(view);
         return view;
-
     }
 
     private void setupScreen(View view) {
@@ -110,7 +113,7 @@ public class TicketSummaryFragment extends BaseFragment {
         filterIV.setOnClickListener(this);
         searchCancelIV = (ImageView) view.findViewById(R.id.searchCancelIV);
         searchCancelIV.setOnClickListener(this);
-         clearTextIV = (ImageView) view.findViewById(R.id.clearTextIV);
+        clearTextIV = (ImageView) view.findViewById(R.id.clearTextIV);
         norecordLayout=(RelativeLayout) view.findViewById(R.id.noRecordLayout);
         summaryRecyclerView = (RecyclerView) view.findViewById(R.id.summaryRecyclerView);
         errorLinearLayout = (LinearLayout) view.findViewById(R.id.errorLinearLayout);

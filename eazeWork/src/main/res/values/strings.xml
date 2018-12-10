@@ -311,5 +311,10 @@
     <string name="marked_out_time">Marked Out Time : </string>
     <string name="mark_in_time">Marked In Time</string>
     <string name="mark_out_time">Marked Out Time</string>
+    <string name="open_help_center">Open Help Center</string>
+    <string name="search_hint_help">Search questions, keywords or topics</string>
+    <string name="recommended_articles">Recommended Articles</string>
+    <string name="updateLocation">Update Location</string>
+
 
 </resources>

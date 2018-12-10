@@ -62,8 +62,6 @@ public class CameraActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-
-
         String bgColor = preferences.getString(Preferences.HEADER_BG_COLOR, "#d9020d");
         String textColor = preferences.getString(Preferences.HEADER_TEXT_COLOR, "#ffffff");
 
@@ -71,9 +69,6 @@ public class CameraActivity extends AppCompatActivity {
         toolbar.setBackgroundColor(Color.parseColor(bgColor));
 
         if (Build.VERSION.SDK_INT >= 22) {
-
-
-
             forBelowLollipop = false;
             Bundle bundle = new Bundle();
             bundle.putString("image_purpose", purpose);
@@ -108,7 +103,9 @@ public class CameraActivity extends AppCompatActivity {
                 byte[] imageBytes = ImageUtil.bitmapToByteArray(rotateImage(imageBitmap, 270));
 
                 File mediaStorageDir = new File(getExternalFilesDir(Environment.DIRECTORY_DCIM), "");
-                //Long timeStamp= DateTimeUtil.currentTimeMillis();
+               /* String mediaStorageDir = Environment.getExternalStorageDirectory().toString();
+                File folder = new File(mediaStorageDir .toString(), "EazeWorkPics");
+                File mediaFile = new File(folder + File.separator + purpose + ".jpg");*/
                 File mediaFile = new File(mediaStorageDir.getPath() + File.separator + purpose + ".jpg");
                 if (mediaFile != null) {
                     try {
@@ -127,7 +124,7 @@ public class CameraActivity extends AppCompatActivity {
                     FragmentManager fragmentManager = getSupportFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     Bundle bundle = new Bundle();
-                Log.d("TAG","Image Absolute path : "+mediaFile.getAbsolutePath());
+                    Log.d("TAG","Image Absolute path : "+mediaFile.getAbsolutePath());
                     bundle.putString("image_taken", mediaFile.getAbsolutePath());
                     bundle.putString("image_purpose", purpose);
                     bundle.putString("screen",screenName);

@@ -7,18 +7,21 @@ import java.io.Serializable;
  */
 
 public class AnnouncementItemsModel extends GenericResponse implements Serializable {
-    private String Desc;
-    private String FilePath;
-    private String Type;
+    private String Desc="";
+    private String FilePath="";
+    private String Type="";
     private Scale Scale;
     private int imageCorner;
     private int id;
+
 
     public AnnouncementItemsModel(int id,String filePath, int imageCorner) {
         FilePath = filePath;
         this.imageCorner = imageCorner;
         this.id = id;
     }
+
+
 
     public int getImageCorner() {
         return imageCorner;

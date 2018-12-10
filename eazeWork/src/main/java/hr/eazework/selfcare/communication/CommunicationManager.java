@@ -600,6 +600,12 @@ public class CommunicationManager extends CommunicationManagerBase {
             case CommunicationConstant.API_GEO_CODER_API_URL:
                 key = CommunicationConstant.API_KEY_GEO_CODER_API_URL;
                 break;
+            case CommunicationConstant.API_UPDATE_EMP_LOCATION:
+                key = CommunicationConstant.API_KEY_UPDATE_EMP_LOCATION;
+                break;
+            case CommunicationConstant.API_GET_QUICK_HELP_SEARCH:
+                key = CommunicationConstant.API_KEY_GET_QUICK_HELP_SEARCH;
+                break;
 
         }
         return CommunicationConstant.getMobileCareURl() + "/EWAPI/" + key;

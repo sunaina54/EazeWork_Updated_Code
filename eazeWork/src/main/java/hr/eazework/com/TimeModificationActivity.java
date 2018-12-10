@@ -111,6 +111,8 @@ public class TimeModificationActivity extends BaseActivity {
     private TextView markedInTimeTV, markedOutTimeTV, inTimeTMTV, outTimeTMTV;
     private String markedInTime, markedOutTime;
     private View progressbar;
+    private ImageView quickHelpIV;
+    private String currentScreen = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,6 +146,8 @@ public class TimeModificationActivity extends BaseActivity {
                 finish();
             }
         });
+        quickHelpIV = (ImageView) findViewById(R.id.quickHelpIV);
+        currentScreen=AppsConstant.Time_Modification_Request;
         rightRL = (RelativeLayout) findViewById(R.id.rightRL);
         rightRL.setVisibility(View.VISIBLE);
         rightRL.setOnClickListener(new View.OnClickListener() {
@@ -235,6 +239,16 @@ public class TimeModificationActivity extends BaseActivity {
             }
         });
 
+        quickHelpIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("CurrentScreen", currentScreen);
+                Intent intent = new Intent(context, GetQuickHelpActivity.class);
+                intent.putExtra("CurrentScreen", currentScreen);
+                startActivity(intent);
+            }
+        });
+
     }
 
     private void doSubmitOperation() {
@@ -295,7 +309,7 @@ public class TimeModificationActivity extends BaseActivity {
                 return;
             }
 
-            if (currentDate!=null && !currentDate.equalsIgnoreCase("") && dateTV.getText().toString() != null &&
+            if (currentDate != null && !currentDate.equalsIgnoreCase("") && dateTV.getText().toString() != null &&
                     !dateTV.getText().toString().equalsIgnoreCase("") &&
                     !currentDate.equalsIgnoreCase(dateTV.getText().toString())) {
                 if (outDate.equalsIgnoreCase("") || outDate.equalsIgnoreCase("--/--/----")) {
@@ -333,8 +347,6 @@ public class TimeModificationActivity extends BaseActivity {
             }
         }
     }
-
-
 
 
     private void doSubmitOperation1() {

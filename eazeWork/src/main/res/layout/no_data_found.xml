@@ -8,6 +8,7 @@
         style="@style/textView"
         android:text="@string/no_record"
         android:layout_marginTop="@dimen/margin_10"
+        android:id="@+id/noDataTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

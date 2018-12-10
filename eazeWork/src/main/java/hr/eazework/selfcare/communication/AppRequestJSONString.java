@@ -41,6 +41,7 @@ import hr.eazework.com.model.GetDetailsOnInputChangeRequestModel;
 import hr.eazework.com.model.GetEmpWFHRequestsModel;
 import hr.eazework.com.model.GetHeadDetailsWithPolicyRequestModel;
 import hr.eazework.com.model.GetODRequestDetail;
+import hr.eazework.com.model.GetQuickHelpSearchRequestModel;
 import hr.eazework.com.model.GetTicketDetailRequestModel;
 import hr.eazework.com.model.GetTimeModificationRequestDetail;
 import hr.eazework.com.model.GetWFHRequestDetail;
@@ -67,6 +68,7 @@ import hr.eazework.com.model.TicketSubmitRequestModel;
 import hr.eazework.com.model.TicketSummaryRequestModel;
 import hr.eazework.com.model.TimeModificationRequestModel;
 import hr.eazework.com.model.TourRequestModel;
+import hr.eazework.com.model.UpdateEmpLocationDetailModel;
 import hr.eazework.com.model.UploadProfilePicModel;
 import hr.eazework.com.model.ViewExpenseClaimRequestModel;
 import hr.eazework.com.model.VisibilityExpenseItem;
@@ -577,6 +579,26 @@ public class AppRequestJSONString {
         item.setLoginData(loginData);
         String request=item.serialize();
         Log.d("TAG","WFH Summary: "+request);
+        return request;
+    }
+
+    public static String quickHelpData(GetQuickHelpSearchRequestModel item){
+        AdvanceLoginDataRequestModel loginData = new AdvanceLoginDataRequestModel();
+        loginData.setDeviceID(MyApplication.getDeviceId());
+        loginData.setSessionID(SharedPreference.getSessionId());
+        item.setLoginData(loginData);
+        String request=item.serialize();
+        Log.d("TAG","Help request: "+request);
+        return request;
+    }
+
+    public static String updateLocationData(UpdateEmpLocationDetailModel item){
+        AdvanceLoginDataRequestModel loginData = new AdvanceLoginDataRequestModel();
+        loginData.setDeviceID(MyApplication.getDeviceId());
+        loginData.setSessionID(SharedPreference.getSessionId());
+        item.setLoginData(loginData);
+        String request=item.serialize();
+        Log.d("TAG","Update Location: "+request);
         return request;
     }
 

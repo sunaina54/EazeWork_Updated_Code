@@ -5,6 +5,9 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,7 +17,6 @@ import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
@@ -46,11 +48,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.Timer;
-import java.util.TimerTask;
 
 import hr.eazework.Slider.Slider;
-import hr.eazework.Slider.adapter.Slide;
 import hr.eazework.com.BuildConfig;
 import hr.eazework.com.Carasole.EnhancedWrapContentViewPager;
 import hr.eazework.com.FileUtils;
@@ -58,6 +59,7 @@ import hr.eazework.com.MainActivity;
 import hr.eazework.com.R;
 import hr.eazework.com.model.AnnouncementItemsModel;
 import hr.eazework.com.model.CheckInOutModel;
+import hr.eazework.com.model.EmpLocationDetailModel;
 import hr.eazework.com.model.EmployeeProfileModel;
 import hr.eazework.com.model.ExpenseStatusData;
 import hr.eazework.com.model.ExpenseStatusModel;
@@ -66,16 +68,20 @@ import hr.eazework.com.model.GeoCoderModel;
 import hr.eazework.com.model.GetAnnouncementRequestModel;
 import hr.eazework.com.model.GetAnnouncementResult;
 import hr.eazework.com.model.GetAnnouncementResultResponseModel;
+import hr.eazework.com.model.GetQuickHelpSearchRequestModel;
 import hr.eazework.com.model.LeaveBalanceModel;
 import hr.eazework.com.model.LoginUserModel;
 import hr.eazework.com.model.MainItemModel;
 import hr.eazework.com.model.MenuItemModel;
 import hr.eazework.com.model.ModelManager;
 import hr.eazework.com.model.PendingCountModel;
+import hr.eazework.com.model.QuickHelpParamModel;
 import hr.eazework.com.model.SalaryMonthModel;
 import hr.eazework.com.model.TeamMember;
 import hr.eazework.com.model.TicketResultModel;
 import hr.eazework.com.model.TypeWiseListModel;
+import hr.eazework.com.model.UpdateEmpLocationDetailModel;
+import hr.eazework.com.model.UpdateEmpLocationResponseModel;
 import hr.eazework.com.model.UploadProfilePicModel;
 import hr.eazework.com.model.UploadProfilePicResponseModel;
 import hr.eazework.com.model.UserModel;
@@ -102,6 +108,7 @@ import hr.eazework.selfcare.communication.CommunicationManager;
 
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.Context.LOCATION_SERVICE;
 import static hr.eazework.com.ui.util.Utility.requestToEnableGPS;
 import static hr.eazework.com.ui.util.Utility.saveEmpConfig;
 
@@ -109,6 +116,7 @@ import static hr.eazework.com.ui.util.Utility.saveEmpConfig;
 public class HomeFragment extends BaseFragment implements OnItemClickListener, OnRefreshListener {
 
     public static final String TAG = "HomeFragment";
+    private String myLatitude = "", myLongitude = "", geoLocation = "";
 
     private boolean mustLoopSlides;
     private int slideShowInterval = 2000;
@@ -145,6 +153,7 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
     private GetAnnouncementResultResponseModel announcementRes;
     private ViewPagerAdapter viewPagerAdapter;
     private RelativeLayout homeCarasoleRL;
+    private UpdateEmpLocationResponseModel updateEmpLocationResponseModel;
 
 
     @Override
@@ -160,7 +169,7 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
         this.setShowEditTeamButtons(false);
         showHideProgressView(true);
         MainActivity.isAnimationLoaded = false;
-        getHomeData();
+
         // getAnnouncementData();
 
         MenuItemModel model = ModelManager.getInstance().getMenuItemModel();
@@ -199,7 +208,9 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
         pager = (EnhancedWrapContentViewPager) rootView.findViewById(R.id.pager);
         btnViewPagerLayout = (LinearLayout) rootView.findViewById(R.id.btnViewPagerLayout);
         pagerlayout = (LinearLayout) rootView.findViewById(R.id.pagerlayout);
+        rootView.findViewById(R.id.updateLocationBTN).setOnClickListener(this);
         // viewAnnouncementData();
+        getHomeData();
         getAnnouncementData();
         pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -242,6 +253,10 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
                                         PermissionUtil.askAllPermissionCamera(HomeFragment.this);
                                     }
                                     if (PermissionUtil.checkCameraPermission(getContext()) && PermissionUtil.checkStoragePermission(getContext())) {
+                                        /*File  mFile = new File(getActivity().getExternalFilesDir(Environment.DIRECTORY_DCIM), "pic.jpg");
+                                        if(mFile.exists()){
+                                            mFile.delete();
+                                        }*/
                                         Utility.openCamera(getActivity(), HomeFragment.this, AppsConstant.FRONT_CAMREA_OPEN, "ForPhoto", screenName);
                                     }
                                     customBuilder.dismiss();
@@ -273,6 +288,7 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
 
         mAdapter = new MainProfileItemListAdapter(getContext(), itemList);
         listView.setAdapter(mAdapter);
+
         rootView.findViewById(R.id.btn_check_in_out).setOnClickListener(this);
         (rootView.findViewById(R.id.btn_check_breack)).setOnClickListener(this);
         listView.setOnItemClickListener(this);
@@ -509,12 +525,29 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
 
     }
 
+    private void hideShowLocationButton() {
+        rootView.findViewById(R.id.updateLocationBTN).setVisibility(View.GONE);
+        if (ModelManager.getInstance().getCaptureLocation() != null
+                && !ModelManager.getInstance().getCaptureLocation().
+                equalsIgnoreCase("")) {
+            if (ModelManager.getInstance().getCaptureLocation().equalsIgnoreCase("Y")) {
+                rootView.findViewById(R.id.updateLocationBTN).setVisibility(View.VISIBLE);
+            } else if (ModelManager.getInstance().getCaptureLocation().equalsIgnoreCase("N")) {
+                rootView.findViewById(R.id.updateLocationBTN).setVisibility(View.GONE);
+
+            }
+        }
+
+    }
+
     private void populateHomeData() {
         if (itemList == null) {
             itemList = new ArrayList<MainItemModel>();
         } else {
             itemList.clear();
         }
+
+        hideShowLocationButton();
         MenuItemModel menuItemModel = ModelManager.getInstance().getMenuItemModel();
 
         if (menuItemModel == null)
@@ -837,12 +870,66 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
                     requestToEnableGPS(getContext(), preferences);
                 }
                 break;
+            case R.id.updateLocationBTN:
+                if (Utility.isLocationEnabled(getContext())) {
+                    if (Utility.isNetworkAvailable(getContext())) {
+                        if (PermissionUtil.checkLocationPermission(getContext())) {
+                            LocationManager service = (LocationManager)
+                                    context.getSystemService(LOCATION_SERVICE);
+
+                            GPSTracker gps = new GPSTracker(getContext());
+                            if (gps.getLatitude() != 0 && gps.getLongitude() != 0) {
+                                myLatitude = gps.getLatitude() + "";
+                                myLongitude = gps.getLongitude() + "";
+
+
+                                Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+                                try {
+                                    List<Address> listAddresses = geocoder.getFromLocation(gps.getLatitude(), gps.getLongitude(), 1);
+                                    if (null != listAddresses && listAddresses.size() > 0) {
+                                        geoLocation = listAddresses.get(0).getAddressLine(0);
+                                    }
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+
+                                Log.d("Address1", "Lat" + myLongitude + "Long" + myLongitude + "Location" + geoLocation);
+                                updateLocation(latitude, longitude, geoLocation);
+                            }
+
+
+                        } else {
+                            PermissionUtil.askLocationPermision(this);
+
+                        }
+
+                    } else {
+                        new AlertCustomDialog(getActivity(), getString(R.string.msg_internet_connection));
+                    }
+                } else {
+                    requestToEnableGPS(getContext(), preferences);
+                }
+                break;
             default:
                 break;
         }
         super.onClick(v);
     }
 
+
+    private void updateLocation(String latitude, String longitude, String geoLocation) {
+
+        showHideProgressView(true);
+        UpdateEmpLocationDetailModel requestModel = new UpdateEmpLocationDetailModel();
+        EmpLocationDetailModel empLocationDetailModel = new EmpLocationDetailModel();
+        empLocationDetailModel.setLatitude(latitude);
+        empLocationDetailModel.setLongitude(longitude);
+        empLocationDetailModel.setGeoLocation(geoLocation);
+        requestModel.setEmpLocationDetail(empLocationDetailModel);
+        CommunicationManager.getInstance().sendPostRequest(this,
+                AppRequestJSONString.updateLocationData(requestModel),
+                CommunicationConstant.API_UPDATE_EMP_LOCATION, true);
+    }
 
     private void getLocationAddress(String lat, String lon) {
         GeoCoderAddress coder = new GeoCoderAddress();
@@ -989,6 +1076,15 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
         }
     }
 
+    private void updateAcessLocation(String captureLocation) {
+        if (captureLocation != null) {
+            String location = captureLocation.toString();
+            ModelManager.getInstance().setCaptureLocation(location);
+            populateHomeData();
+            updateHomeData();
+        }
+    }
+
     private void updateEmpLeaveBalanceMethods(JSONObject jsonObject) {
         String getEmpLeaveBalanceResult = jsonObject.toString();
         ModelManager.getInstance().setLeaveBalanceModel(getEmpLeaveBalanceResult);
@@ -1052,6 +1148,10 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
                         JSONObject ticketData = object.optJSONObject("TicketResult");
                         Log.d("Ticket Result", ticketData.toString());
                         updateTicketData(ticketData);
+
+                        String captureLocation = object.optString("CaptureLocation");
+                        Log.d("CaptureLocation", captureLocation + "");
+                        updateAcessLocation(captureLocation);
                     }
                 } catch (JSONException e) {
                     Crashlytics.logException(e);
@@ -1108,7 +1208,6 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
                         && uploadProfilePicResponseModel.getUploadProfilePicResult().getErrorCode().equalsIgnoreCase(AppsConstant.SUCCESS)) {
                     //  CustomDialog.alertOkWithFinish(context,uploadProfilePicResponseModel.getTimeModificationResult().getErrorMessage());
                     //CustomDialog.alertOkWithFinishActivity(context, uploadProfilePicResponseModel.getTimeModificationResult().getErrorMessage(), TimeModificationActivity.this, true);
-
                     //CustomDialog.alertOkWithFinishFragment(context, uploadProfilePicResponseModel.getTimeModificationResult().getErrorMessage(), null, IAction.HOME_VIEW, true);
                     CommunicationManager.getInstance().sendPostRequest(this,
                             AppRequestJSONString.getLogOutData(),
@@ -1140,6 +1239,18 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
                     new AlertCustomDialog(getActivity(), announcementRes.getGetAnnouncementResult().getErrorMessage());
                 }
                 break;
+            case CommunicationConstant.API_UPDATE_EMP_LOCATION:
+                String locationResp = response.getResponseData();
+                Log.d("TAG", "location response : " + locationResp);
+                updateEmpLocationResponseModel = UpdateEmpLocationResponseModel.create(locationResp);
+                if (updateEmpLocationResponseModel != null && updateEmpLocationResponseModel.getUpdateEmpLocationResult()!=null
+                        && updateEmpLocationResponseModel.getUpdateEmpLocationResult().getErrorCode().equalsIgnoreCase(AppsConstant.SUCCESS)) {
+                  new AlertCustomDialog(getActivity(), updateEmpLocationResponseModel.getUpdateEmpLocationResult().getErrorMessage());
+                } else {
+                    new AlertCustomDialog(getActivity(), updateEmpLocationResponseModel.getUpdateEmpLocationResult().getErrorMessage());
+                }
+                break;
+
             default:
                 break;
         }
@@ -1160,6 +1271,7 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
                     && announcementRes.getGetAnnouncementResult().getAnnouncementItems() != null
                     && announcementRes.getGetAnnouncementResult().getAnnouncementItems().size() > 0) {
                 refreshAnnouncementResult(announcementRes.getGetAnnouncementResult().getAnnouncementItems());
+                viewPagerAdapter.notifyDataSetChanged();
             }
         }
         //viewAnnouncementData();
@@ -1366,7 +1478,7 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
         announcementItemsModel.add(0, new AnnouncementItemsModel(0, "http://cssslider.com/sliders/demo-20/data1/images/picjumbo.com_img_4635.jpg", getResources().getDimensionPixelSize(R.dimen.slider_image_corner)));
         announcementItemsModel.add(1, new AnnouncementItemsModel(1, "http://cssslider.com/sliders/demo-20/data1/images/picjumbo.com_img_4635.jpg", getResources().getDimensionPixelSize(R.dimen.slider_image_corner)));
 */
-        imageList();
+        imageList(announcementItemsModel);
         if (viewPagerAdapter == null) {
             pagerlayout.setVisibility(View.GONE);
         } else {
@@ -1382,8 +1494,11 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
                 }
                 btnViewPagerLayout.addView(view);
             }
+            // viewPagerAdapter.notifyDataSetChanged();
 
         }
+
+        //viewPagerAdapter.notifyDataSetChanged();
 
 
        /* //ArrayList<AnnouncementItemsModel> announcementItemsModel1 = new ArrayList<>();
@@ -1444,34 +1559,46 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
 
             ImageSliderFragment fragment = new ImageSliderFragment();
             fragment.setAnnouncementItemsModel(announcementList.get(index));
-
             return fragment;
         }
 
         @Override
         public int getCount() {
-
             return announcementList.size();
         }
 
 
+
+
+
+        /* @Override
+        public void finishUpdate(ViewGroup container) {
+            super.finishUpdate(container);
+        }*/
+
+   /*
+        @Override
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;
+            //return super.getItemPosition(object);
+        }*/
     }
 
 
-    private void imageList() {
-        if (announcementRes != null && announcementRes.getGetAnnouncementResult() != null
-                && announcementRes.getGetAnnouncementResult().getAnnouncementItems() != null
-                && announcementRes.getGetAnnouncementResult().getAnnouncementItems().size() > 0) {
-            viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager(),
-                    announcementRes.getGetAnnouncementResult().getAnnouncementItems());
+    private void imageList(ArrayList<AnnouncementItemsModel> announcementItemsModel) {
+        if (announcementItemsModel.size() > 0) {
 
+            viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager(),
+                    announcementItemsModel);
+            //
             pager.setAdapter(viewPagerAdapter);
-            if (announcementRes.getGetAnnouncementResult().
-                    getAnnouncementItems().size() > 1) {
+            //  viewPagerAdapter.notifyDataSetChanged();
+            if (announcementItemsModel.size() > 1) {
                 Log.d("list animation:", "true list size");
                 setupTimer();
 
             }
+
 
         }
 

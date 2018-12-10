@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/progress_root_container"></include>
+
+    <LinearLayout
+        android:id="@+id/headerLL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical">
+
+        <include layout="@layout/help_center_header_layout"></include>
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/view_advance_expense"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/headerLL"
+        android:background="@color/fragment_bg"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_10"
+            android:orientation="vertical">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_10"
+                android:gravity="right">
+
+                <Button
+                    android:id="@+id/helpCenterBTN"
+                    style="@style/button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/margin_35"
+                    android:background="@drawable/rounded_corner_light_blue"
+                    android:padding="@dimen/margin_7"
+                    android:text="@string/open_help_center"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/font_14" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <include
+                    layout="@layout/search_topics_layout"
+                    android:visibility="visible"></include>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/textViewYellow"
+                    android:layout_marginLeft="@dimen/margin_5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/articlesTV"
+                    android:text="@string/recommended_articles" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/nodataLL"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <include layout="@layout/no_data_found"></include>
+
+                </LinearLayout>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/helpListRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none"></android.support.v7.widget.RecyclerView>
+
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
+
+</RelativeLayout>
+

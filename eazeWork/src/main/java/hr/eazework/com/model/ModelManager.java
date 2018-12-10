@@ -62,6 +62,7 @@ public class ModelManager {
     private TypeWiseListModel locationCountModel;
 	private ExpenseStatusModel expenseStatusModel;
 	private TicketResultModel TicketResult;
+	private String CaptureLocation;
 
 
 
@@ -236,6 +237,14 @@ public class ModelManager {
 		pendingLeaveModel = new LeaveModel(jsonStrin);
 	}
 
+	public String getCaptureLocation() {
+		return CaptureLocation;
+	}
+
+	public void setCaptureLocation(String captureLocation) {
+		CaptureLocation = captureLocation;
+	}
+
 	public  LeaveModel getPendingLeaveModel() {
 		return pendingLeaveModel;
 	}
@@ -260,6 +269,7 @@ public class ModelManager {
         locationCountModel = null;
 		expenseStatusModel=null;
 		TicketResult = null;
+		CaptureLocation=null;
 
         obj = null;
 

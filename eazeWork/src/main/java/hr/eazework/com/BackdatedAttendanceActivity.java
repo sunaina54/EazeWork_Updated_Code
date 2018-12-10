@@ -105,6 +105,8 @@ public class BackdatedAttendanceActivity extends BaseActivity {
     private LinearLayout markedTimeLl;
     private TimeModificationSummaryResponseModel summaryResponseModel;
     private View progressbar;
+    private ImageView quickHelpIV;
+    private String currentScreen = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -224,6 +226,17 @@ public class BackdatedAttendanceActivity extends BaseActivity {
             }
         });
 
+        quickHelpIV = (ImageView) findViewById(R.id.quickHelpIV);
+        currentScreen=AppsConstant.Backdated_Attendance_Request;
+        quickHelpIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("CurrentScreen", currentScreen);
+                Intent intent = new Intent(context, GetQuickHelpActivity.class);
+                intent.putExtra("CurrentScreen", currentScreen);
+                startActivity(intent);
+            }
+        });
     }
 
     private void sendViewRequestSummaryData() {

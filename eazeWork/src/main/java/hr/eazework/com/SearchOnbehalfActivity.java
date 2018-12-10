@@ -387,7 +387,7 @@ public class SearchOnbehalfActivity extends BaseActivity {
                     setResult(WorkFromHomeRequestFragment.WFH_EMP,theIntent);
                     setResult(CreateNewLeaveFragment.LEAVE_EMP,theIntent);
                     setResult(TourRequestFragment.TOUR_EMP,theIntent);
-                    setResult(CreateTicketFragment.TICKET_EMP,theIntent);
+                 //   setResult(CreateTicketFragment.TICKET_EMP,theIntent);
                     setResult(TICKET_EMP_ADV,theIntent);
                     finish();
                 }

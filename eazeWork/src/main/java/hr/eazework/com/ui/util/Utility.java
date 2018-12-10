@@ -74,6 +74,7 @@ import hr.eazework.com.model.LineItemsModel;
 import hr.eazework.com.model.LoginUserModel;
 import hr.eazework.com.model.MenuItemModel;
 import hr.eazework.com.model.ModelManager;
+import hr.eazework.com.model.QuickHelpListModel;
 import hr.eazework.com.model.SupportDocsItemModel;
 import hr.eazework.com.model.TeamMember;
 import hr.eazework.com.model.TicketItem;
@@ -627,6 +628,21 @@ public class Utility {
         return newList;
     }
 
+    public static ArrayList<QuickHelpListModel> prepareFilterListHelp(List<QuickHelpListModel> list){
+        Set set = new TreeSet(new Comparator() {
+            @Override
+            public int compare(Object o1, Object o2) {
+                int a = Integer.parseInt(((QuickHelpListModel)o1).getSeqNo());
+                int b = Integer.parseInt(((QuickHelpListModel)o2).getSeqNo());
+            /*    int a= ((LeaveReqsItem)o1).getStatusDesc();
+                int b = ((LeaveReqsItem) o2).getStatusDesc();*/
+                return  a-b;
+            }
+        });
+        set.addAll(list);
+        ArrayList<QuickHelpListModel> newList = new ArrayList(set);
+        return newList;
+    }
 
     public static String getFileName(Uri uri,Context context) {
         String result = null;

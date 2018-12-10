@@ -21,7 +21,7 @@
        android:scaleType="fitXY"
        />
 
-    <TextView
+   <!-- <TextView
         android:layout_width="match_parent"
         android:layout_height="@dimen/margin_130"
         android:visibility="visible"
@@ -30,7 +30,15 @@
         android:scaleType="fitXY"
         style="@style/sliderTextView"
         android:gravity="center_horizontal|center_vertical"
-      />
+      />-->
+
+        <WebView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/margin_130"
+            android:id="@+id/announcementWV"
+            >
+
+        </WebView>
     </android.support.v7.widget.CardView>
 
 </FrameLayout>

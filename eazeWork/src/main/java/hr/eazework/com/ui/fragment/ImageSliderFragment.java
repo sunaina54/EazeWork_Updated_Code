@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,6 +21,7 @@ import hr.eazework.Slider.customUI.RoundedCornersTransformations;
 import hr.eazework.com.R;
 import hr.eazework.com.model.AnnouncementItemsModel;
 import hr.eazework.com.ui.util.AppsConstant;
+import hr.eazework.selfcare.communication.CommunicationConstant;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,13 +30,30 @@ public class ImageSliderFragment extends Fragment {
 
     private ImageView sliderImageIV;
     private TextView sliderTextTV;
-    private AnnouncementItemsModel announcementItemsModel;
+    private AnnouncementItemsModel announcementItemsModel = null;
     private CardView cardViewAnnouncement;
+    private WebView announcementWV;
+    private String screen = "";
 
     public ImageSliderFragment() {
         // Required empty public constructor
     }
 
+    public AnnouncementItemsModel getAnnouncementItemsModel() {
+        return announcementItemsModel;
+    }
+
+    public void setAnnouncementItemsModel(AnnouncementItemsModel announcementItemsModel) {
+        this.announcementItemsModel = announcementItemsModel;
+    }
+
+    public String getScreen() {
+        return screen;
+    }
+
+    public void setScreen(String screen) {
+        this.screen = screen;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,30 +67,36 @@ public class ImageSliderFragment extends Fragment {
     private void setupScreen(View view) {
         cardViewAnnouncement = (CardView) view.findViewById(R.id.cardViewAnnouncement);
         sliderImageIV = (ImageView) view.findViewById(R.id.sliderImageIV);
-        sliderTextTV = (TextView) view.findViewById(R.id.sliderTextTV);
+        announcementWV = (WebView) view.findViewById(R.id.announcementWV);
+        // sliderTextTV = (TextView) view.findViewById(R.id.sliderTextTV);
         sliderImageIV.setVisibility(View.GONE);
-        sliderTextTV.setVisibility(View.GONE);
-       // cardViewAnnouncement.setVisibility(View.GONE);
-        if(announcementItemsModel.getType()!=null && !announcementItemsModel.getType().equalsIgnoreCase("") &&
-                announcementItemsModel.getType().equalsIgnoreCase(AppsConstant.TEXT_ANNOUNCEMENT)){
-         //   cardViewAnnouncement.setVisibility(View.VISIBLE);
-            sliderTextTV.setVisibility(View.VISIBLE);
-            sliderTextTV.setText(Html.fromHtml(announcementItemsModel.getDesc()));
-        }else {
-            sliderImageIV.setVisibility(View.VISIBLE);
-            String UrlFile = "http://www.eazework.net/test";
-            String imageUrl = UrlFile + announcementItemsModel.getFilePath().replace("..", "");
-            // String imageUrl= announcementItemsModel.getFilePath();
-            loadImage(sliderImageIV, imageUrl);
-        }
-    }
+        announcementWV.setVisibility(View.GONE);
 
-    public AnnouncementItemsModel getAnnouncementItemsModel() {
-        return announcementItemsModel;
-    }
+        //  sliderTextTV.setVisibility(View.GONE);
+        // cardViewAnnouncement.setVisibility(View.GONE);
+    /*    if (!getScreen().equalsIgnoreCase("")
+                && getScreen().equalsIgnoreCase("HomeScreen")) {*/
+            if (announcementItemsModel.getType() != null && !announcementItemsModel.getType().equalsIgnoreCase("") &&
+                    announcementItemsModel.getType().equalsIgnoreCase(AppsConstant.TEXT_ANNOUNCEMENT)) {
+                //   cardViewAnnouncement.setVisibility(View.VISIBLE);
+                announcementWV.setVisibility(View.VISIBLE);
+                //  sliderTextTV.setVisibility(View.VISIBLE);
+                //  sliderTextTV.setText(Html.fromHtml(announcementItemsModel.getDesc()));
+                String testDesc = "<HTML>" + announcementItemsModel.getDesc() + "</HTML>";
+                Log.d("Text-Announcement", testDesc);
+                announcementWV.loadData(testDesc
+                        , "text/html; charset=utf-8", "UTF-8");
+            } else if (announcementItemsModel.getFilePath() != null &&
+                    !announcementItemsModel.getFilePath().equalsIgnoreCase("")) {
+                sliderImageIV.setVisibility(View.VISIBLE);
+                String UrlFile = CommunicationConstant.UrlFile;
+                String imageUrl = UrlFile + announcementItemsModel.getFilePath().replace("..", "");
+                Log.d("image-ann", imageUrl);
+                // announcementWV.loadUrl(imageUrl);
+                loadImage(sliderImageIV, imageUrl);
+            }
+       // }
 
-    public void setAnnouncementItemsModel(AnnouncementItemsModel announcementItemsModel) {
-        this.announcementItemsModel = announcementItemsModel;
     }
 
     private void loadImage(ImageView imageView, String url) {

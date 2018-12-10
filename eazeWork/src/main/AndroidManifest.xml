@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="hr.eazework.com"
     android:versionCode="27"
-    android:versionName="1.1.17">
+    android:versionName="1.1.20">
 
     <uses-sdk
         android:minSdkVersion="17"
@@ -81,9 +81,11 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/notification_ez_icon1" />
-        <!--<meta-data
+        <!--
+            <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/ic_launcher" />-->
+            android:resource="@drawable/ic_launcher" />
+        -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/accent" />
@@ -95,9 +97,9 @@
             android:value="@string/default_notification_channel_id" />
 
         <activity android:name=".AddExpenseActivity" />
-        <activity android:name=".ViewDocumentActivity"></activity>
-        <activity android:name=".TimeModificationActivity"></activity>
-        <activity android:name=".BackdatedAttendanceActivity"></activity>
+        <activity android:name=".ViewDocumentActivity" />
+        <activity android:name=".TimeModificationActivity" />
+        <activity android:name=".BackdatedAttendanceActivity" />
 
         <service android:name="hr.eazework.Notification.MyFirebaseMessagingService">
             <intent-filter>
@@ -109,10 +111,8 @@
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
-
             </intent-filter>
         </service>
-
         <service
             android:name="hr.eazework.Notification.MyJobService"
             android:exported="false">
@@ -121,6 +121,8 @@
             </intent-filter>
         </service>
 
+        <activity android:name=".GetQuickHelpActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

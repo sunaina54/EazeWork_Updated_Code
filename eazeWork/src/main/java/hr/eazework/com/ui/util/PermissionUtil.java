@@ -3,6 +3,7 @@ package hr.eazework.com.ui.util;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
@@ -130,7 +131,9 @@ public class PermissionUtil {
     public static void askAllPermissionCamera(TimeModificationActivity baseFragment) {
         if (baseFragment != null) {
             try {
-                baseFragment.requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE}, REQ_PERMISSION);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    baseFragment.requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE}, REQ_PERMISSION);
+                }
             } catch (IllegalStateException e) {
                 Crashlytics.logException(e);
             }

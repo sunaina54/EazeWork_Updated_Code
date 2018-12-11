@@ -21,7 +21,7 @@ android {
 
 
     defaultConfig {
-        versionCode 27
+        versionCode 28
         applicationId "hr.eazework.com"
         minSdkVersion 17
         targetSdkVersion 26

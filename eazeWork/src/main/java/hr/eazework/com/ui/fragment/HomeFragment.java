@@ -87,6 +87,7 @@ import hr.eazework.com.model.UploadProfilePicResponseModel;
 import hr.eazework.com.model.UserModel;
 import hr.eazework.com.ui.customview.CustomBuilder;
 import hr.eazework.com.ui.customview.CustomDialog;
+import hr.eazework.com.ui.fragment.Camera.RetakeFragment;
 import hr.eazework.com.ui.interfaces.IAction;
 import hr.eazework.com.ui.util.AppsConstant;
 import hr.eazework.com.ui.util.AttendanceUtil;
@@ -210,7 +211,7 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
         pagerlayout = (LinearLayout) rootView.findViewById(R.id.pagerlayout);
         rootView.findViewById(R.id.updateLocationBTN).setOnClickListener(this);
         // viewAnnouncementData();
-       // getHomeData();
+        // getHomeData();
         getAnnouncementData();
         pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -549,8 +550,8 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
         }
 
         hideShowLocationButton();
-      //  hideTimeInButtons();
-     //   showTimeInButtons();
+        //  hideTimeInButtons();
+        //   showTimeInButtons();
         MenuItemModel menuItemModel = ModelManager.getInstance().getMenuItemModel();
 
         if (menuItemModel == null)
@@ -882,9 +883,9 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
 
                             GPSTracker gps = new GPSTracker(getContext());
                             if (gps.getLatitude() != 0 && gps.getLongitude() != 0) {
+
                                 myLatitude = gps.getLatitude() + "";
                                 myLongitude = gps.getLongitude() + "";
-
 
                                 Geocoder geocoder = new Geocoder(context, Locale.getDefault());
                                 try {
@@ -899,7 +900,6 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
                                 Log.d("Address1", "Lat" + myLatitude + "Long" + myLongitude + "Location" + geoLocation);
                                 updateLocation(myLatitude, myLongitude, geoLocation);
                             }
-
 
                         } else {
                             PermissionUtil.askLocationPermision(this);
@@ -1246,9 +1246,9 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
                 String locationResp = response.getResponseData();
                 Log.d("TAG", "location response : " + locationResp);
                 updateEmpLocationResponseModel = UpdateEmpLocationResponseModel.create(locationResp);
-                if (updateEmpLocationResponseModel != null && updateEmpLocationResponseModel.getUpdateEmpLocationResult()!=null
+                if (updateEmpLocationResponseModel != null && updateEmpLocationResponseModel.getUpdateEmpLocationResult() != null
                         && updateEmpLocationResponseModel.getUpdateEmpLocationResult().getErrorCode().equalsIgnoreCase(AppsConstant.SUCCESS)) {
-                  new AlertCustomDialog(getActivity(), updateEmpLocationResponseModel.getUpdateEmpLocationResult().getErrorMessage());
+                    new AlertCustomDialog(getActivity(), updateEmpLocationResponseModel.getUpdateEmpLocationResult().getErrorMessage());
                 } else {
                     new AlertCustomDialog(getActivity(), updateEmpLocationResponseModel.getUpdateEmpLocationResult().getErrorMessage());
                 }

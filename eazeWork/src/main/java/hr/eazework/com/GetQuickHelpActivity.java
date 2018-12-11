@@ -112,10 +112,11 @@ private Button helpCenterBTN;
                 if(getQuickHelpSearchResponseModel!=null && getQuickHelpSearchResponseModel.getGetQuickHelpSearchResult()!=null
                         && getQuickHelpSearchResponseModel.getGetQuickHelpSearchResult().getHomeLink()!=null
                         && !getQuickHelpSearchResponseModel.getGetQuickHelpSearchResult().getHomeLink().equalsIgnoreCase("")) {
-                    String link = CommunicationConstant.UrlFile + getQuickHelpSearchResponseModel.getGetQuickHelpSearchResult().getHomeLink().replace("..","");
+
+                    String urlFile = CommunicationConstant.getMobileCareURl();
+                    String link = urlFile + getQuickHelpSearchResponseModel.getGetQuickHelpSearchResult().getHomeLink().replace("..","");
                     Log.d("Link is:", link);
                     Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
-
                     startActivity(browserIntent);
                 }
             }
@@ -242,7 +243,8 @@ private Button helpCenterBTN;
                 @Override
                 public void onClick(View view) {
                     if(item.getLink()!=null && !item.getLink().equalsIgnoreCase("")){
-                        String urlFile = CommunicationConstant.UrlFile;
+                        //String urlFile = CommunicationConstant.UrlFile;
+                        String urlFile = CommunicationConstant.getMobileCareURl();
                         String link=urlFile+item.getLink().replace("..", "");;
                         Log.d("Link is:",link);
                         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));

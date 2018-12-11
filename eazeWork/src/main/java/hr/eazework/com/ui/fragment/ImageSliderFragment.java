@@ -89,7 +89,8 @@ public class ImageSliderFragment extends Fragment {
             } else if (announcementItemsModel.getFilePath() != null &&
                     !announcementItemsModel.getFilePath().equalsIgnoreCase("")) {
                 sliderImageIV.setVisibility(View.VISIBLE);
-                String UrlFile = CommunicationConstant.UrlFile;
+                //String UrlFile = CommunicationConstant.UrlFile;
+                String UrlFile = CommunicationConstant.getMobileCareURl();
                 String imageUrl = UrlFile + announcementItemsModel.getFilePath().replace("..", "");
                 Log.d("image-ann", imageUrl);
                 // announcementWV.loadUrl(imageUrl);

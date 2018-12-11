@@ -169,7 +169,7 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
         this.setShowEditTeamButtons(false);
         showHideProgressView(true);
         MainActivity.isAnimationLoaded = false;
-
+        getHomeData();
         // getAnnouncementData();
 
         MenuItemModel model = ModelManager.getInstance().getMenuItemModel();
@@ -210,7 +210,7 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
         pagerlayout = (LinearLayout) rootView.findViewById(R.id.pagerlayout);
         rootView.findViewById(R.id.updateLocationBTN).setOnClickListener(this);
         // viewAnnouncementData();
-        getHomeData();
+       // getHomeData();
         getAnnouncementData();
         pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -234,7 +234,8 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
             }
         });
         Log.d("DeviceInfo", Build.VERSION.SDK_INT + " Release " + Build.VERSION.RELEASE + " " + BuildConfig.VERSION_CODE + " " + BuildConfig.VERSION_NAME + " " + Build.MODEL + " " + Build.MANUFACTURER);
-
+        MainActivity.isAnimationLoaded = false;
+        getHomeData();
         populateHomeData();
         img_user_img = (ImageView) rootView.findViewById(R.id.img_user_img);
         editProfilePicLayout = (RelativeLayout) rootView.findViewById(R.id.editProfilePicLayout);
@@ -548,6 +549,8 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
         }
 
         hideShowLocationButton();
+      //  hideTimeInButtons();
+     //   showTimeInButtons();
         MenuItemModel menuItemModel = ModelManager.getInstance().getMenuItemModel();
 
         if (menuItemModel == null)
@@ -893,8 +896,8 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener, O
                                     e.printStackTrace();
                                 }
 
-                                Log.d("Address1", "Lat" + myLongitude + "Long" + myLongitude + "Location" + geoLocation);
-                                updateLocation(latitude, longitude, geoLocation);
+                                Log.d("Address1", "Lat" + myLatitude + "Long" + myLongitude + "Location" + geoLocation);
+                                updateLocation(myLatitude, myLongitude, geoLocation);
                             }
 
 

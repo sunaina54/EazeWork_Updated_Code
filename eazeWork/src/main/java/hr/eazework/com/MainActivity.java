@@ -5,6 +5,8 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,6 +19,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -24,6 +27,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -117,6 +121,8 @@ import hr.eazework.selfcare.communication.AppRequestJSONString;
 import hr.eazework.selfcare.communication.CommunicationConstant;
 import hr.eazework.selfcare.communication.CommunicationManager;
 import hr.eazework.selfcare.communication.IBaseResponse;
+import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 
 public class MainActivity extends AppCompatActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks, UserActionListner, IBaseResponse {
 
@@ -1214,7 +1220,35 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(mTitle);
+       /* // Create a TextView programmatically.
+        TextView tv = new TextView(getApplicationContext());
+        // Create a LayoutParams for TextView
+        LayoutParams lp = new RelativeLayout.LayoutParams(
+                LayoutParams.WRAP_CONTENT, // Width of TextView
+                LayoutParams.WRAP_CONTENT); // Height of TextView
 
+        lp.setMarginStart(15);
+        // Apply the layout parameters to TextView widget
+        tv.setLayoutParams(lp);
+
+        // Set text to display in TextView
+        tv.setText(actionBar.getTitle()); // ActionBar title text
+
+        // Set the text color of TextView to black
+        // This line change the ActionBar title text color
+        tv.setTextColor(Color.WHITE);
+        tv.setGravity(Gravity.LEFT);
+
+
+        // Set the TextView text size in dp
+        // This will change the ActionBar title text size
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP,16);
+
+        // Set the ActionBar display option
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+
+        // Finally, set the newly created TextView as ActionBar custom view
+        actionBar.setCustomView(tv);*/
 
     }
 
